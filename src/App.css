@@ -1,3 +1,5 @@
+@import "./pages/shopowner/shop-owner.css";
+
 .app {
   display: flex;
   flex-direction: column;
@@ -9,45 +11,3 @@
   flex: 1;
   overflow-y: auto;
 }
-
-/* Admin - EmployeeList - Table */
-.employee-th {
-  @apply font-bold py-2 bg-gray-200;
-
-  &:first-child {
-    @apply pl-3 rounded-l-lg;
-  }
-
-  &:last-child {
-    @apply rounded-r-lg;
-  }
-}
-
-.employee-td-id {
-  @apply w-1/12 pl-3;
-}
-
-.employee-td-name {
-  @apply w-2/12;
-}
-
-.employee-td-avatar {
-  @apply w-1/12;
-}
-
-.employee-td-position {
-  @apply w-2/12;
-}
-
-.employee-td-salary {
-  @apply w-2/12;
-}
-
-.employee-td-start {
-  @apply w-2/12;
-}
-
-.employee-td-detail {
-  @apply w-1/12;
-}
-
