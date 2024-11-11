@@ -20,7 +20,7 @@ export default {
         customOrange: '#8A4F40',
         customGray3:'#D9D9D9',
       },
-
+      
     },
     plugins: [],
   }
