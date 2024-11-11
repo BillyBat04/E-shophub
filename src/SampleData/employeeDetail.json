@@ -1,0 +1,18 @@
+{
+  "personal": {
+    "name": "Lê Bảo Minh",
+    "avatar": "https://placehold.co/150/add8e6/000",
+    "id": "020202",
+    "position": "Tư vấn & Hỗ trợ",
+    "start": "07/11/2024"
+  },
+  "account": {
+    "username": "020202.lbminh",
+    "password": "lebaominh0202"
+  },
+  "salary": {
+    "current": "15.000.000",
+    "increase": "10%",
+    "effective": "07/11/2024"
+  }
+}

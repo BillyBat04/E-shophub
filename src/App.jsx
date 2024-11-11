@@ -16,6 +16,7 @@ import DropdownMenu from "./components/dropdownmenu";
 import Nav from "./components/shopowner/nav/nav";
 import MainPage from "./pages/shopowner/mainpage";
 import EmployeeList from "./pages/shopowner/NewEmployee";
+import EmployeeDetail from "./pages/shopowner/EmployeeDetail";
 
 function App() {
   const location = useLocation();
@@ -51,6 +52,7 @@ function App() {
             <Route path="/personal" element={<OrderHistory />} />
             <Route path="/admin" element={<MainPage />}>
               <Route path="employees" element={<EmployeeList />}>
+              <Route path=":employeeId" element={<EmployeeDetail />}></Route>
               </Route>
             </Route>
           </Routes>
