@@ -28,7 +28,7 @@ const ProductList = () => {
         </button>
       </div>
 
-      <div className="mt-4 max-h-[640px] overflow-y-auto">
+      <div className="mt-4 max-h-[600px] overflow-y-auto">
         <table className="w-full table-fixed">
           <thead>
             <tr>
