@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Header = () => {
     return (
-        <div className='flex justify-between items-center h-[70%] rounded-full bg-black w-[40%]'>
+        <div className='flex justify-between items-center h-[80%] rounded-full bg-black w-[40%]'>
             <Link to='mainpage'>
                 <span className="pl-5 text-white font-roboto text-[17px]">E-ShopHub</span>
             </Link>

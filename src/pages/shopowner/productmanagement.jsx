@@ -12,23 +12,23 @@ const ProductManagement = () => {
   ]
 
   return (
-    <div className="p-3 w-full h-full bg-customGray3 flex flex-col justify-center items-center" >
-      <div className='w-full h-[10%] flex justify-center'>
+    <div className="pb-5 pr-5 pl-5 pt-2 w-full h-full bg-customGray3 flex flex-col justify-center items-center">
+      <div className='w-[60%] h-[8%] flex justify-center'>
         <Header />
       </div>
-      <div className='w-full h-[90%]'>
-        <div className='w-1/5 h-5/6 p-3 bg-white shadow-md rounded-[20px] text-sm justify-between flex flex-col '>
+      <div className='w-full h-[90%] flex'>
+        <div className='w-1/5 h-full p-3 bg-white shadow-md rounded-[20px] text-sm justify-between flex flex-col'>
           <Nav items={item} />
-          <button className='flex justify-end items-center mr-5'>
+          <button className='pb-3 flex justify-end items-center mr-5'>
             <span className='text-md'>Log out</span>
-            <img src='src/assets/logout.png'
-              className='ml-3 w-6 h-6' />
+            <img src='src/assets/logout.png' className='ml-3 w-6 h-6' />
           </button>
         </div>
-        <div className='w-4/5 h-full'>
+        <div className='w-4/5 flex h-full ml-5 bg-white shadow-md rounded-[20px]'>
+
         </div>
       </div>
-    </div >
+    </div>
   )
 }
 
