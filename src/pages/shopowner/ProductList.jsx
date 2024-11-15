@@ -2,10 +2,16 @@ import { IoAdd } from "react-icons/io5";
 import productListData from "../../SampleData/productList.json";
 import { IoIosSearch } from "react-icons/io";
 import { FaFilter } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { MdCheckCircle, MdOutlineRadioButtonUnchecked } from "react-icons/md";
 
 const ProductList = () => {
+  const isDetailPage = location.pathname !== "/admin/products";
+  
+  if (isDetailPage) {
+    return <Outlet></Outlet>
+  }
+
   return (
     <div className="h-full p-6 bg-white shadow-md rounded-[20px] text-sm">
       <div className="flex justify-between">
@@ -61,7 +67,9 @@ const ProductList = () => {
                 <td className="product-td-stock">{p.stock}</td>
                 <td className="product-td-rating">{p.rating}</td>
                 <td className="product-td-detail">
-                  <a>Chi tiết</a>
+                  <Link to={p.sku} className="text-blue-800 underline">
+                    Chi tiết
+                  </Link>
                 </td>
               </tr>
             ))}
