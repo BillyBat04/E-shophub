@@ -1,0 +1,142 @@
+[
+  {
+    "sku": "031782",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "iPhone 16 Pro 256GB",
+    "price": "20.000.000",
+    "selling": true,
+    "stock": 300,
+    "sold": 250,
+    "rating": 4.5
+  },
+  {
+    "sku": "031783",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "iPhone 13 Mini 128GB",
+    "price": "20.000.000",
+    "selling": false,
+    "stock": 300,
+    "sold": 250,
+    "rating": 4.5
+  },
+  {
+    "sku": "031784",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Samsung Galaxy Z Fold 6",
+    "price": "20.000.000",
+    "selling": false,
+    "stock": 20,
+    "sold": 250,
+    "rating": 4.5
+  },
+  {
+    "sku": "031785",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Samsung Galaxy S23 FE",
+    "price": "20.000.000",
+    "selling": true,
+    "stock": 0,
+    "sold": 250,
+    "rating": 4.5
+  },
+  {
+    "sku": "031786",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "iPhone 14 Pro 128GB",
+    "price": "18.000.000",
+    "selling": true,
+    "stock": 100,
+    "sold": 80,
+    "rating": 4.6
+  },
+  {
+    "sku": "031787",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Google Pixel 7 128GB",
+    "price": "15.000.000",
+    "selling": false,
+    "stock": 50,
+    "sold": 45,
+    "rating": 4.3
+  },
+  {
+    "sku": "031788",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "OnePlus 11 Pro",
+    "price": "16.000.000",
+    "selling": true,
+    "stock": 60,
+    "sold": 55,
+    "rating": 4.4
+  },
+  {
+    "sku": "031789",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Xiaomi Mi 13 Ultra",
+    "price": "14.000.000",
+    "selling": true,
+    "stock": 200,
+    "sold": 150,
+    "rating": 4.7
+  },
+  {
+    "sku": "031790",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Sony Xperia 1 IV",
+    "price": "19.000.000",
+    "selling": false,
+    "stock": 80,
+    "sold": 65,
+    "rating": 4.2
+  },
+  {
+    "sku": "031791",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Huawei P50 Pro",
+    "price": "13.000.000",
+    "selling": true,
+    "stock": 90,
+    "sold": 70,
+    "rating": 4.3
+  },
+  {
+    "sku": "031792",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Oppo Find X5 Pro",
+    "price": "17.000.000",
+    "selling": true,
+    "stock": 110,
+    "sold": 85,
+    "rating": 4.5
+  },
+  {
+    "sku": "031793",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Vivo X80 Pro",
+    "price": "16.500.000",
+    "selling": true,
+    "stock": 130,
+    "sold": 95,
+    "rating": 4.6
+  },
+  {
+    "sku": "031794",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Motorola Edge 30 Ultra",
+    "price": "15.500.000",
+    "selling": false,
+    "stock": 40,
+    "sold": 35,
+    "rating": 4.1
+  },
+  {
+    "sku": "031795",
+    "image": "https://placehold.co/60/add8e6/000",
+    "name": "Nokia X100 5G",
+    "price": "12.000.000",
+    "selling": true,
+    "stock": 200,
+    "sold": 180,
+    "rating": 4.0
+  }
+]
