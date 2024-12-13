@@ -2,11 +2,13 @@ import { IoAdd } from "react-icons/io5";
 import employeeData from "../../SampleData/employeeList.json";
 import { IoIosSearch } from "react-icons/io";
 import { FaFilter } from "react-icons/fa6";
+import { Card, Typography } from "@material-tailwind/react";
 import { Link, Outlet } from "react-router-dom";
 
 const EmployeeList = () => {
   const isDetailPage = location.pathname !== "/admin/employees";
-  
+  const TABLE_HEAD = ["ID", "Name", "Image", "Position", "Salary", "Start day"];
+
   if (isDetailPage) {
     return <Outlet></Outlet>
   }
@@ -18,7 +20,7 @@ const EmployeeList = () => {
           <div className="grid grid-cols-[1fr_auto] px-4 py-2 border border-black rounded-[20px]">
             <input
               className="focus:outline-none"
-              placeholder="Tìm ID, Tên, SĐT"></input>
+              placeholder="Find ID, name, phone number"></input>
             <button type="submit">
               <IoIosSearch className="w-6 h-6"></IoIosSearch>
             </button>
@@ -28,44 +30,105 @@ const EmployeeList = () => {
           </button>
         </form>
         <button className="flex items-center gap-2 bg-black rounded-[20px] px-4 py-2">
-          <span className="text-white font-bold">Nhân viên mới</span>
+          <span className="text-white font-bold">Add new employee</span>
           <IoAdd className="w-6 h-6 text-white"></IoAdd>
         </button>
       </div>
 
-      <div className="mt-4 max-h-[580px] overflow-y-auto">
-        <table className="w-full table-fixed">
-          <thead>
-            <tr>
-              <td className="employee-th employee-td-id">ID</td>
-              <td className="employee-th employee-td-name">Họ tên</td>
-              <td className="employee-th employee-td-avatar">Hình ảnh</td>
-              <td className="employee-th employee-td-position">Vị trí</td>
-              <td className="employee-th employee-td-salary">Lương cơ bản</td>
-              <td className="employee-th employee-td-start">Ngày vào làm</td>
-              <td className="employee-th employee-td-detail"> - </td>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600">
-            {employeeData.map((e) => (
-              <tr className="hover:bg-gray-100" key={e.id}>
-                <td className="employee-td-id">{e.id}</td>
-                <td className="employee-td-name">{e.name}</td>
-                <td className="employee-td-avatar">
-                  <img src={e.avatar} alt="Ảnh nhân viên" />
-                </td>
-                <td className="employee-td-position">{e.position}</td>
-                <td className="employee-td-salary">7.000.000</td>
-                <td className="employee-td-start">{e.start}</td>
-                <td className="employee-td-detail">
-                  <Link to={e.id} className="text-blue-800 underline">
-                    Chi tiết
-                  </Link>
-                </td>
+      <div className="mt-4 h-[92%] overflow-y-scroll">
+        <Card className="p-5 w-full flex h-full overflow-scroll px-6">
+          <table className="w-full min-w-max table-auto text-center">
+            <thead>
+              <tr >
+                {TABLE_HEAD.map((head, index) => (
+                  <th key={head} className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
+                    ${index === 0 ? 'rounded-l-2xl' : ''} 
+                    ${index === TABLE_HEAD.length - 1 ? 'rounded-r-2xl' : ''}`}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-bold leading-none"
+                    >
+                      {head}
+                    </Typography>
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {employeeData.map((row, index) => {
+                const isLast = index === employeeData.length - 1;
+                const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
+
+                return (
+                  <tr key={row.id} className="hover:bg-gray-50">
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-bold"
+                      >
+                        {row.id}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        {row.name}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        <img src={row.avatar} alt="Ảnh sản phẩm" />
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        {row.position}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        7.000.000
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        {row.start}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-white"
+                      >
+                        <Link to={row.id}>
+                          <button className='bg-black w-20 h-6 rounded-xl'>
+                            Detail
+                          </button>
+                        </Link>
+                      </Typography>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </Card>
       </div>
     </div>
   );

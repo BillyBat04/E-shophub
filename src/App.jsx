@@ -6,19 +6,20 @@ import Shoppingcart from "./pages/shoppingcart";
 import PaymentPage from "./pages/payment";
 import Pdescript from "./pages/pdescript";
 import Chat from "./pages/shopowner/chat";
-import ProductManagement from "./pages/shopowner/productmanagement";
 import OrderManagement from "./pages/shopowner/ordermanagement";
-import EmployeeManagement from "./pages/shopowner/employeemanagement";
+import OrderDetail from "./pages/shopowner/OrderDetail";
 import Reports from "./pages/shopowner/report";
 import OrderHistory from "./pages/personal";
 import { CartProvider } from "./components/cartcontext";
 import DropdownMenu from "./components/dropdownmenu";
-import Nav from "./components/shopowner/nav/nav";
 import MainPage from "./pages/shopowner/mainpage";
 import EmployeeList from "./pages/shopowner/NewEmployee";
+import Supplier from "./pages/shopowner/Supplier";
+import SupplierDetail from "./pages/shopowner/SupplierDetail";
 import EmployeeDetail from "./pages/shopowner/EmployeeDetail";
 import ProductList from "./pages/shopowner/ProductList";
 import ProductDetail from "./pages/shopowner/ProductDetail";
+import AddSupplier from "./pages/shopowner/AddSupplier";
 
 function App() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function App() {
     "products",
     "orders",
     "employees",
+    "supplier",
     "admin",
   ].some((page) => location.pathname.includes(page));
 
@@ -43,16 +45,20 @@ function App() {
         <div className="content">
           <Routes>
             <Route path="/mainpage" element={<Mainpage />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/products" element={<ProductManagement />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/orders" element={<OrderManagement />} />
-            <Route path="/employees" element={<EmployeeManagement />} />
             <Route path="/shoppingcart" element={<Shoppingcart />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/pdescript" element={<Pdescript />} />
             <Route path="/personal" element={<OrderHistory />} />
             <Route path="/admin" element={<MainPage />}>
+              <Route path="chat" element={<Chat />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="supplier" element={<Supplier />} >
+                <Route path="addsupplier" element={<AddSupplier/>} ></Route>
+                <Route path=":supplierId" element={<SupplierDetail />}></Route>
+              </Route>
+              <Route path="orders" element={<OrderManagement />} >
+                <Route path=":orderId" element={<OrderDetail />}></Route>
+              </Route>
               <Route path="employees" element={<EmployeeList />}>
                 <Route path=":employeeId" element={<EmployeeDetail />}></Route>
               </Route>

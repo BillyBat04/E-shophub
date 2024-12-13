@@ -1,0 +1,47 @@
+[
+    {
+        "id": "1",
+        "name": "Apple",
+        "address": "Silicon Valley",
+        "phone": "1-800-692-7753",
+        "total": 20,
+        "revenue": 100000,
+        "status": true
+    },
+    {
+        "id": "2",
+        "name": "Apple",
+        "address": "Silicon Valley",
+        "phone": "1-800-692-7753",
+        "total": 20,
+        "revenue": 100000,
+        "status": true
+    },
+    {
+        "id": "3",
+        "name": "Apple",
+        "address": "Silicon Valley",
+        "phone": "1-800-692-7753",
+        "total": 20,
+        "revenue": 100000,
+        "status": true
+    },
+    {
+        "id": "4",
+        "name": "Apple",
+        "address": "Silicon Valley",
+        "phone": "1-800-692-7753",
+        "total": 20,
+        "revenue": 100000,
+        "status": true
+    },
+    {
+        "id": "5",
+        "name": "Apple",
+        "address": "Silicon Valley",
+        "phone": "1-800-692-7753",
+        "total": 20,
+        "revenue": 100000,
+        "status": true
+    }
+]
