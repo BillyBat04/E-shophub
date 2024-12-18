@@ -82,9 +82,9 @@ const EmployeeList = () => {
                     <td className={classes}>
                       <Typography
                         variant="small"
-                        className="font-normal text-gray-600"
+                        className="font-normal text-gray-600 flex justify-center"
                       >
-                        <img src={row.avatar} alt="Ảnh sản phẩm" />
+                        <img className="w-full" src={row.avatar} alt="Ảnh sản phẩm" />
                       </Typography>
                     </td>
                     <td className={classes}>

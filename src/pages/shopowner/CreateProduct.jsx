@@ -3,7 +3,7 @@ import { Input, TextareaAutosize } from "@mui/base";
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from 'axios'
 import axiosInstance from "../../config/api";
-const ProductDetail = () => {
+const CreateProduct = () => {
   const { productId } = useParams();
   const navigate = useNavigate()
   const [productName, setProductName] = useState('')
@@ -14,7 +14,6 @@ const ProductDetail = () => {
   const [sellingPrice, setSellingPrice] = useState(0)
   const [supplier, setSupplier] = useState('')
 
-  const [product, setProduct] = useState(null)
   const [suppliers, setSuppliers] = useState([])
   const [categoryList, setCategoryList] = useState([])
   const [brands, setBrands] = useState([])
@@ -89,15 +88,6 @@ const ProductDetail = () => {
     setBrands(response.data)
   }
 
-  const getProduct = useCallback(async () => {
-    const response = await axiosInstance.get(`/product/${productId}`)
-    setProduct(response.data)
-    setFeaturedImage(response.data.image)
-    setExtraImages(response.data.featuresImages)
-    handleCategoryChange(response.data.categoryId)
-
-  }, [productId])
-
   const getSuppliers = useCallback(async () => {
     const response = await axiosInstance.get('/supplier')
     setSuppliers(response.data)
@@ -110,42 +100,38 @@ const ProductDetail = () => {
 
 
   useEffect(() => {
-    getProduct()
     getSuppliers()
     getCategoryList()
-  }, [getProduct, getSuppliers, getCategoryList])
+  }, [getSuppliers, getCategoryList])
 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const data = new FormData()
-    if (mainImage) data.append('images', mainImage)
+    data.append('images', mainImage)
     if (featuredImages.length > 0){
       for (const img of featuredImages){
         data.append('images', img)
       }
     }
 
-    if (productName) data.append('productName', productName)
-    if (purchasePrice > 0) data.append('purchasePrice', purchasePrice)
-    if (sellingPrice > 0) data.append('sellingPrice', sellingPrice)
-    if (supplier) data.append('supplierId', supplier)
-    if (category) data.append('categoryId', category)
-    if (description) data.append('description', description)
-    if (brand) data.append('brand', brand)
-    
+    data.append('productName', productName)
+    data.append('purchasePrice', purchasePrice)
+    data.append('sellingPrice', sellingPrice)
+    data.append('supplierId', supplier)
+    data.append('categoryId', category)
+    data.append('description', description)
+    data.append('brand', brand)
+
     const response = await axios({
-            method: 'PATCH',
-          url: `http://localhost:3000/api/product/${productId}`,
+            method: 'POST',
+          url: 'http://localhost:3000/api/product',
             data,
             headers: {'Content-Type': 'multipart/form-data'}
         })
-    if (response.status) {
+    if(response.status) {
       navigate("/admin/products")
-      window.location.reload();
     }
-
-
   }
 
   return (
@@ -172,7 +158,7 @@ const ProductDetail = () => {
                 },
               }}
               placeholder="Nhập tên sản phẩm"
-              value={productName || product?.productName}
+              value={productName}
               onChange={e => setProductName(e.target.value)}
             />
             <h5 className='mt-5 font-normal text-slate-400 mb-2'>Description</h5>
@@ -200,7 +186,7 @@ const ProductDetail = () => {
                             "pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black",
                         },
                       }}
-                      value={purchasePrice || product?.purchasePrice}
+                      value={purchasePrice}
                       onChange={e => setPurchasePrice(e.target.value)}
                     />
                   </div>
@@ -213,7 +199,7 @@ const ProductDetail = () => {
                             "pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black",
                         },
                       }}
-                      value={sellingPrice || product?.sellingPrice}
+                      value={sellingPrice}
                       onChange={e => setSellingPrice(e.target.value)}
                     />
                   </div>
@@ -226,10 +212,10 @@ const ProductDetail = () => {
                 onChange={e => setSupplier(e.target.value)}
                 className="w-full bg-slate-200 p-2 border border-black rounded-lg"
                 id="product-category">
-                  <option>Select category</option>
+                  <option>Select supplier</option>
                 {suppliers.map((supplier, index) => {
                   return (
-                    <option key={index} value={supplier.id} selected = {supplier.supplierName === product?.supplier.supplierName} >{supplier.supplierName}</option>
+                    <option key={index} value={supplier.id} >{supplier.supplierName}</option>
                   )
                 })}
               </select>
@@ -329,7 +315,7 @@ const ProductDetail = () => {
                     <option value= "" >Select category</option>
                   {categoryList.map((item, index) => {
                     return (
-                      <option key={index} value={item.id} selected = {item.categoryName === product?.category.categoryName} >{item.categoryName}</option>
+                      <option key={index} value={item.id} >{item.categoryName}</option>
                     )
                   })}
                 </select>
@@ -343,7 +329,7 @@ const ProductDetail = () => {
                     <option value="">Select brand</option>
                   {brands.map((item, index) => {
                     return (
-                      <option key={index} value={item.brandName} selected = {item.brandName === product?.brand} >{item.brandName}</option>
+                      <option key={index} value={item.brandName}>{item.brandName}</option>
                     )
                   })}
                 </select>
@@ -351,6 +337,11 @@ const ProductDetail = () => {
             </div>
           </fieldset>
 
+          {/* <Link to='/admin/products' className="w-max self-end bg-black text-white text-base px-8 py-3 rounded-lg shadow-md">
+          <button
+            type="submit">
+            <span>Submit</span>
+          </button></Link> */}
           <button
             className="w-max self-end bg-black text-white text-base px-8 py-3 rounded-lg shadow-md"
             type="submit">
@@ -362,4 +353,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default CreateProduct;

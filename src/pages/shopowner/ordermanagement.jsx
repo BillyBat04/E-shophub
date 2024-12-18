@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, Typography } from "@material-tailwind/react";
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
@@ -76,7 +76,7 @@ const OrderManagement = () => {
                 <span className='text-5xl'>100</span>
               </div>
               <div className='h-[70px] w-[70px] rounded-full flex justify-center items-center bg-white'>
-                <img src="src/assets/total.png" />
+                <img src="/src/assets/total.png" />
               </div>
             </div>
           </div>
@@ -89,7 +89,7 @@ const OrderManagement = () => {
                 <span className='text-5xl'>100</span>
               </div>
               <div className='h-[70px] w-[70px] rounded-full flex justify-center items-center border border-black bg-white'>
-                <img src="src/assets/pending.png" />
+                <img src="/src/assets/pending.png" />
               </div>
             </div>
           </div>
@@ -102,7 +102,7 @@ const OrderManagement = () => {
                 <span className='text-5xl'>100</span>
               </div>
               <div className='h-[70px] w-[70px] rounded-full flex justify-center items-center bg-white border border-black'>
-                <img src="src/assets/success.png" />
+                <img src="/src/assets/success.png" />
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React from "react"
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom"
 const NavItem = ({ item }) => {
 	const { label, icon, active, link } = item

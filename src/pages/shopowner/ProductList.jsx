@@ -4,12 +4,24 @@ import { IoIosSearch } from "react-icons/io";
 import { FaFilter } from "react-icons/fa6";
 import { Card, Typography } from "@material-tailwind/react";
 import { Link, Outlet } from "react-router-dom";
-import Switcher from "../../components/togglebutton";
+import { useCallback, useEffect, useState } from "react";
+import axiosInstance from "../../config/api";
 
 const ProductList = () => {
+  const [list, setList] = useState([])
+
+  const getList = useCallback(async () => {
+    const response = await axiosInstance.get('/product')
+    setList(response.data)
+    console.log(response.data)
+  }, [])
+
+  useEffect(() => {
+    getList()
+  }, [getList])
+
   const isDetailPage = location.pathname !== "/admin/products";
-  const TABLE_HEAD = ["SKU", "Name", "Image","Selling", "Status", "Price", "Inventory", "Rating"];
-  
+  const TABLE_HEAD = ["SKU", "Product Name", "Image","Selling Price", "Purchase Price", "Supplier"];
   if (isDetailPage) {
     return <Outlet></Outlet>
   }
@@ -30,10 +42,12 @@ const ProductList = () => {
             <FaFilter className="w-6 h-6"></FaFilter>
           </button>
         </form>
-        <button className="flex items-center gap-2 bg-black rounded-[20px] px-4 py-2">
-          <span className="text-white font-bold">Add Product</span>
-          <IoAdd className="w-6 h-6 text-white"></IoAdd>
-        </button>
+        <Link className=" bg-black rounded-[20px] px-6 py-2" to="/admin/products/create"> 
+          <button className="flex items-center">
+            <span className="text-white font-bold">Add Product</span>
+            <IoAdd className="w-6 h-6 text-white"></IoAdd>
+          </button>
+        </Link>
       </div>
 
       <div className="mt-4 h-[92%] overflow-y-scroll">
@@ -57,7 +71,7 @@ const ProductList = () => {
               </tr>
             </thead>
             <tbody>
-              {productListData.map((row, index) => {
+              {list.map((row, index) => {
                 const isLast = index === productListData.length - 1;
                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
@@ -69,21 +83,21 @@ const ProductList = () => {
                         color="blue-gray"
                         className="font-bold"
                       >
-                        {row.sku}
+                        {row.SKU.substring(0, 3)}
                       </Typography>
                     </td>
-                    <td className={classes}>
+                    <td className={classes + " w-[250px]"}>
                       <Typography
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.name}
+                        {row.productName}
                       </Typography>
                     </td>
                     <td className={classes}>
                       <Typography
                         variant="small"
-                        className="font-normal text-gray-600"
+                        className="font-normal text-gray-600 flex justify-center w-[full] h-[60px]"
                       >
                         <img src={row.image} alt="Ảnh sản phẩm" />
                       </Typography>
@@ -93,7 +107,23 @@ const ProductList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.sold}
+                        {row.purchasePrice}
+                      </Typography>
+                    </td>
+                    {/* <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        <Switcher status= {row.sellingPrice}/>
+                      </Typography>
+                    </td> */}
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        {row.purchasePrice}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -101,31 +131,7 @@ const ProductList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        <Switcher status= {row.selling}/>
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
-                        {row.price}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
-                        {row.stock}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
-                        {row.rating}
+                        {row.supplierId.substring(0,3)}
                       </Typography>
                     </td>
                     
@@ -134,7 +140,7 @@ const ProductList = () => {
                         variant="small"
                         className="font-normal text-white"
                       >
-                        <Link to={row.sku}>
+                        <Link to={row.SKU}>
                           <button className='bg-black w-20 h-6 rounded-xl'>
                             Detail
                           </button>
