@@ -4,11 +4,11 @@ import { Outlet } from "react-router-dom";
 
 const MainPage = () => {
   const item = [
-    { label: "Cha", icon: "/src/assets/chat.svg", link: "chat" },
+    { label: "Chat", icon: "/src/assets/chat.svg", link: "chat" },
     { label: "Order", icon: "/src/assets/order.svg", link: "orders" },
     { label: "Product", icon: "/src/assets/product.svg", link: "products" },
     { label: "Employee", icon: "/src/assets/employee.svg", link: "employees" },
-    { label: "Supplier", icon: "/src/assets/report.svg", link: "supplier" },
+    { label: "Supplier", icon: "/src/assets/supplier.png", link: "supplier" },
     { label: "Report", icon: "/src/assets/report.svg", link: "reports" },
   ];
 

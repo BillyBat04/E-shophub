@@ -1,0 +1,30 @@
+[
+    {
+        "select": false,
+        "name": "Iphone",
+        "parent": "Phone",
+        "sub": 20,
+        "status": true
+    },
+    {
+        "select": false,
+        "name": "Iphone",
+        "parent": "Phone",
+        "sub": 20,
+        "status": true
+    },
+    {
+        "select": false,
+        "name": "Iphone",
+        "parent": "Phone",
+        "sub": 20,
+        "status": true
+    },
+    {
+        "select": false,
+        "name": "Iphone",
+        "parent": "Phone",
+        "sub": 20,
+        "status": true
+    }
+]

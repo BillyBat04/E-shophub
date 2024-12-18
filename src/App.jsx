@@ -21,6 +21,7 @@ import ProductList from "./pages/shopowner/ProductList";
 import ProductDetail from "./pages/shopowner/ProductDetail";
 import AddSupplier from "./pages/shopowner/AddSupplier";
 import CreateProduct from "./pages/shopowner/CreateProduct";
+import AddEmployee from "./pages/shopowner/AddEmployee";
 
 function App() {
   const location = useLocation();
@@ -61,6 +62,7 @@ function App() {
                 <Route path=":orderId" element={<OrderDetail />}></Route>
               </Route>
               <Route path="employees" element={<EmployeeList />}>
+              <Route path="addemployee" element={<AddEmployee />}></Route>
                 <Route path=":employeeId" element={<EmployeeDetail />}></Route>
               </Route>
               <Route path="products" element={<ProductList />}>
