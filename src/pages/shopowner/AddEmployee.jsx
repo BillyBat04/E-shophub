@@ -33,7 +33,7 @@ const AddEmployee = () => {
                 </p>
             </div>
             <div className='h-full gap-3 grid grid-cols-2 w-full '>
-                <div className='grid grid-rows-7 gap-3'>
+                <div className='grid grid-rows-8 gap-3'>
                     <div className='row-span-3 p-5 bg-white rounded-lg'>
                         <h3 className="text-base mb-3 font-semibold">Avatar</h3>
                         <div className="flex flex-col items-center">
@@ -61,9 +61,9 @@ const AddEmployee = () => {
                             </label>
                         </div>
                     </div>
-                    <div className='bg-white row-span-4 p-5 rounded-lg'>
+                    <div className='bg-white row-span-5 p-5 rounded-lg'>
                         <h3 className="text-base mb-3 font-semibold">Salary Information</h3>
-                        <div className='pt-1'>
+                        <div className='pt-0'>
                             <h5 className='font-normal text-slate-400 mb-2'>Current Salary</h5>
                             <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>

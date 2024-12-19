@@ -19,6 +19,7 @@ export default {
         customBeige: '#F9DEC9',
         customOrange: '#8A4F40',
         customGray3:'#D9D9D9',
+        customBlue: '#F5F8FF',
       },
       
     },

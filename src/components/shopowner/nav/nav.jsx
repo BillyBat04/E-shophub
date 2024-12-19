@@ -15,6 +15,7 @@ const Nav = ({ items }) => {
 				<NavItemsContainer items={items} />
 			</ul>
 		</nav>
+		
 	)
 }
 export default Nav
