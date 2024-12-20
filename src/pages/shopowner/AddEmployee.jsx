@@ -1,27 +1,57 @@
-import React from 'react'
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import generateRandomPassword from '../../helpers/generatePassword';
+import axiosInstance from '../../config/api';
+import axios from 'axios';
 const AddEmployee = () => {
     const [startDate, setStartDate] = useState("");
-    const [startIncreaseDate, setStartIncreaseDate] = useState("");
-
+    const [fullName, setFullName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [role, setRole] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
     const handleStartDateChange = (event) => {
         setStartDate(event.target.value);
     };
-    const handleStartIncreaseDateChange = (event) => {
-        setStartIncreaseDate(event.target.value);
-    };
-
+    const navigate = useNavigate()
     const today = new Date().toISOString().split("T")[0];
     const [selectedAvatar, setSelectedAvatar] = useState(null);
+    const [image, setImage] = useState(null)
     const handleAvatarChange = (event) => {
         const file = event.target.files[0];
         if (file) {
             const imageURL = URL.createObjectURL(file);
+            setImage(file)
             setSelectedAvatar(imageURL);
         }
     };
+    const handleGeneratePassword = () => {
+        const randomPassword = generateRandomPassword()
+        alert(randomPassword)
+        setPassword(randomPassword)
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        const data = new FormData()
+        data.append('fullName', fullName)
+        data.append('email', email)
+        data.append('password', password)
+        data.append('phoneNumber', phoneNumber)
+        data.append('role', role)
+        data.append('beginDate', new Date(startDate))
+        data.append('image', image)
+
+        await axios({
+            method: 'POST',
+            url: 'http://localhost:3000/api/employee',
+            data,
+            headers: {'Content-Type': 'multipart/form-data'}
+        })
+        navigate('/admin/employees')
+        window.location.reload()
+    }
     return (
         <div className=' w-full h-full '>
              <div className="text-base grid mb-3 lg:grid-cols-[repeat(3,_1fr)] items-center h-16 bg-white shadow-md rounded-[20px]">
@@ -61,46 +91,34 @@ const AddEmployee = () => {
                             </label>
                         </div>
                     </div>
-                    <div className='bg-white row-span-5 p-5 rounded-lg'>
-                        <h3 className="text-base mb-3 font-semibold">Salary Information</h3>
-                        <div className='pt-0'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Current Salary</h5>
-                            <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
-                        </div>
-                        <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Increase</h5>
-                            <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
-                        </div>
-                        <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Start Increase</h5>
-                            <input
-                                type="date"
-                                value={startIncreaseDate}
-                                min={today}
-                                onChange={handleStartIncreaseDateChange}
-                                className="pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black"
-                            />
-                        </div>
-                    </div>
                 </div>
                 <div>
                     <div className=' h-[80%] bg-white rounded-lg p-5'>
                         <h3 className="text-base mb-3 font-semibold">Information</h3>
                         <div className='pt-1'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Name</h5>
-                            <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                            <h5 className='font-normal text-slate-400 mb-2'>Full Name</h5>
+                            <input value={fullName} onChange={e => setFullName(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                        </div>
+                        <div className='pt-1'>
+                            <h5 className='font-normal text-slate-400 mb-2'>Email</h5>
+                            <input value={email} onChange={e => setEmail(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                        </div>
+                        <div className='pt-1'>
+                            <h5 className='font-normal text-slate-400 mb-2'>Password</h5>
+                            <input disabled value="********" className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                            <button onClick={() => handleGeneratePassword()} className='p-2 bg-black text-white mt-4 rounded-md opacity-50 duration-150 hover:opacity-100 font-bold'>Generate random password</button>
                         </div>
                         <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Position</h5>
-                            <select className="pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black">
-                                <option value="">Select Position</option>
-                                <option value="sales">Sales</option>
-                                <option value="shipping-man">Shipping Man</option>
+                            <h5 className='font-normal text-slate-400 mb-2'>Role</h5>
+                            <select onChange={e => setRole(e.target.value)} className="pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black">
+                                <option value="">Select role</option>
+                                <option value="WHEMPLOYEE">Warehouse Employee</option>
+                                <option value="DEEMPLOYEE">Delivery Employee</option>
                             </select>
                         </div>
                         <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Employee ID</h5>
-                            <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                            <h5 className='font-normal text-slate-400 mb-2'>Phone Number</h5>
+                            <input value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>
                         <div className='pt-3'>
                             <h5 className='font-normal text-slate-400 mb-2'>Start working Day</h5>
@@ -114,7 +132,7 @@ const AddEmployee = () => {
                         </div>
                     </div >
                     <div className='pt-5 row-span-1 flex justify-end items-center'>
-                        <button className='w-36 h-12 rounded-xl bg-customBlack text-white'>Save</button>
+                        <button onClick={e => handleSubmit(e)} type='button' className='w-36 h-12 rounded-xl bg-customBlack text-white'>Submit</button>
                     </div>
                 </div>
             </div >

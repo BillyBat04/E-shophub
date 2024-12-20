@@ -6,10 +6,11 @@ import { Card, Typography } from "@material-tailwind/react";
 import { Link, Outlet } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import axiosInstance from "../../config/api";
+import formatDate from "../../helpers/formatDate";
 
 const EmployeeList = () => {
   const isDetailPage = location.pathname !== "/admin/employees";
-  const TABLE_HEAD = ["ID", "Name", "Image", "Position", "Salary", "Start day"];
+  const TABLE_HEAD = ["ID", "Image", "Full Name", "Phone Number", "Begin Date", "Email", "Role"];
   const [employeeList, setEmployeeList] = useState([])
 
   const getList = useCallback(async () => {
@@ -82,7 +83,7 @@ const EmployeeList = () => {
                         color="blue-gray"
                         className="font-bold"
                       >
-                        {row.id}
+                        {index + 1}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -90,7 +91,7 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.name}
+                        {row.fullName}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -98,7 +99,7 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600 flex justify-center"
                       >
-                        <img className="w-full" src={row.avatar} alt="Ảnh sản phẩm" />
+                        <img className="w-[60px] h-[60px] rounded-md" src={row.user.image} alt="Ảnh sản phẩm" />
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -106,7 +107,7 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.position}
+                        {row.phoneNumber}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -114,7 +115,7 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        7.000.000
+                        {formatDate(row.beginDate)}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -122,7 +123,15 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.start}
+                        {row.user.email}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        {row.user.role}
                       </Typography>
                     </td>
                     <td className={classes}>

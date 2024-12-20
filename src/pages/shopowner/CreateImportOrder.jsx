@@ -88,7 +88,6 @@ const CreateImportOrder = () => {
       shippingAddress: address,
       supplierId: activeSupplierId
     }
-
     try {
       const response = await axiosInstance.post('/supply-order', data)
       const newSupplyOrder = response.data 
@@ -104,6 +103,7 @@ const CreateImportOrder = () => {
       }
       navigate('/admin/orders')
       window.location.reload()
+
     } catch (error) {
       console.log(error)
     }
