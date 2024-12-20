@@ -4,17 +4,16 @@ const NavItem = ({ item }) => {
 	const { label, icon: Icon, link } = item
 	function CustomComponent() {
 		return (
-			<a
-				key={link}
-				href={link}
+			<Link
+				to={link}
 				className={`h-[45px] w-[200px] flex font-roboto text-sm justify-start items-center ${location.pathname.includes(link)
 					? "bg-customBlack text-white rounded-lg"
 					: "text-black"
 					}`}
 			>
-				<Icon color={`${location.pathname.includes(link) ? "#ffffff" : "#000000"}`}className=" ml-12 mr-3 h-6 w-6" />
+				<Icon color={`${location.pathname.includes(link) ? "#ffffff" : "#000000"}`} className=" ml-12 mr-3 h-6 w-6" />
 				{label}
-			</a>
+			</Link>
 		);
 	}
 	return (

@@ -24,6 +24,7 @@ import CreateProduct from "./pages/shopowner/CreateProduct";
 import AddEmployee from "./pages/shopowner/AddEmployee";
 import ImportOrder from "./pages/shopowner/ImportOrder";
 import CreateImportOrder from "./pages/shopowner/CreateImportOrder";
+import Listproduct from "./pages/listproduct";
 
 function App() {
   const location = useLocation();
@@ -53,6 +54,7 @@ function App() {
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/pdescript" element={<Pdescript />} />
             <Route path="/personal" element={<OrderHistory />} />
+            <Route path="/listproduct" element={<Listproduct />} />
             <Route path="/admin" element={<MainPage />}>
               <Route path="chat" element={<Chat />} />
               <Route path="reports" element={<Reports />} />
