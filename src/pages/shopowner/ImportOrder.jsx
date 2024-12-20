@@ -1,11 +1,24 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card, Typography } from "@material-tailwind/react";
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Link, Outlet } from "react-router-dom";
 import { IoAdd } from 'react-icons/io5';
+import axiosInstance from '../../config/api';
+import formatDate from '../../helpers/formatDate';
 const ImportOrder = () => {
-  const TABLE_HEAD = ["No", "Customer", "Date", "Amount", "Items", "Payment", "Status"];
+  const TABLE_HEAD = ["No", "Order Date", "Shipping Address", "Total Price", "Supplier", "Status"];
+  const [supplyOrders, setSupplyOrders] = useState([])
+
+  const getList = useCallback(async () => {
+    const response = await axiosInstance.get('/supply-order')
+    setSupplyOrders(response.data)
+  }, [])
+
+  useEffect(() => {
+    getList()
+  }, [getList])
+
   const [tableRows, setTableRows] = useState([
     {
       no: "23121",
@@ -14,7 +27,7 @@ const ImportOrder = () => {
       amount: "20.000.000",
       item: "1",
       mode: "COD",
-      status: "Pending",
+      status: "PROCESSING",
     },
     {
       no: "23122",
@@ -23,7 +36,7 @@ const ImportOrder = () => {
       amount: "20.000.000",
       item: "1",
       mode: "COD",
-      status: "Canceled",
+      status: "SHIPPING",
     },
     {
       no: "23123",
@@ -32,7 +45,7 @@ const ImportOrder = () => {
       amount: "20.000.000",
       item: "1",
       mode: "COD",
-      status: "Pending",
+      status: "CANCELED",
     },
 
   ]);
@@ -47,13 +60,13 @@ const ImportOrder = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Pending":
-        return "text-yellow-500 bg-yellow-300";
-      case "Canceled":
+      case "PROCESSING":
+        return "text-yellow-700 bg-yellow-300";
+      case "CANCELED":
         return "text-red-500 bg-red-300";
-      case "Shipped":
+      case "COMPLETED":
         return "text-green-500 bg-green-300";
-      case "Delivered":
+      case "SHIPPING":
         return "text-blue-500 bg-blue-300";
       default:
         return "text-gray-600 bg-gray-400";
@@ -135,7 +148,7 @@ const ImportOrder = () => {
               </tr>
             </thead>
             <tbody>
-              {tableRows.map((row, index) => {
+              {supplyOrders.map((row, index) => {
                 const isLast = index === tableRows.length - 1;
                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
@@ -147,7 +160,7 @@ const ImportOrder = () => {
                         color="blue-gray"
                         className="font-bold"
                       >
-                        {row.no}
+                        {index + 1}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -155,7 +168,7 @@ const ImportOrder = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.customer}
+                        {formatDate(row.orderDate)}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -163,7 +176,7 @@ const ImportOrder = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.date}
+                        {row.shippingAddress}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -171,7 +184,7 @@ const ImportOrder = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.amount}
+                        {row.totalPrice}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -179,19 +192,11 @@ const ImportOrder = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.item}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
-                        {row.mode}
+                        {row.supplierId.slice(0,3)}
                       </Typography>
                     </td>
                     <td className={`${classes} flex justify-center items-center`}>
-                      <Typography className={`font-normal w-20 flex items-center justify-center rounded-full ${getStatusColor(row.status)}`}>
+                      <Typography className={`font-normal w-full flex items-center justify-center rounded-full ${getStatusColor(row.status)}`}>
                         {row.status}
                       </Typography>
                       <Menu as="div" className="relative inline-block text-left ml-2">
@@ -199,9 +204,9 @@ const ImportOrder = () => {
                           <ChevronDownIcon className="h-5 w-5 text-gray-400" />
                         </MenuButton>
                         <MenuItems className="flex flex-col items-start absolute right-0 z-10  w-56 bg-white rounded-lg shadow-lg">
-                          {["Pending", "Shipped", "Delivered", "Canceled"].map((status) => (
-                            <MenuItem key={status} as="button" onClick={() => handleStatusChange(index, status)}>
-                              <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{status}</span>
+                          {["PROCESSING", "SHIPPING", "COMPLETED", "CANCELED"].map((status) => (
+                            <MenuItem className= "w-full" key={status} as="button" onClick={() => handleStatusChange(index, status)}>
+                              <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{status}</span>
                             </MenuItem>
                           ))}
                         </MenuItems>

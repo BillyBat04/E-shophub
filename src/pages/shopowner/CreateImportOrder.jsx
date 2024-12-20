@@ -7,6 +7,7 @@ const CreateImportOrder = () => {
   const navigate = useNavigate()
 
    const [suppliers, setSuppliers] = useState([])
+   const [activeSupplierId, setActiveSupplierId] = useState('')
     const [products, setProducts] = useState([])
     const [productList, setProductList] = useState([])
     const [productSelected, setProductSelected] = useState([])
@@ -19,6 +20,9 @@ const CreateImportOrder = () => {
             return acc;
         }, {})
     );
+
+    const [totalQuantity, setTotalQuantity] = useState(0)
+    const [totalPrice, setTotalPrice] = useState(0)
 
 
   const addproductOption = () => {
@@ -43,9 +47,9 @@ const CreateImportOrder = () => {
   }, [getSuppliers])
 
   const handleSupplierChanged  = async (e) => {
-    console.log(123)
     const response = await axiosInstance.get(`/product/get-product/${e.target.value}`)
     setProducts(response.data)
+    setActiveSupplierId(e.target.value)
   }
 
   const handleProductChanged = async (productSKU) => {
@@ -62,15 +66,49 @@ const CreateImportOrder = () => {
 
   const handleConfirm = async () => {
     const temp = []
+    let quantity = 0
+    let price = 0
     for (let i = 0; i < productSelected.length; i++) {
         const response = await axiosInstance.get(`/product/${productSelected[i]}`)
         temp.push(response.data)
         setProductList(prevState => [...prevState, response.data])
+        quantity += parseInt(quantities[i])
+        price += response.data.purchasePrice * quantities[i]
     }
+    setTotalQuantity(quantity)
+    setTotalPrice(price)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const data = {
+      orderDate: new Date(),
+      status: "PROCESSING",
+      totalPrice: totalPrice,
+      shippingAddress: address,
+      supplierId: activeSupplierId
+    }
+
+    try {
+      const response = await axiosInstance.post('/supply-order', data)
+      const newSupplyOrder = response.data 
+
+      for (let i = 0; i < productSelected.length; i++){
+        const data = {
+          totalPrice: productList[i].purchasePrice * parseInt(quantities[i]),
+          productSKU: productSelected[i],
+          supplyOrderId: newSupplyOrder.id,
+          quantity: parseInt(quantities[i])
+        }
+        await axiosInstance.post('/supply-order-detail', data)
+      }
+      navigate('/admin/orders')
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
+
+    
   }
 
   return (
@@ -158,7 +196,7 @@ const CreateImportOrder = () => {
                             <button
                                 onClick={e => handleConfirm(e)}
                                 className="opacity-50 hover:opacity-100 duration-150 mt-4 ml-[auto] self-end bg-black text-white text-base px-8 py-3 rounded-lg shadow-md"
-                                type="submit">
+                                type="button">
                                 <span>Confirm</span>
                             </button>
                         </div>
@@ -183,13 +221,13 @@ const CreateImportOrder = () => {
                         )
                     })}
                   <h3 className="text-base font-semibold mt-3">Address: {address}</h3>
-                  <h3 className="text-base font-semibold mt-3">Total Quantity: 80.000</h3>
-                  <h3 className="text-base font-semibold mt-3">Total Price: 80.000</h3>
+                  <h3 className="text-base font-semibold mt-3">Total Quantity: {totalQuantity}</h3>
+                  <h3 className="text-base font-semibold mt-3">Total Price: {totalPrice}</h3>
             </div>
           <button
             onClick={e => handleSubmit(e)}
             className="w-max self-end bg-black text-white text-base px-8 py-3 rounded-lg shadow-md"
-            type="submit">
+            type="button">
             <span>Submit</span>
           </button>
         </div>

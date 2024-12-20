@@ -4,10 +4,22 @@ import { IoIosSearch } from "react-icons/io";
 import { FaFilter } from "react-icons/fa6";
 import { Card, Typography } from "@material-tailwind/react";
 import { Link, Outlet } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import axiosInstance from "../../config/api";
 
 const EmployeeList = () => {
   const isDetailPage = location.pathname !== "/admin/employees";
   const TABLE_HEAD = ["ID", "Name", "Image", "Position", "Salary", "Start day"];
+  const [employeeList, setEmployeeList] = useState([])
+
+  const getList = useCallback(async () => {
+    const response = await axiosInstance.get('/employee')
+    setEmployeeList(response.data)
+  }, [])
+
+  useEffect(() => {
+    getList()
+  }, [getList])
 
   if (isDetailPage) {
     return <Outlet></Outlet>
@@ -58,7 +70,7 @@ const EmployeeList = () => {
               </tr>
             </thead>
             <tbody>
-              {employeeData.map((row, index) => {
+              {employeeList.map((row, index) => {
                 const isLast = index === employeeData.length - 1;
                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
