@@ -3,6 +3,7 @@ import { GrNext } from "react-icons/gr";
 import PhoneList from '../components/phonecart';
 import LaptopList from '../components/laptopcart'
 import AccessoryCard from '../components/accessorycart';
+import ChatModal from '../components/chatmodal';
 
 const products = [
   {
@@ -61,6 +62,7 @@ const Mainpage = () => {
   return (
     <div className="xl:pl-[15%] xl:pr-[15%]  w-screen h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
       {/* Section 1 */}
+      <ChatModal/>
       <section className="snap-start  w-full h-[95%] flex flex-col">
         <div className="relative w-full  h-[95%]">
           <div className=' absolute inset-0 w-full h-[60%] bg-black'>
