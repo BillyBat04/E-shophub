@@ -1,0 +1,126 @@
+[
+  {
+    "id": "031782",
+    "image": "src/assets/16.svg",
+    "name": "iPhone 16 Pro 256GB",
+    "price": "20.000.000",
+
+    "rate_count": 250,
+    "rating": 4.5
+  },
+  {
+    "id": "031783",
+    "image": "src/assets/16.svg",
+    "name": "iPhone 13 Mini 128GB",
+    "price": "20.000.000",
+    "rate_count": 250,
+    "rating": 4.5
+  },
+  {
+    "id": "031784",
+    "image": "src/assets/16.svg",
+    "name": "Samsung Galaxy Z Fold 6",
+    "price": "20.000.000",
+
+    "rate_count": 250,
+    "rating": 4.5
+  },
+  {
+    "id": "031785",
+    "image": "src/assets/16.svg",
+    "name": "Samsung Galaxy S23 FE",
+    "price": "20.000.000",
+
+    "rate_count": 250,
+    "rating": 4.5
+  },
+  {
+    "id": "031786",
+    "image": "src/assets/16.svg",
+    "name": "iPhone 14 Pro 128GB",
+    "price": "18.000.000",
+
+    "rate_count": 80,
+    "rating": 4.6
+  },
+  {
+    "id": "031787",
+    "image": "src/assets/16.svg",
+    "name": "Google Pixel 7 128GB",
+    "price": "15.000.000",
+
+    "rate_count": 45,
+    "rating": 4.3
+  },
+  {
+    "id": "031788",
+    "image": "src/assets/16.svg",
+    "name": "OnePlus 11 Pro",
+    "price": "16.000.000",
+
+    "rate_count": 55,
+    "rating": 4.4
+  },
+  {
+    "id": "031789",
+    "image": "src/assets/16.svg",
+    "name": "Xiaomi Mi 13 Ultra",
+    "price": "14.000.000",
+
+    "rate_count": 150,
+    "rating": 4.7
+  },
+  {
+    "id": "031790",
+    "image": "src/assets/16.svg",
+    "name": "Sony Xperia 1 IV",
+    "price": "19.000.000",
+
+    "rate_count": 65,
+    "rating": 4.2
+  },
+  {
+    "id": "031791",
+    "image": "src/assets/16.svg",
+    "name": "Huawei P50 Pro",
+    "price": "13.000.000",
+
+    "rate_count": 70,
+    "rating": 4.3
+  },
+  {
+    "id": "031792",
+    "image": "src/assets/16.svg",
+    "name": "Oppo Find X5 Pro",
+    "price": "17.000.000",
+
+    "rate_count": 85,
+    "rating": 4.5
+  },
+  {
+    "id": "031793",
+    "image": "src/assets/16.svg",
+    "name": "Vivo X80 Pro",
+    "price": "16.500.000",
+
+    "rate_count": 95,
+    "rating": 4.6
+  },
+  {
+    "id": "031794",
+    "image": "src/assets/16.svg",
+    "name": "Motorola Edge 30 Ultra",
+    "price": "15.500.000",
+
+    "rate_count": 35,
+    "rating": 4.1
+  },
+  {
+    "id": "031795",
+    "image": "src/assets/16.svg",
+    "name": "Nokia X100 5G",
+    "price": "12.000.000",
+    "rate_count": 180,
+    "rating": 4.0
+  }
+]
