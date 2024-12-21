@@ -36,7 +36,6 @@ const ProductDetail = ({ id }) => {
     setFeaturedImage(null);
   };
 
-  // extra images
   const [extraImages, setExtraImages] = useState([]);
   const extraImagesDescription = useRef({});
   const currentSelectedImage = useRef();
@@ -57,32 +56,21 @@ const ProductDetail = ({ id }) => {
   };
 
   const extraImageOnClick = (e) => {
-    // find current and remove id from it
     const current = document.getElementById("selected-extra-image");
     if (current) {
       current.removeAttribute("id");
     }
-
-    // add id to newfsafdsa
     e.target.setAttribute("id", "selected-extra-image");
-
-    // change current state to idString
     currentSelectedImage.current = e.target.getAttribute("src");
-
-    // fill textarea with new description
     descTextArea.current.value =
       extraImagesDescription[currentSelectedImage.current];
   };
 
   const extraImageDescOnChange = (e) => {
-    // find current selected image and change its value to new description
     extraImagesDescription[currentSelectedImage.current] = e.target.value;
   };
 
   const deleteExtraImage = (url) => () => {
-    // change currentSelectedImage to null
-    // delete from extraImagesDescription
-    // remove from array
     currentSelectedImage.current = null;
     delete extraImagesDescription.url;
     setExtraImages((cur) => cur.filter((u) => u !== url));

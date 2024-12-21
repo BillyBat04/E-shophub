@@ -5,10 +5,10 @@ const DropdownMenu = () => {
 
   return (
     <div
-      className="w-full h-[35px] z-50 flex justify-center bg-customGray"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}>
-      <div className="w-auto h-full flex items-center">
+      className="w-full h-[35px] z-50 flex justify-center bg-customGray">
+      <div className="w-auto h-full flex items-center"
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}>
         {/* Button Group */}
         <div className="flex space-x-16 items-center">
           <button className="flex flex-row items-center">

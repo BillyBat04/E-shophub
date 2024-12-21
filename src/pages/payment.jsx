@@ -33,7 +33,7 @@ const PaymentPage = () => {
                     <p className="text-right font-semibold">Full payment: 12,999,000 VND</p>
                 </div>
                 {cartItems.map((item) => (
-                    <div className="flex justify-between mb-4">
+                    <div key={item.id} className="flex justify-between mb-4">
                         <div className="flex items-center w-full">
                             <div className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold mr-4">{item.id}</div>
                             <img src={item.image} className='w-[70px] h-[70px] object-cover mr-4' />
