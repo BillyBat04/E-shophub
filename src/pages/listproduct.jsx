@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FaFilter } from "react-icons/fa6";
 import { Range } from 'react-range';
 import ProductList1 from '../components/productlist';
+import axiosInstance from '../config/api';
 
 const Listproduct = () => {
     const [selectedOption, setSelectedOption] = useState('');
-
     const handleChange = (event) => {
         setSelectedOption(event.target.value);
     };
+
+
     const [values, setValues] = useState([0, 100]);
     const banners = [
         { id: 1, img: "src/assets/banner1.jpg" },

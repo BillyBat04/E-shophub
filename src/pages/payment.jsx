@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import AddressModal from '../components/addressmodal';
 
 const PaymentPage = () => {
     const [selectedPayment, setSelectedPayment] = useState(null);
-
+    const [address, setAddress] = useState({})
     const handlePaymentSelection = (method) => {
         setSelectedPayment(method);
     };
@@ -25,16 +27,16 @@ const PaymentPage = () => {
         }
     ];
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <h1 className="text-3xl font-bold text-center mb-8">Payment</h1>
-            <section className="max-w-lg mx-auto mb-6">
+        <div className="min-h-screen bg-gray-50 p-8 flex ">
+            <section className=" mx-auto mb-6 w-[70%]">
+                <h1 className="text-3xl font-bold text-center mb-8">Payment</h1>
                 <div className='flex flex-row justify-between'>
                     <h2 className="text-xl font-semibold mb-4">Your shopping</h2>
                     <p className="text-right font-semibold">Full payment: 12,999,000 VND</p>
                 </div>
                 {cartItems.map((item) => (
-                    <div key={item.id} className="flex justify-between mb-4">
-                        <div className="flex items-center w-full">
+                    <div key={item.id} className="flex mb-4">
+                        <div className="flex justify-center items-center w-full">
                             <div className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold mr-4">{item.id}</div>
                             <img src={item.image} className='w-[70px] h-[70px] object-cover mr-4' />
                             <div className="bg-gray-100 p-4 w-[74%] rounded-lg flex flex-row justify-between ">
@@ -52,13 +54,19 @@ const PaymentPage = () => {
 
             </section>
 
-            <section className="max-w-lg mx-auto mb-6 ">
+            <div>
+            <section className="max-w-lg mx-auto ml-6 ">
                 <h2 className="text-xl font-semibold mb-4">Shipping address</h2>
-                <div className="bg-gray-100 p-4 shadow-xl rounded-lg">
-                    <p>Le Bao Minh</p>
-                    <p>+84812352371</p>
-                    <p>Binh Chieu, Thu Duc, Ho Chi Minh City</p>
-                    <p className="font-semibold">Delivery: 10/10/2024 - 12/10/2024</p>
+                <div className='flex justify-between'>
+                    <p>Giao tới</p>
+                    <AddressModal setAddress = {setAddress}/>
+                </div>
+                <div className='border border-black p-4 my-4 rounded-md'>
+                    <div>
+                        <p>{address.name}</p>
+                        <p>{address.phone}</p>
+                    </div>
+                    {Object.keys(address).length > 0 && <p>{address.address}, {address.ward}, {address.district}, {address.city}</p>}
                 </div>
             </section>
 
@@ -113,11 +121,27 @@ const PaymentPage = () => {
             </section>
 
             {/* Order Button */}
+            <section className='ml-2 mt-4'>
+                <p className='text-xl'>Đơn hàng</p>
+                <div className='flex justify-between'>
+                    <p className='text-[#808090]'>Tổng tiền hàng: </p>
+                    <p>43.990.000đ</p>
+                </div>
+                <div className='flex justify-between'>
+                    <p className='text-[#808090]'>Phí vận chuyển: </p>
+                    <p>16.500đ</p>
+                </div>
+                <div className='flex justify-between'>
+                    <p>Tổng tiền thanh toán: </p>
+                    <p className='text-[#FF424E] text-2xl font-bold'>43.990.000 ₫</p>
+                </div>
+            </section>
             <section className="max-w-lg mx-auto mt-8">
-                <button className="w-full bg-black text-white py-3 rounded-lg font-semibold">
+                <button className="w-full bg-[#FF424E] text-white py-3 rounded-lg font-semibold">
                     Order
                 </button>
             </section>
+            </div>
         </div>
     );
 };

@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import SimilarProduct from "../components/similarproduct";
+import axiosInstance from "../config/api";
+import { useParams } from "react-router-dom";
+import Thumbnail from "../components/thumbnail";
+import '@splidejs/splide/dist/css/splide.min.css';
+import Splide from '@splidejs/splide';
 function DetailProduct() {
+  const params = useParams()
+  const SKU = params.sku
   // Danh sách hình ảnh sản phẩm
   const images = [
     "https://salt.tikicdn.com/cache/750x750/ts/product/27/04/0f/455b9d3e001963e89cabc903afe9f1d1.jpg.webp",
@@ -13,6 +20,7 @@ function DetailProduct() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState('');
+  const [product, setProduct] = useState({})
   const colors = ['red', 'blue', 'green'];
   // Handle increment
   const increment = () => {
@@ -20,6 +28,15 @@ function DetailProduct() {
       setQuantity(quantity + 1);
     }
   };
+
+  const getProduct = useCallback(async () => {
+    const response = await axiosInstance.get(`/product/${SKU}`)
+    setProduct(response.data)
+  }, [])
+
+  useEffect(() => {
+    getProduct()
+  }, [getProduct])
 
   const filters = [
     'Tất cả', 
@@ -50,23 +67,20 @@ function DetailProduct() {
     }
   };
 
+
   return (
     <div className="bg-customGray1">
         <div className="flex justify-between p-8 w-[1400px] mx-auto">
         {/* Cột 1: Hình ảnh sản phẩm */}
-        <div className="flex-1 p-4 bg-white rounded-md mr-4">
-          <div className="relative">
-            <img
-              src={images[currentImageIndex]}
-              alt="Sản phẩm"
-              className="w-full h-auto"
-            />
+        <div className="flex-1 p-4 bg-white rounded-md mr-4 w-[300px]">
+          <div>
+            <Thumbnail product={product}/>
           </div>
         </div>
 
         {/* Cột 2: Thông tin sản phẩm */}
         <div className="flex-1 p-4 mr-4 bg-white rounded-md">
-          <h2 className="text-xl font-bold mb-4">Điện thoại Samsung Galaxy Z Fold6 (12GB/ 256GB) - Hàng Chính Hãng</h2>
+          <h2 className="text-xl font-bold mb-4">{product.productName}</h2>
           <div className="flex items-center">
             <p className="mr-2">5.0</p>
             <FaStar className="text-[#ffd700]"/>
@@ -77,10 +91,10 @@ function DetailProduct() {
             <p className="ml-2">Đã bán: 500</p>
           </div>
           <p className="text-2xl font-bold mt-4">
-            43.990.000₫
+            {product.sellingPrice}
           </p>
           <p className="mt-4 customGray3">
-          The Samsung Galaxy Z Fold6 features a 7.6-inch Dynamic AMOLED 2X foldable display and a 6.2-inch outer screen for seamless multitasking. Powered by a Snapdragon processor, 12GB of RAM, and 256GB of storage, it offers powerful performance and ample space. The versatile triple-camera setup ensures excellent photography. With 5G connectivity, a durable foldable design, and a long-lasting battery, the Z Fold6 is a premium choice for users seeking innovation and style. This is an official genuine product, delivering top-tier performance and design.
+          {product.description}
           </p>
             <p className="font-bold text-md my-4">Màu:</p>
             <div className="flex space-x-4">

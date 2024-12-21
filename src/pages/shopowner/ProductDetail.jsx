@@ -22,10 +22,10 @@ const ProductDetail = () => {
   const [featuredImage, setFeaturedImage] = useState(null);
   const [mainImage, setMainImage] = useState(null)
   const changeFeaturedImage = (e) => {
-    const file = e.target.files[0]; // get image
+    const file = e.target.files[0]; 
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // create temp URL
-      setFeaturedImage(imageUrl); // update URL
+      const imageUrl = URL.createObjectURL(file); 
+      setFeaturedImage(imageUrl);
       setMainImage(file)
     }
   };

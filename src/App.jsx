@@ -56,7 +56,7 @@ function App() {
             <Route path="/pdescript" element={<Pdescript />} />
             <Route path="/personal" element={<OrderHistory />} />
             <Route path="/listproduct" element={<Listproduct />} />
-            <Route path="/products/:id" element={<DetailProduct />} />
+            <Route path="/products/:sku" element={<DetailProduct />} />
             <Route path="/admin" element={<MainPage />}>
               <Route path="chat" element={<Chat />} />
               <Route path="reports" element={<Reports />} />
