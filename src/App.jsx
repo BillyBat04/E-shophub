@@ -20,6 +20,11 @@ import EmployeeDetail from "./pages/shopowner/EmployeeDetail";
 import ProductList from "./pages/shopowner/ProductList";
 import ProductDetail from "./pages/shopowner/ProductDetail";
 import AddSupplier from "./pages/shopowner/AddSupplier";
+import CreateProduct from "./pages/shopowner/CreateProduct";
+import AddEmployee from "./pages/shopowner/AddEmployee";
+import ImportOrder from "./pages/shopowner/ImportOrder";
+import CreateImportOrder from "./pages/shopowner/CreateImportOrder";
+import Listproduct from "./pages/listproduct";
 
 function App() {
   const location = useLocation();
@@ -49,6 +54,7 @@ function App() {
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/pdescript" element={<Pdescript />} />
             <Route path="/personal" element={<OrderHistory />} />
+            <Route path="/listproduct" element={<Listproduct />} />
             <Route path="/admin" element={<MainPage />}>
               <Route path="chat" element={<Chat />} />
               <Route path="reports" element={<Reports />} />
@@ -56,14 +62,17 @@ function App() {
                 <Route path="addsupplier" element={<AddSupplier/>} ></Route>
                 <Route path=":supplierId" element={<SupplierDetail />}></Route>
               </Route>
-              <Route path="orders" element={<OrderManagement />} >
+              <Route path="orders" element={<ImportOrder />} >
                 <Route path=":orderId" element={<OrderDetail />}></Route>
+                <Route path="create" element={<CreateImportOrder />}></Route>
               </Route>
               <Route path="employees" element={<EmployeeList />}>
+              <Route path="addemployee" element={<AddEmployee />}></Route>
                 <Route path=":employeeId" element={<EmployeeDetail />}></Route>
               </Route>
               <Route path="products" element={<ProductList />}>
                 <Route path=":productId" element={<ProductDetail />} />
+                <Route path="create" element={<CreateProduct />} />
               </Route>
             </Route>
           </Routes>

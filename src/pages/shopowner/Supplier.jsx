@@ -1,14 +1,25 @@
 import { IoAdd } from "react-icons/io5";
-import supplierList from "../../SampleData/supplierList.json";
 import { IoIosSearch } from "react-icons/io";
 import { FaFilter } from "react-icons/fa6";
 import { Card, Typography } from "@material-tailwind/react";
 import { Link, Outlet } from "react-router-dom";
-import Switcher from "../../components/togglebutton";
+import { useCallback, useEffect, useState } from "react";
+import axiosInstance from "../../config/api";
 
 const Supplier = () => {
     const isDetailPage = location.pathname !== "/admin/supplier";
-    const TABLE_HEAD = ["ID", "Name", "Address", "Phone", "Total product", "Revenue", "Status"];
+    const TABLE_HEAD = ["ID", "Name", "Email", "Address", "Phone Number", "Contact Person" , "Total Product"];
+
+    const [supplierList, setSupplierList] = useState([])
+    const getList = useCallback(async () => {
+        const response = await axiosInstance.get('/supplier')
+        console.log(response.data)
+        setSupplierList(response.data)
+    } , [])
+
+    useEffect(() => {
+        getList()
+    }, [getList])
 
     if (isDetailPage) {
         return <Outlet></Outlet>
@@ -58,19 +69,19 @@ const Supplier = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {supplierList.map((row, index) => {
+                            {supplierList?.map((supplier, index) => {
                                 const isLast = index === supplierList.length - 1;
                                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
                                 return (
-                                    <tr key={row.id} className="hover:bg-gray-50">
+                                    <tr key={supplier.id} className="hover:bg-gray-50">
                                         <td className={classes}>
                                             <Typography
                                                 variant="small"
                                                 color="blue-gray"
                                                 className="font-bold"
                                             >
-                                                {row.id}
+                                                {supplier.id.slice(0,3)}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -78,7 +89,7 @@ const Supplier = () => {
                                                 variant="small"
                                                 className="font-normal text-gray-600"
                                             >
-                                                {row.name}
+                                                {supplier.supplierName}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -86,7 +97,7 @@ const Supplier = () => {
                                                 variant="small"
                                                 className="font-normal text-gray-600"
                                             >
-                                                {row.address}
+                                                {supplier.email}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -94,7 +105,7 @@ const Supplier = () => {
                                                 variant="small"
                                                 className="font-normal text-gray-600"
                                             >
-                                                {row.phone}
+                                                {supplier.address}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -102,7 +113,7 @@ const Supplier = () => {
                                                 variant="small"
                                                 className="font-normal text-gray-600"
                                             >
-                                                {row.total}
+                                                {supplier.phoneNumber}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -110,7 +121,7 @@ const Supplier = () => {
                                                 variant="small"
                                                 className="font-normal text-gray-600"
                                             >
-                                                {row.revenue}
+                                                {supplier.contactPerson}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -118,7 +129,7 @@ const Supplier = () => {
                                                 variant="small"
                                                 className="font-normal text-gray-600"
                                             >
-                                                <Switcher status={row.status} />
+                                                {supplier.products.length}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -126,7 +137,7 @@ const Supplier = () => {
                                                 variant="small"
                                                 className="font-normal text-white"
                                             >
-                                                <Link to={row.id}>
+                                                <Link to={supplier.id}>
                                                     <button className='bg-black w-20 h-6 rounded-xl'>
                                                         Detail
                                                     </button>

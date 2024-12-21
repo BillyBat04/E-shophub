@@ -1,24 +1,44 @@
 
-import { React, useState, useRef } from 'react';
-import { Link, useParams } from 'react-router-dom'
-import { Input } from "@mui/base";
-import { RxCross2 } from "react-icons/rx";
+import { useCallback, useEffect, useState} from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import axiosInstance from '../../config/api';
 const SupplierDetail = () => {
     const { supplierId } = useParams();
-    const [productOptions, setproductOptions] = useState([{ id: 0 }]);
-    const productOptionCount = useRef(1);
 
-    const addproductOption = () => {
-        setproductOptions((prevOptions) => [
-            ...prevOptions,
-            { id: productOptionCount.current },
-        ]);
-        productOptionCount.current += 1;
-    };
+    const navigate = useNavigate()
+    const [supplier, setSupplier] = useState(null)
+    const [supplierName, setSupplierName] = useState('')
+    const [email, setEmail] = useState('')
+    const [address, setAddress] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [contactPerson, setContactPerson] = useState('')
 
-    const removeproductOption = (id) => () => {
-        setproductOptions((options) => options.filter((option) => option.id !== id));
-    };
+    const getSupplier = useCallback(async () => {
+        const response = await axiosInstance.get(`/supplier/${supplierId}`)
+        setSupplier(response.data)
+    }, [supplierId])
+
+    useEffect(() => {
+        getSupplier()
+    }, [getSupplier])
+
+    const handleSubmit = async e => {
+        e.preventDefault()
+
+        const data = {
+            supplierName,
+            email,
+            address,
+            phoneNumber,
+            contactPerson
+        }
+
+        const response = await axiosInstance.patch(`/supplier/${supplierId}`, data)
+        console.log(response.data)
+        // navigate('/admin/supplier')
+        // window.location.reload()
+    }
+
     return (
         <div className='w-full h-full flex flex-col'>
             <div className="text-base grid lg:grid-cols-[repeat(3,_1fr)] items-center h-16 bg-white shadow-md rounded-[20px]">
@@ -35,75 +55,48 @@ const SupplierDetail = () => {
                         <h3 className="text-base mb-3 font-semibold">General Information</h3>
                         <div className='pb-3'>
                             <h5 className='font-normal text-slate-400 mb-2'>Supplier Name</h5>
-                            <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                            <input value={supplierName} onChange={e => setSupplierName(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                        </div>
+                        <div className='pb-3'>
+                            <h5 className='font-normal text-slate-400 mb-2'>Email</h5>
+                            <input value={email} onChange={e => setEmail(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>
                         <div className='pb-3'>
                             <h5 className='font-normal text-slate-400 mb-2'>Address</h5>
-                            <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                            <input value={address} onChange={e => setAddress(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>
-                        <div className='pb-3 w-1/2'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Phone number</h5>
-                            <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
-                        </div>
-                    </div>
-                    <div className='p-5 row-span-2 w-full h-full bg-white rounded-lg customShadow'>
-                    <h3 className="text-base mb-3 font-semibold">Discount</h3>
                         <div className='pb-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Percentage</h5>
-                            <input className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                            <h5 className='font-normal text-slate-400 mb-2'>Phone number</h5>
+                            <input value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
+                        </div>
+                        <div className='pb-3'>
+                            <h5 className='font-normal text-slate-400 mb-2'>Contact Person</h5>
+                            <input value={contactPerson} onChange={e => setContactPerson(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>
                     </div>
                 </div>
-                <div className='overflow-scroll'>
-                    <div className='p-5 w-full h-[90%] overflow-scroll bg-white rounded-lg customShadow'>
-                    <h3 className="text-base mb-3 font-semibold">Product</h3>
-                        <button
-                            className="border border-blue-700 px-3 py-1 rounded-md text-blue-700"
-                            type="button"
-                            onClick={addproductOption}>
-                            Add Option
-                        </button>
-                        <div className='overflow-scroll '>
-                            {productOptions.map((option) => {
+                <div className=''>
+                    <div className='p-5 w-full h-[90%] overflow-y-scroll bg-white rounded-lg customShadow'>
+                    <h3 className="text-base mb-3 font-semibold">Products</h3>
+                        <div className=''>
+                            {supplier?.products.map((product) => {
                                 return (
-                                    <div key={option.id} className="flex gap-4 mt-3">
-                                        <div className="flex-grow">
-                                            <h5 className='font-normal text-slate-400 mb-2' htmlFor={`sku-${option.id}`}>SKU</h5>
-                                            <Input
-                                                id={`sku-${option.id}`}
-                                                slotProps={{
-                                                    input: {
-                                                        className:
-                                                            "pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black",
-                                                    },
-                                                }}
-                                            />
+                                    <div key={product.id} className="flex gap-4 my-3">
+                                        <div className="flex-grow w-1/2">
+                                            <h5 className='font-normal text-slate-400 mb-2' htmlFor={`sku-${product.id}`}>SKU</h5>
+                                            <p className='flex justify-center items-center p-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full text-black'>{product.SKU}</p>
                                         </div>
-                                        <div className="flex-grow">
-                                            <h5 className='font-normal text-slate-400 mb-2' htmlFor={`quantity-${option.id}`}>Quantity</h5>
-                                            <Input
-                                                id={`quantity-${option.id}`}
-                                                slotProps={{
-                                                    input: {
-                                                        className:
-                                                            "pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black",
-                                                    },
-                                                }}
-                                            />
+                                        <div className="flex-grow w-1/2">
+                                            <h5 className='font-normal text-slate-400 mb-2' htmlFor={`quantity-${product.id}`}>Quantity</h5>
+                                            <p className='flex justify-center items-center p-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full text-black'>{product.productName}</p>
                                         </div>
-                                        <button
-                                            type="button"
-                                            className="w-7 h-7 p-1 self-center mt-4"
-                                            onClick={removeproductOption(option.id)}>
-                                            <RxCross2 className="w-6 h-6" />
-                                        </button>
                                     </div>
                                 );
                             })}
                         </div>
                     </div>
                     <div className=' flex justify-end items-end w-full h-[10%]'>
-                        <button className='rounded-xl h-[80%] w-[200px] bg-customBlack text-white'>SAVE</button>
+                        <button onClick={e => handleSubmit(e)} className='rounded-xl h-[80%] w-[200px] bg-customBlack text-white'>SUBMIT</button>
                     </div>
                 </div>
             </div>

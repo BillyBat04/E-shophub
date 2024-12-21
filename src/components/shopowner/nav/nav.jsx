@@ -1,4 +1,4 @@
-import React from "react"
+/* eslint-disable react/prop-types */
 import NavItem from "./navitem"
 
 const NavItemsContainer = ({ items }) => (
@@ -15,6 +15,7 @@ const Nav = ({ items }) => {
 				<NavItemsContainer items={items} />
 			</ul>
 		</nav>
+		
 	)
 }
 export default Nav

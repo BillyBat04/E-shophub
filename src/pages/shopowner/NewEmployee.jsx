@@ -4,10 +4,23 @@ import { IoIosSearch } from "react-icons/io";
 import { FaFilter } from "react-icons/fa6";
 import { Card, Typography } from "@material-tailwind/react";
 import { Link, Outlet } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import axiosInstance from "../../config/api";
+import formatDate from "../../helpers/formatDate";
 
 const EmployeeList = () => {
   const isDetailPage = location.pathname !== "/admin/employees";
-  const TABLE_HEAD = ["ID", "Name", "Image", "Position", "Salary", "Start day"];
+  const TABLE_HEAD = ["ID", "Image", "Full Name", "Phone Number", "Begin Date", "Email", "Role"];
+  const [employeeList, setEmployeeList] = useState([])
+
+  const getList = useCallback(async () => {
+    const response = await axiosInstance.get('/employee')
+    setEmployeeList(response.data)
+  }, [])
+
+  useEffect(() => {
+    getList()
+  }, [getList])
 
   if (isDetailPage) {
     return <Outlet></Outlet>
@@ -29,10 +42,12 @@ const EmployeeList = () => {
             <FaFilter className="w-6 h-6"></FaFilter>
           </button>
         </form>
-        <button className="flex items-center gap-2 bg-black rounded-[20px] px-4 py-2">
-          <span className="text-white font-bold">Add new employee</span>
-          <IoAdd className="w-6 h-6 text-white"></IoAdd>
-        </button>
+        <Link to="addemployee">
+          <button className="flex items-center gap-2 bg-black rounded-[20px] px-4 py-2">
+            <span className="text-white font-bold">Add new employee</span>
+            <IoAdd className="w-6 h-6 text-white"></IoAdd>
+          </button>
+        </Link>
       </div>
 
       <div className="mt-4 h-[92%] overflow-y-scroll">
@@ -56,7 +71,7 @@ const EmployeeList = () => {
               </tr>
             </thead>
             <tbody>
-              {employeeData.map((row, index) => {
+              {employeeList.map((row, index) => {
                 const isLast = index === employeeData.length - 1;
                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
@@ -68,7 +83,7 @@ const EmployeeList = () => {
                         color="blue-gray"
                         className="font-bold"
                       >
-                        {row.id}
+                        {index + 1}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -76,7 +91,15 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.name}
+                        {row.fullName}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600 flex justify-center"
+                      >
+                        <img className="w-[60px] h-[60px] rounded-md" src={row.user.image} alt="Ảnh sản phẩm" />
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -84,7 +107,7 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        <img src={row.avatar} alt="Ảnh sản phẩm" />
+                        {row.phoneNumber}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -92,7 +115,7 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.position}
+                        {formatDate(row.beginDate)}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -100,7 +123,7 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        7.000.000
+                        {row.user.email}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -108,7 +131,7 @@ const EmployeeList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.start}
+                        {row.user.role}
                       </Typography>
                     </td>
                     <td className={classes}>
