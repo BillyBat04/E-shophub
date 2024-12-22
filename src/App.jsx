@@ -26,6 +26,7 @@ import ImportOrder from "./pages/shopowner/ImportOrder";
 import CreateImportOrder from "./pages/shopowner/CreateImportOrder";
 import Listproduct from "./pages/listproduct";
 import DetailProduct from "./pages/DetailProduct";
+import { FooterWithSitemap } from "./components/footer";
 
 function App() {
   const location = useLocation();
@@ -61,7 +62,7 @@ function App() {
               <Route path="chat" element={<Chat />} />
               <Route path="reports" element={<Reports />} />
               <Route path="supplier" element={<Supplier />} >
-                <Route path="addsupplier" element={<AddSupplier/>} ></Route>
+                <Route path="addsupplier" element={<AddSupplier />} ></Route>
                 <Route path=":supplierId" element={<SupplierDetail />}></Route>
               </Route>
               <Route path="orders" element={<ImportOrder />} >
@@ -69,7 +70,7 @@ function App() {
                 <Route path="create" element={<CreateImportOrder />}></Route>
               </Route>
               <Route path="employees" element={<EmployeeList />}>
-              <Route path="addemployee" element={<AddEmployee />}></Route>
+                <Route path="addemployee" element={<AddEmployee />}></Route>
                 <Route path=":employeeId" element={<EmployeeDetail />}></Route>
               </Route>
               <Route path="products" element={<ProductList />}>
@@ -78,7 +79,13 @@ function App() {
               </Route>
             </Route>
           </Routes>
+          {!showNav && (
+            <>
+              <FooterWithSitemap />
+            </>
+          )}
         </div>
+
       </div>
     </CartProvider>
   );
