@@ -1,38 +1,23 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import SimilarProduct from "../components/similarproduct";
 import axiosInstance from "../config/api";
 import { useParams } from "react-router-dom";
 import Thumbnail from "../components/thumbnail";
 import '@splidejs/splide/dist/css/splide.min.css';
-import Splide from '@splidejs/splide';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function DetailProduct() {
   const params = useParams()
   const SKU = params.sku
-  // Danh sách hình ảnh sản phẩm
-  const images = [
-    "https://salt.tikicdn.com/cache/750x750/ts/product/27/04/0f/455b9d3e001963e89cabc903afe9f1d1.jpg.webp",
-    "https://salt.tikicdn.com/cache/750x750/ts/product/9c/e2/01/a467970d437ce3980cd6c045cc97fb9c.jpg.webp",
-    "https://salt.tikicdn.com/cache/750x750/ts/product/af/b9/89/30ca40cd9286b72b1860d48c093e9646.jpg.webp",
-  ];
 
   const [activeFilter, setActiveFilter] = useState('Tất cả');
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [selectedColor, setSelectedColor] = useState('');
   const [product, setProduct] = useState({})
-  const colors = ['red', 'blue', 'green'];
-  // Handle increment
-  const increment = () => {
-    if (quantity < 100) {
-      setQuantity(quantity + 1);
-    }
-  };
-
   const getProduct = useCallback(async () => {
     const response = await axiosInstance.get(`/product/${SKU}`)
     setProduct(response.data)
-  }, [])
+  }, [SKU])
 
   useEffect(() => {
     getProduct()
@@ -48,25 +33,35 @@ function DetailProduct() {
     '1 sao'
   ];
 
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const productIndex = cart.findIndex(item => item[product.SKU]);
+
+    if (productIndex !== -1) {
+      cart[productIndex][product.SKU] += 1;
+    } else {
+      cart.push({ [product.SKU]: 1 });
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    toast.success("Thêm vào giỏ hàng thành công!", {
+      autoClose: 3000, 
+      hideProgressBar: true,
+    });
+  };
+
   const handleFilterClick = (filter) => {
     setActiveFilter(filter); // Cập nhật filter đang được chọn
   };
 
-  // Handle decrement
-  const decrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-  // Hàm thay đổi hình ảnh khi nhấn nút next/prev
-  const changeImage = (direction) => {
-    if (direction === "next") {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    } else if (direction === "prev") {
-      setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  const handleDecrement = () => {
+    if (quantity > 0) {
+      setQuantity(quantity - 1); // Decrement the quantity
     }
   };
 
+  const handleIncrement = () => {
+    setQuantity(quantity + 1); // Increment the quantity
+  };
 
   return (
     <div className="bg-customGray1">
@@ -96,57 +91,54 @@ function DetailProduct() {
           <p className="mt-4 customGray3">
           {product.description}
           </p>
-            <p className="font-bold text-md my-4">Màu:</p>
             <div className="flex space-x-4">
-      {colors.map(color => (
-        <button
-          key={color}
-          onClick={() => setSelectedColor(color)} // Set the selected color
-          className={`px-4 py-2 rounded-lg font-semibold ${
-            selectedColor === color
-              ? `bg-${color}-500 text-white` // Selected: color background, white text
-              : `border-2 border-${color}-500 text-${color}-500 hover:bg-${color}-100` // Unselected: border is the color, text color matches, hover effect
-          }`}
-        >
-          {color.charAt(0).toUpperCase() + color.slice(1)} {/* Capitalize the first letter */}
-        </button>
-      ))}
     </div>
         </div>
 
         {/* Cột 3: Giá tiền, số lượng, button thanh toán */}
         <div className="flex-1 p-4 ml-4 bg-white rounded-md mx-auto">
-          <label htmlFor="quantity" className="block mb-2 font-bold text-2xl">Số lượng:</label>
-          <div className="flex items-center mb-4">
-            <button 
-              onClick={decrement} 
-              className="w-8 h-8 bg-gray-200 rounded-full text-xl"
-            >
-              -
-            </button>
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              value={quantity}
-              min="1"
-              max="100"
-              className="text-center w-16 py-1 border border-gray-300 rounded mx-2"
-              readOnly
-            />
-            <button 
-              onClick={increment} 
-              className="w-8 h-8 bg-gray-200 rounded-full text-xl text-center"
-            >
-              +
-            </button>
-          </div>
-          <p className="my-2 font-bold text-2xl">Tạm tính</p>
+        <form className="max-w-xs">
+      <label htmlFor="quantity-input" className="block mb-2 text-xl font-medium text-gray-900 dark:text-white">
+        Số lượng:
+      </label>
+      <div className="relative flex items-center max-w-[8rem]">
+        <button
+          type="button"
+          onClick={handleDecrement}
+          className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+        >
+          <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+          </svg>
+        </button>
+        <input
+          type="text"
+          id="quantity-input"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          data-input-counter
+          aria-describedby="helper-text-explanation"
+          className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="999"
+          required
+        />
+        <button
+          type="button"
+          onClick={handleIncrement}
+          className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+        >
+          <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+          </svg>
+        </button>
+      </div>
+    </form>
+          <p className="my-2 text-xl">Tạm tính</p>
           <p className="font-bold text-xl">{43000000 * quantity} VNĐ</p>
           <button className="w-full mt-2 py-2 bg-[#FF424E] text-white rounded">
             Mua ngay
           </button>
-          <button className="my-4 w-full py-2 border border-[#0A68FF] text-[#0A68FF] rounded">
+          <button onClick={() => handleAddToCart()} className="my-4 w-full py-2 border border-[#0A68FF] text-[#0A68FF] rounded">
             Thêm vào giỏ
           </button>
         </div>
@@ -322,6 +314,7 @@ function DetailProduct() {
               </div>
             </div>
         </div>
+        <div className="relative z-[9999]"><ToastContainer position="top-right" /></div>
     </div>
   );
 }

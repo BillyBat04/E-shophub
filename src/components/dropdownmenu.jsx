@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { useState } from "react";
 
 const DropdownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,35 +13,35 @@ const DropdownMenu = () => {
         <div className="flex space-x-16 items-center">
           <button className="flex flex-row items-center">
             <img
-              src="src/assets/mobile.png"
+              src="/src/assets/mobile.png"
               className="hidden sm:block w-5 h-5"
             />
             <label className="text-white">Phone</label>
           </button>
           <button className="flex flex-row items-center">
             <img
-              src="src/assets/tablet.png"
+              src="/src/assets/tablet.png"
               className="hidden sm:block w-[18px] h-[18px] mr-1"
             />
             <label className="text-white">Tablet</label>
           </button>
           <button className="flex flex-row items-center">
             <img
-              src="src/assets/laptop.png"
+              src="/src/assets/laptop.png"
               className="hidden sm:block w-6 h-6 mr-1"
             />
             <label className="text-white">Laptop</label>
           </button>
           <button className="flex flex-row items-center">
             <img
-              src="src/assets/smartwatch.png"
+              src="/src/assets/smartwatch.png"
               className="hidden sm:block w-5 h-5 mr-1"
             />
             <label className="text-white">Watch</label>
           </button>
           <button className="flex flex-row items-center">
             <img
-              src="src/assets/headphone.png"
+              src="/src/assets/headphone.png"
               className="hidden sm:block w-[18px] h-[18px] mr-1"
             />
             <label className="text-white">Accessories</label>

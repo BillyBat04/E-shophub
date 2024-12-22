@@ -131,6 +131,7 @@ const CreateProduct = () => {
         })
     if(response.status) {
       navigate("/admin/products")
+      window.location.reload()
     }
   }
 

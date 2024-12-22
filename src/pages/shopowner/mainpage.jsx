@@ -11,6 +11,7 @@ const MainPage = () => {
     { label: "Chat", icon: IoIosChatbubbles, link: "chat" },
     { label: "Order", icon: FaReceipt, link: "orders" },
     { label: "Product", icon: FaBox, link: "products" },
+    { label: "Displayed Product", icon: FaBox, link: "displayed-product" },
     { label: "Employee", icon: IoMdPeople, link: "employees" },
     { label: "Supplier", icon: MdTrolley, link: "supplier" },
     { label: "Report", icon: BiSolidReport, link: "reports" },

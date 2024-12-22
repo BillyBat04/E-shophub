@@ -19,43 +19,12 @@ const ImportOrder = () => {
     getList()
   }, [getList])
 
-  const [tableRows, setTableRows] = useState([
-    {
-      no: "23121",
-      customer: "Minhgaa",
-      date: "21:21. 7 Nov",
-      amount: "20.000.000",
-      item: "1",
-      mode: "COD",
-      status: "PROCESSING",
-    },
-    {
-      no: "23122",
-      customer: "Minhgaa",
-      date: "21:21. 7 Nov",
-      amount: "20.000.000",
-      item: "1",
-      mode: "COD",
-      status: "SHIPPING",
-    },
-    {
-      no: "23123",
-      customer: "Minhgaa",
-      date: "21:21. 7 Nov",
-      amount: "20.000.000",
-      item: "1",
-      mode: "COD",
-      status: "CANCELED",
-    },
 
-  ]);
-
-  const handleStatusChange = (index, newStatus) => {
-    setTableRows((prevRows) =>
-      prevRows.map((row, i) =>
-        i === index ? { ...row, status: newStatus } : row
-      )
-    );
+  const handleStatusChange = async (id, status) => {
+    await axiosInstance.patch(`/supply-order/${id}`, {
+      status
+    })
+    window.location.reload()
   };
 
   const getStatusColor = (status) => {
@@ -149,7 +118,7 @@ const ImportOrder = () => {
             </thead>
             <tbody>
               {supplyOrders.map((row, index) => {
-                const isLast = index === tableRows.length - 1;
+                const isLast = index === supplyOrders.length - 1;
                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
                 return (
@@ -205,7 +174,7 @@ const ImportOrder = () => {
                         </MenuButton>
                         <MenuItems className="flex flex-col items-start absolute right-0 z-10  w-56 bg-white rounded-lg shadow-lg">
                           {["PROCESSING", "SHIPPING", "COMPLETED", "CANCELED"].map((status) => (
-                            <MenuItem className= "w-full" key={status} as="button" onClick={() => handleStatusChange(index, status)}>
+                            <MenuItem className= "w-full" key={status} as="button" onClick={() => handleStatusChange(row.id, status)}>
                               <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{status}</span>
                             </MenuItem>
                           ))}

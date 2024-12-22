@@ -55,12 +55,12 @@ const Header = () => {
       {/* Other elements like Login, Shopping Cart, Chatbox, etc. */}
       <div className='mr-5 flex items-center'>
         <button onClick={toggleLogin}>
-          <img src='src/assets/user.png' className='h-[20px] w-[20px]' />
+          <img src='/src/assets/user.png' className='h-[20px] w-[20px]' />
         </button>
         <div className='relative ml-5'>
           <Link to='shoppingcart'>
             <img
-              src='src/assets/trolley.png'
+              src='/src/assets/trolley.png'
               className='h-[25px] w-[25px]'
               alt='Shopping Cart Icon'
             />
@@ -70,7 +70,7 @@ const Header = () => {
           </span>
         </div>
         <button onClick={toggleChatbox}>
-          <img src='src/assets/chat.png' className='ml-5 h-[20px] w-[20px]' />
+          <img src='/src/assets/chat.png' className='ml-5 h-[20px] w-[20px]' />
         </button>
       </div>
 

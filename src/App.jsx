@@ -27,6 +27,8 @@ import CreateImportOrder from "./pages/shopowner/CreateImportOrder";
 import Listproduct from "./pages/listproduct";
 import DetailProduct from "./pages/DetailProduct";
 import { FooterWithSitemap } from "./components/footer";
+import DisplayedProduct from "./pages/shopowner/DisplayProduct";
+import CreateDisplayedProduct from "./pages/shopowner/CreateDisplayProduct";
 
 function App() {
   const location = useLocation();
@@ -57,7 +59,7 @@ function App() {
             <Route path="/pdescript" element={<Pdescript />} />
             <Route path="/personal" element={<OrderHistory />} />
             <Route path="/listproduct" element={<Listproduct />} />
-            <Route path="/products/:sku" element={<DetailProduct />} />
+            <Route path="/detail-product/:sku" element={<DetailProduct />} />
             <Route path="/admin" element={<MainPage />}>
               <Route path="chat" element={<Chat />} />
               <Route path="reports" element={<Reports />} />
@@ -76,6 +78,9 @@ function App() {
               <Route path="products" element={<ProductList />}>
                 <Route path=":productId" element={<ProductDetail />} />
                 <Route path="create" element={<CreateProduct />} />
+              </Route>
+              <Route path="displayed-product" element={<DisplayedProduct />}>
+                <Route path="create" element={<CreateDisplayedProduct />} />
               </Route>
             </Route>
           </Routes>

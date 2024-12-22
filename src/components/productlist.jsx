@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import customerProductView from "../SampleData/customerProductView.json";
 import { Link } from 'react-router-dom';
 import axiosInstance from '../config/api';
 
@@ -10,9 +10,9 @@ const fadeUpVariants = {
 };
 
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ displayedProduct }) => {
     return (
-        <Link to={`/products/${product.SKU}`}>
+        <Link to={`/detail-product/${displayedProduct.product.SKU}`}>
                 <motion.div
                     className="p-6 bg-white rounded-2xl customShadow flex flex-col items-center h-full"
                     variants={fadeUpVariants}
@@ -21,11 +21,11 @@ const ProductCard = ({ product }) => {
                     viewport={{ once: true, amount: 0.1 }}
                 >
                     <div className="relative flex-shrink-0">
-                        <img src={product.image} alt={product.name} className="w-[140px] h-[150px] object-contain" />
+                        <img src={displayedProduct.product.image} alt={displayedProduct.product.productName} className="w-[140px] h-[150px] object-contain" />
                     </div>
-                    <h2 className="text-base font-semibold ">{product.productName}</h2>
-                    <p className="text-[#808089]">SAMSUNG</p>
-                    <p className="text-[#FF424E] text-lg font-bold mb-2">{product.sellingPrice}</p>
+                    <h2 className="text-base font-semibold text-center ">{displayedProduct.product.productName}</h2>
+                    <p className="text-[#808089]">{displayedProduct.product.brand}</p>
+                    <p className="text-[#FF424E] text-lg font-bold mb-2">{displayedProduct.sellingPrice}</p>
                     <div className="flex gap-4 mt-auto">
                         <button className="p-2 bg-black text-white rounded-full text-[14px] font-bold px-8">
                             Add to cart
@@ -40,7 +40,7 @@ const ProductCard = ({ product }) => {
 const ProductList1 = () => {
     const [productList, setProductList] = useState([])
     const getList = useCallback(async () => {
-            const response = await axiosInstance.get('/product')
+            const response = await axiosInstance.get('/displayed-product')
             setProductList(response.data)
         }, [])
     
@@ -52,7 +52,7 @@ const ProductList1 = () => {
             {productList.map((product, index) => (
                 <div className="w-1/5 group" key={index}>
                     <div className="product-card transition-transform transform group-hover:scale-110 ">
-                        <ProductCard product={product} />
+                        <ProductCard displayedProduct={product} />
                     </div>
                 </div>
             ))}

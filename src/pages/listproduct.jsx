@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { FaFilter } from "react-icons/fa6";
 import { Range } from 'react-range';
 import ProductList1 from '../components/productlist';
-import axiosInstance from '../config/api';
 
 const Listproduct = () => {
     const [selectedOption, setSelectedOption] = useState('');
@@ -36,8 +35,8 @@ const Listproduct = () => {
     }, [banners.length]);
 
     return (
-        <div className="xl:pl-[15%] xl:pr-[15%]  w-screen h-screen">
-            <div className="relative w-full h-full overflow-y-scroll overflow-x-hidden">
+        <div className="xl:pl-[15%] xl:pr-[15%]  w-screen ">
+            <div className="relative w-full h-full ">
                 <div
                     className="flex transition-transform duration-500 ease-in-out"
                     style={{
@@ -87,6 +86,7 @@ const Listproduct = () => {
                                                 {...props}
                                                 className="w-full h-1 rounded-full"
                                                 style={{
+                                                    // eslint-disable-next-line react/prop-types
                                                     ...props.style,
                                                 }}
                                             >
@@ -105,6 +105,7 @@ const Listproduct = () => {
                                                 {...props}
                                                 className="w-4 h-4 bg-customBlack rounded-full flex justify-center items-center shadow-md"
                                                 style={{
+                                                    // eslint-disable-next-line react/prop-types
                                                     ...props.style,
                                                 }}
                                             >

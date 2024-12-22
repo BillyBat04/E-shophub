@@ -6,7 +6,7 @@ const NavItem = ({ item }) => {
 		return (
 			<Link
 				to={link}
-				className={`h-[45px] w-[200px] flex font-roboto text-sm justify-start items-center ${location.pathname.includes(link)
+				className={`p-4 flex font-roboto text-sm justify-start items-center ${location.pathname.includes(link)
 					? "bg-customBlack text-white rounded-lg"
 					: "text-black"
 					}`}
