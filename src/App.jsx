@@ -6,9 +6,10 @@ import Shoppingcart from "./pages/shoppingcart";
 import PaymentPage from "./pages/payment";
 import Pdescript from "./pages/pdescript";
 import Chat from "./pages/shopowner/chat";
-import OrderManagement from "./pages/shopowner/ordermanagement";
+import CustomerList from "./pages/shopowner/customerlist";
 import OrderDetail from "./pages/shopowner/OrderDetail";
 import Reports from "./pages/shopowner/report";
+import CustomerDetail from "./pages/shopowner/customerDetail";
 import OrderHistory from "./pages/personal";
 import { CartProvider } from "./components/cartcontext";
 import DropdownMenu from "./components/dropdownmenu";
@@ -74,6 +75,10 @@ function App() {
               <Route path="employees" element={<EmployeeList />}>
                 <Route path="addemployee" element={<AddEmployee />}></Route>
                 <Route path=":employeeId" element={<EmployeeDetail />}></Route>
+              </Route>
+              <Route path="customerId" element={<CustomerDetail />} />
+              <Route path="customers" element={<CustomerList />}>
+                
               </Route>
               <Route path="products" element={<ProductList />}>
                 <Route path=":productId" element={<ProductDetail />} />
