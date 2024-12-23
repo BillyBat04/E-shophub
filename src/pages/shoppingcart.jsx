@@ -49,6 +49,13 @@ const Shoppingcart = () => {
 
 
   const handleIncrement = (id, e, price) => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const productIndex = cart.findIndex(item => item[id]);
+
+    if (productIndex !== -1) {
+      cart[productIndex][id] += 1;
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
     setQuantity((prevQuantities) => {
       const newQuantity = (prevQuantities[id] || 1) + 1;
   
@@ -61,6 +68,15 @@ const Shoppingcart = () => {
     });
   };
   const handleDecrement = (id, e, price) => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const productIndex = cart.findIndex(item => item[id]);
+
+    if (productIndex !== -1) {
+      if (cart[productIndex][id] > 1) {
+        cart[productIndex][id] -= 1;
+        localStorage.setItem('cart', JSON.stringify(cart));
+      } else return
+    }
     setQuantity((prevQuantities) => {
 
       const newQuantity = prevQuantities[id] > 0 ? prevQuantities[id] - 1 : 0;
@@ -77,6 +93,13 @@ const Shoppingcart = () => {
 
   const handleChange = (id, e, price) => {
     const value = Math.max(0, parseInt(e.target.value) || 0);
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const productIndex = cart.findIndex(item => item[id]);
+
+    if (productIndex !== -1) {
+      cart[productIndex][id] = value;
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
     setQuantity((prevQuantities) => ({
       ...prevQuantities,
       [id]: value,
@@ -201,7 +224,7 @@ const Shoppingcart = () => {
               <span>{formatNumber(totalPrice)} VND</span>
             </div>
             <Link to='/payment'>
-              <button onClick={() => handleSubmit()} className="mt-6 w-full bg-black text-white py-2 rounded-lg font-semibold">Payment </button>
+              <button onClick={() => handleSubmit()} className="mt-6 w-full bg-black text-white py-2 rounded-lg font-semibold">Thanh toán </button>
             </Link>
           </div>
         </div>

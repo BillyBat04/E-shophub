@@ -42,7 +42,7 @@ const PaymentPage = () => {
         const invoiceData = {
             totalPrice,
             address: fullAddress,
-            customerId: 'cm4xuzsga0002uxnh1x5ykvcc',
+            customerId: 'cm51botdm000214lf5retwca8',
             invoiceDate: new Date(),
             status: 'PROCESSING'
         }

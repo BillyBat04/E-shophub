@@ -1,98 +1,171 @@
-import React, { useState } from 'react';
-import DropdownMenu from '../components/dropdownmenu';
+import { Typography } from '@material-tailwind/react';
+import { useCallback, useEffect, useState } from 'react';
+import axiosInstance from '../config/api';
+import formatDate from '../helpers/formatDate';
+import ModalOrder from '../components/modalorder';
+
 const OrderHistory = () => {
-    const [selectedTab, setSelectedTab] = useState('All');
+    const [selectedTab, setSelectedTab] = useState('Tất cả');
     const [selected, setSelected] = useState('History');
-    const orders = [
-        {
-            id: 1,
-            product: "Apple iPhone 16 Pro",
-            details: "8GB, Titan Desert",
-            quantity: 1,
-            price: "12.999.000 VND",
-            status: "On shipping",
-            paid: true,
-        },
-        {
-            id: 2,
-            product: "Apple iPhone 16 Pro",
-            details: "8GB, Titan Desert",
-            quantity: 1,
-            price: "12.999.000 VND",
-            status: "On shipping",
-            paid: true,
-        },
-        {
-            id: 3,
-            product: "Apple iPhone 16 Pro",
-            details: "8GB, Titan Desert",
-            quantity: 1,
-            price: "12.999.000 VND",
-            status: "On shipping",
-            paid: true,
-        },
-    ];
-    const renderOrders = () =>
-        orders.map((order) => (
-            <div key={order.id} className="flex w-full h-[150px] items-center p-4 mb-4 bg-white shadow-lg rounded-lg">
-                <img src="src/assets/16.svg" alt="Product" className="w-[20%] h-[100%] rounded-lg mr-4" />
-                <div className="flex flex-col w-full">
-                    <h3 className="text-lg font-semibold">{order.product}</h3>
-                    <p className="text-sm text-gray-500">{order.details}</p>
-                    <p className="text-sm">Quantity: {order.quantity}</p>
-                    <p className="mt-2 text-lg font-bold text-black">{order.price}</p>
-                </div>
-                <div className="flex flex-col w-[50%] items-end ml-4">
-                    {order.paid && <p className="text-sm text-green-600 font-semibold">✔ Paid</p>}
-                    <div className='flex flex-row justify-center items-center'>
-                        <img src="src/assets/ship.svg" className='mr-2'></img>
-                        <p className="text-sm text-gray-500">{order.status}</p>
-                    </div>
-                </div>
-            </div>
-        ));
+    const [orderList, setOrderList] = useState([])
+    const [invoiceId, setInvoiceId] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
+    const getList = useCallback(async () => {
+        const response = await axiosInstance.get('/invoice')
+        setOrderList(response.data)
+    }, [])
 
-    return (
-        <div className='flex flex-col w-screen h-full'>
-           
-            <div className="flex p-8 bg-gray-100 min-h-screen">
+    useEffect(() => {
+        getList()
+    }, [getList])
 
-                <div className="w-1/4 h-[81%] p-6 flex flex-col items-center justify-center bg-white shadow-lg rounded-2xl">
-                    <h2 className="text-2xl font-bold mb-10">Hi, Le Bao Minh</h2>
-                    {['History', 'Information'].map((tab) => (
-                        <button
-                            key={tab}
-                            onClick={() => setSelected(tab)}
-                            className={`w-full py-4 mb-4 rounded-full ${selected === tab ? 'bg-black text-white' : 'text-black border border-black'
-                                }`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
-                    <button className="w-full py-2 text-black font-semibold">Log out</button>
-                </div>
+    const handleSelectTab = async (tab) => {
+        setSelectedTab(tab)
+        let newTab = ''
+        switch(tab) {
+            case 'Đang xử lý': {
+                newTab = 'PROCESSING'
+                break
+            }
+            case 'Đang vận chuyển': {
+                newTab = 'SHIPPING'
+                break
+            }
+            case 'Hoàn thành': {
+                newTab = 'COMPLETED'
+                break
+            }
+            case 'Đã hủy': {
+                newTab = 'CANCELED'
+                break
+            }
+            default: {
+                break
+            }
+        }
+        if (tab == 'Tất cả') {
+            getList()
+        } else {
+            const response = await axiosInstance.get(`/invoice/filter-list/${newTab}`)
+            const list = response.data 
+            setOrderList(list)
+        }
+    }
 
-                <div className="flex items-center flex-col w-3/4 ml-6">
-                    <div className="bg-white shadow-md h-[50px] w-[80%] rounded-full justify-center flex items-center space-x-7 mb-4">
-                        {['All', 'Order placed', 'On shipping', 'Cancel'].map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setSelectedTab(tab)}
-                                className={`px-4 h-[35px] w-[120px] py-2 text-sm rounded-full ${selectedTab === tab ? 'bg-black text-white' : 'text-black'
-                                    }`}
-                            >
-                                {tab}
-                            </button>
-                        ))}
-                    </div>
-                    {selected === 'Information' ?
-                        <div className='w-full h-full'>{renderOrders()}</div>
-                        : <div className='w-full h-full'>{renderOrders()}</div>
-                    }
-                </div>
-            </div>
+
+  const TABLE_HEAD = ["No", "Invoice Date", "Total Price", "Address", "Status"];
+
+
+
+  return (
+    <div className="flex flex-col w-screen h-full">
+      {/* Sidebar */}
+      <div className="flex p-8 bg-gray-100 min-h-screen">
+        <div className="w-1/4 h-[81%] p-6 flex flex-col items-center justify-center bg-white shadow-lg rounded-2xl">
+          <h2 className="text-2xl font-bold mb-10">Hi, Le Bao Minh</h2>
+
+          {/* Navigation buttons */}
+          {['History', 'Information'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setSelected(tab)}
+              className={`w-full py-4 mb-4 rounded-full ${selected === tab ? 'bg-black text-white' : 'text-black border border-black'}`}
+            >
+              {tab}
+            </button>
+          ))}
+          
+          {/* Log out button */}
+          <button className="w-full py-2 text-black font-semibold">Log out</button>
         </div>
-    );
+
+        {/* Main content */}
+        <div className="flex items-center flex-col w-3/4 ml-6">
+          {/* Tab navigation for order status */}
+          <div className="bg-white shadow-md py-4 w-[80%] rounded-full justify-center flex items-center space-x-7 mb-4">
+            {['Tất cả', 'Đang xử lý', 'Đang vận chuyển', 'Hoàn thành', 'Đã hủy'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => handleSelectTab(tab)}
+                className={`px-4 py-2 text-sm rounded-full ${selectedTab === tab ? 'bg-black text-white' : 'text-black'}`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Orders table */}
+          <div className='w-full min-w-max table-auto text-center bg-white p-4 rounded-md'>
+            <table className="w-full min-w-max table-auto text-center">
+                <thead>
+                <tr>
+                    {TABLE_HEAD.map((head, index) => (
+                    <th
+                        key={head}
+                        className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4
+                        ${index === 0 ? 'rounded-l-2xl' : ''}
+                        ${index === TABLE_HEAD.length - 1 ? 'rounded-r-2xl' : ''}`}
+                    >
+                        <Typography variant="small" color="blue-gray" className="font-bold leading-none">
+                        {head}
+                        </Typography>
+                    </th>
+                    ))}
+                </tr>
+                </thead>
+                <tbody>
+                {orderList.map((row, index) => {
+                    const isLast = index === orderList.length - 1;
+                    const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
+
+                    return (
+                    <tr key={row.id} className="hover:bg-gray-50">
+                        <td className={classes}>
+                        <Typography variant="small" color="blue-gray" className="font-bold">
+                            {index + 1}
+                        </Typography>
+                        </td>
+                        <td className={classes}>
+                        <Typography variant="small" className="font-normal text-gray-600">
+                            {formatDate(row.invoiceDate)}
+                        </Typography>
+                        </td>
+                        <td className={classes}>
+                        <Typography variant="small" className="font-normal text-gray-600">
+                            {row.totalPrice}
+                        </Typography>
+                        </td>
+                        <td className={classes}>
+                        <Typography variant="small" className="font-normal text-gray-600">
+                            {row.address}
+                        </Typography>
+                        </td>
+                        <td className={classes}>
+                            <Typography variant="small" className="font-normal text-gray-600">
+                                {row.status}
+                            </Typography>
+                        </td>
+                        <td className={classes}>
+                            <Typography
+                                variant="small"
+                                className="font-normal text-white"
+                            >
+                                <button onClick={() => {setInvoiceId(row.id); setIsOpen(prevState => !prevState)}} className='bg-black w-20 h-6 rounded-xl'>
+                                    Detail
+                                </button>
+                            </Typography>
+                        </td>
+                    </tr>
+                    );
+                })}
+                </tbody>
+            </table>
+                {isOpen && <ModalOrder isOpen = {isOpen} setIsOpen = {setIsOpen} invoiceId={invoiceId} />}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default OrderHistory;
