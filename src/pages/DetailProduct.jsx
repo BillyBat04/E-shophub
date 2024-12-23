@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import SimilarProduct from "../components/similarproduct";
 import axiosInstance from "../config/api";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Thumbnail from "../components/thumbnail";
 import '@splidejs/splide/dist/css/splide.min.css';
 import { ToastContainer, toast } from "react-toastify";
@@ -48,6 +48,14 @@ function DetailProduct() {
       hideProgressBar: true,
     });
   };
+
+  const handleSubmit = () => {
+    localStorage.removeItem('payment')
+    const shoppingCart = JSON.parse(localStorage.getItem('payment')) || [];
+    shoppingCart.push({[product.SKU] : quantity})
+    localStorage.setItem('payment', JSON.stringify(shoppingCart));
+    console.log(shoppingCart)
+  }
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter); // Cập nhật filter đang được chọn
@@ -135,9 +143,9 @@ function DetailProduct() {
     </form>
           <p className="my-2 text-xl">Tạm tính</p>
           <p className="font-bold text-xl">{43000000 * quantity} VNĐ</p>
-          <button className="w-full mt-2 py-2 bg-[#FF424E] text-white rounded">
+          <Link to='/payment'><button onClick={() => handleSubmit()} className="w-full mt-2 py-2 bg-[#FF424E] text-white rounded">
             Mua ngay
-          </button>
+          </button></Link>
           <button onClick={() => handleAddToCart()} className="my-4 w-full py-2 border border-[#0A68FF] text-[#0A68FF] rounded">
             Thêm vào giỏ
           </button>

@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import AddressModal from '../components/addressmodal';
 import axiosInstance from '../config/api';
+import formatNumber from '../helpers/formatNumber';
 
 const PaymentPage = () => {
     const [selectedPayment, setSelectedPayment] = useState(null);
@@ -17,58 +18,47 @@ const PaymentPage = () => {
     const handlePaymentSelection = (method) => {
         setSelectedPayment(method);
     };
-
-    const handleIncrement = (id, e, price) => {
-        setQuantity((prevQuantities) => {
-          const newQuantity = (prevQuantities[id] || 1) + 1;
-      
-          setTotalPrice(price * newQuantity);
-
-          return {
-            ...prevQuantities,
-            [id]: newQuantity,
-          };
-        });
-      };
-      const handleDecrement = (id, e, price) => {
-        setQuantity((prevQuantities) => {
-
-          const newQuantity = prevQuantities[id] > 0 ? prevQuantities[id] - 1 : 0;
-
-          setTotalPrice(price * newQuantity);
-
-          return {
-            ...prevQuantities,
-            [id]: newQuantity,
-          };
-        });
-      };
-      
-
-      const handleChange = (id, e, price) => {
-        const value = Math.max(0, parseInt(e.target.value) || 0);
-        setQuantity((prevQuantities) => ({
-          ...prevQuantities,
-          [id]: value,
-        }));
-        setTotalPrice(price * value)
-      };
     const getProductList = useCallback(async () => {
-        const cart = JSON.parse(localStorage.getItem('cart')) || []
+        const cart = JSON.parse(localStorage.getItem('payment')) || []
+        console.log(cart)
         for (let i = 0; i < cart.length; i++) {
             for (let productSKU in cart[i]){
                 const response = await axiosInstance.get(`/product/${productSKU}`)
                 setProductList(prevState => [...prevState, response.data])
+                setTotalPrice(prevState => prevState + response.data.sellingPrice * cart[i][productSKU])
+                setQuantity((prevQuantities) => {
+                    return {
+                      ...prevQuantities,
+                      [productSKU]: cart[i][productSKU],
+                    };
+                  });
+                
             }
         }
     }, [])
 
-    const handleSubmit = () => {
-        const data = {
+    const handleSubmit = async () => {
+        const fullAddress = `${address.address}, ${address.ward}, ${address.district}, ${address.city}`
+        const invoiceData = {
             totalPrice,
-            address,
+            address: fullAddress,
+            customerId: 'cm4xuzsga0002uxnh1x5ykvcc',
+            invoiceDate: new Date(),
+            status: 'PROCESSING'
         }
-        console.log(data)
+        const newInvoice = await axiosInstance.post('/invoice', invoiceData)
+        const invoiceId = newInvoice.data.id 
+        
+        for (let product of productList){
+
+            const displayedProduct = await axiosInstance.get(`/displayed-product/${product.SKU}`)
+            await axiosInstance.post('/invoice-detail', {
+                quantity: quantity[product.SKU],
+                totalPrice: quantity[product.SKU] * product.sellingPrice,
+                invoiceId,
+                displayedProductId: displayedProduct.data[0].id
+            } )
+        }
     }
 
     useEffect(() => {
@@ -89,45 +79,9 @@ const PaymentPage = () => {
                             <div className="bg-gray-100 p-4 w-[74%] rounded-lg flex flex-row justify-between ">
                                 <div className='flex flex-col '>
                                     <h3 className="font-semibold">{item.productName}</h3>
-                                    <form className="max-w-xs">
-                                        <label htmlFor="quantity-input" className="block mb-2 text-xl font-medium text-gray-900 dark:text-white">
-                                            Số lượng:
-                                        </label>
-                                        <div className="relative flex items-center max-w-[8rem]">
-                                            <button
-                                            type="button"
-                                            onClick={e => handleDecrement(item.SKU, e, item.sellingPrice)}
-                                            className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                                            >
-                                            <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
-                                            </svg>
-                                            </button>
-                                            <input
-                                            type="text"
-                                            id="quantity-input"
-                                            value={quantity[item.SKU] || 1}
-                                            onChange={(e) => handleChange(item.SKU, e, item.sellingPrice)}
-                                            data-input-counter
-                                            aria-describedby="helper-text-explanation"
-                                            className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="999"
-                                            required
-                                            />
-                                            <button
-                                            type="button"
-                                            onClick={e => handleIncrement(item.SKU, e, item.sellingPrice)}
-                                            className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                                            >
-                                            <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
-                                            </svg>
-                                            </button>
-                                        </div>
-                                        </form>
+                                    <p className="text-sm">Số lượng: {quantity[item.SKU]}</p>
                                 </div>
-                                <p className="font-bold text-sm">Đơn giá: 50.000 VNĐ</p>
-                                <p className="font-bold text-sm text-[#FF424E]">Thành tiền: {totalPrice || item.sellingPrice} VNĐ</p>
+                                <p className="font-bold text-sm text-[#FF424E]">Thành tiền: {formatNumber(item.sellingPrice * quantity[item.SKU])} VNĐ</p>
                             </div>
                         </div>
 
@@ -215,7 +169,7 @@ const PaymentPage = () => {
                 </div>
                 <div className='flex justify-between items-center'>
                     <p>Tổng tiền thanh toán: </p>
-                    <p className='ml-6 text-[#FF424E] text-2xl font-bold'>43.990.000 ₫</p>
+                    <p className='ml-6 text-[#FF424E] text-2xl font-bold'>{formatNumber(totalPrice)}</p>
                 </div>
             </section>
             <section className="max-w-lg mx-auto mt-8">

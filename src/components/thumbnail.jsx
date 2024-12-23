@@ -1,40 +1,42 @@
-import React, { useEffect } from 'react';
+/* eslint-disable react/prop-types */
+import { useEffect } from 'react';
 import Splide from '@splidejs/splide';
 import '@splidejs/splide/dist/css/splide.min.css'; // Import Splide CSS
 
-const SplideSlider = ({product}) => {
-    var splideCheck = document.getElementById("main-slider");
-if (splideCheck) {
-    console.log(`Splide is present`);
+const SplideSlider = ({ product }) => {
+  useEffect(() => {
+    if (product?.featuresImages?.length) {
+      const splideCheck = document.getElementById("main-slider");
 
-    var main = new Splide("#main-slider", {
-        type: "fade",
-        rewind: true,
-        pagination: false,
-        arrows: false,
-    });
+      if (splideCheck) {
+        console.log(`Splide is present`);
 
-    var thumbnails = new Splide("#thumbnail-slider", {
-        fixedWidth: 100,
-        gap: 10,
-        arrows: true,
-        rewind: true,
-        pagination: false,
-        focus: "center",
-        isNavigation: true,
-        breakpoints: {
-            600: {
-                fixedWidth: 60,
-            },
-        },
-    });
+        const main = new Splide("#main-slider", {
+          fixedWidth: 400,
+          type: "fade",
+          rewind: true,
+          pagination: false,
+          arrows: false,
+        });
 
-    main.sync(thumbnails);
-    main.mount();
-    thumbnails.mount();
-} else {
-    console.log(`Splide is NOT present`);
-}
+        const thumbnails = new Splide("#thumbnail-slider", {
+          fixedWidth: 100,
+          gap: 30,
+          arrows: true,
+          rewind: true,
+          pagination: false,
+          focus: "center",
+          isNavigation: true,
+        });
+
+        main.sync(thumbnails);
+        main.mount();
+        thumbnails.mount();
+      } else {
+        console.log(`Splide is NOT present`);
+      }
+    }
+  }, [product]); // Depend on the `product` prop to re-run when it changes
 
   return (
     <div>
@@ -43,11 +45,11 @@ if (splideCheck) {
         <div className="splide__track">
           <ul className="splide__list">
             {product?.featuresImages?.map((image, index) => {
-                return (
-                    <li className="splide__slide">
-                        <img src={image} alt="Slide 1" />
-                    </li>
-                )
+              return (
+                <li key={index} className="splide__slide">
+                  <img src={image} alt={`Slide ${index + 1}`} />
+                </li>
+              );
             })}
           </ul>
         </div>
@@ -58,11 +60,11 @@ if (splideCheck) {
         <div className="splide__track">
           <ul className="splide__list">
             {product?.featuresImages?.map((image, index) => {
-                return (
-                    <li className="splide__slide">
-                        <img src={image} alt="Slide 1" />
-                    </li>
-                )
+              return (
+                <li key={index} className="splide__slide">
+                  <img src={image} alt={`Slide ${index + 1}`} />
+                </li>
+              );
             })}
           </ul>
         </div>
