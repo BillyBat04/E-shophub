@@ -1,10 +1,10 @@
 import Nav from "../../components/shopowner/nav/nav";
 import Header from "../../components/shopowner/header";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet} from "react-router-dom";
 import { IoIosChatbubbles, IoMdPeople } from "react-icons/io";
 import { FaBox, FaReceipt } from "react-icons/fa6";
 import { BiSolidReport } from "react-icons/bi";
-import { MdTrolley } from "react-icons/md";
+import { MdTrolley, MdManageAccounts } from "react-icons/md";
 const MainPage = () => {
 
   const item = [
@@ -12,6 +12,7 @@ const MainPage = () => {
     { label: "Order", icon: FaReceipt, link: "orders" },
     { label: "Product", icon: FaBox, link: "products" },
     { label: "Displayed Product", icon: FaBox, link: "displayed-product" },
+    { label: "Customer", icon: MdManageAccounts, link: "customers" },
     { label: "Employee", icon: IoMdPeople, link: "employees" },
     { label: "Supplier", icon: MdTrolley, link: "supplier" },
     { label: "Report", icon: BiSolidReport, link: "reports" },

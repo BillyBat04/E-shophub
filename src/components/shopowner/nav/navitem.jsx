@@ -18,7 +18,7 @@ const NavItem = ({ item }) => {
 	}
 	return (
 		<li
-			className="mb-8 mt-5 w-full ">
+			className="mb-2 mt-2 w-full ">
 			<CustomComponent />
 		</li>
 	)
