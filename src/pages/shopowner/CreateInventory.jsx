@@ -78,7 +78,7 @@ const CreateInventory = () => {
       <form className="flex justify-between">
         <div className="flex flex-col w-1/2 m-4">
           <fieldset className="px-8 py-6 bg-white shadow-md rounded-xl">
-            <h3 className="text-base mb-3 font-semibold">Chọn danh mục sản phẩm</h3>
+            <h3 className="text-base mb-3 font-semibold">Chọn kho hàng</h3>
             <div className="flex-grow space-y-2">
               <select
                 onChange={e => handleChangeCategory(e)}

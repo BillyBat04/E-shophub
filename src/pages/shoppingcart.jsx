@@ -24,7 +24,6 @@ const Shoppingcart = () => {
 
   const handleDelete = (id) => {
     setIsModalOpen(prevState => !prevState)
-    setCartItems(cartItems.filter(item => item.id !== id));
   };
 
 
@@ -112,12 +111,7 @@ const Shoppingcart = () => {
 
 
   const toggleSelectItem = (id) => {
-    setCartItems(cartItems.map(item => {
-      if (item.id === id) {
-        return { ...item, selected: !item.selected };
-      }
-      return item;
-    }));
+    
   };
 
   const handleSubmit = () => {
