@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaGoogle, FaMagnifyingGlass } from "react-icons/fa6";
 import { GrNext } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { useCart } from "./cartcontext";
 import { IoIosArrowBack } from "react-icons/io";
+import axiosInstance from "../config/api";
+import useUser from "../hooks/useUser";
+import UserAvatarDropdown from "./avatar";
 
 const Header = () => {
   const { cartItemCount } = useCart();
@@ -12,10 +15,13 @@ const Header = () => {
   const [isLoginVisible, setLoginVisible] = useState(false);
   const [view, setView] = useState("login");
   const [isSearchFocused, setSearchFocused] = useState(false);
-
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const {user} = useUser()
   const handleChange = (e) => setInputValue(e.target.value);
   const toggleChatbox = () => setChatboxVisible(!isChatboxVisible);
   const toggleLogin = () => {
+    if(user) return
     setLoginVisible(!isLoginVisible);
     setView("login");
   };
@@ -24,8 +30,20 @@ const Header = () => {
     window.open("http://localhost:3000/api/auth/google", "_self");
   };
 
+  const handleSubmit = async e => {
+    e.preventDefault()
+    const response = await axiosInstance.post('/user/login', {
+      email,
+      password
+    })
+    if (response.data.account) {
+      localStorage.setItem('user', JSON.stringify(response.data.account))
+      window.location.reload()
+    }
+  }
+
   return (
-    <div className='w-full bg-customBlack h-[50px] flex justify-between items-center'>
+    <div className='w-full bg-customBlack py-4 flex justify-between items-center'>
       <div className='ml-5 flex flex-row w-[50%] h-full items-center'>
         <Link to='mainpage'>
           <label className='text-white font-roboto text-[20px]'>
@@ -54,8 +72,9 @@ const Header = () => {
 
       {/* Other elements like Login, Shopping Cart, Chatbox, etc. */}
       <div className='mr-5 flex items-center'>
-        <button onClick={toggleLogin}>
-          <img src='/src/assets/user.png' className='h-[20px] w-[20px]' />
+        <button onClick={() => toggleLogin()}>
+          {!user ? <img src='/src/assets/user.png' className='h-[20px] w-[20px]' /> :
+          <UserAvatarDropdown image="https://mui.com/static/images/avatar/3.jpg"/>}
         </button>
         <div className='relative ml-5'>
           <Link to='shoppingcart'>
@@ -143,11 +162,13 @@ const Header = () => {
 
               {/* Login Form */}
               {view === "login" && (
-                <>
-                  <div className='mb-2 w-[80%] font-medium flex flex-col justify-start'>
+                <form onSubmit={(e) => handleSubmit(e)} className="w-full flex flex-col items-center">
+                  <div className='mb-2 w-[80%] font-medium flex flex-col'>
                     Email
                   </div>
                   <input
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
                     type='text'
                     placeholder='Email'
                     className='w-[80%] mb-3 p-2 border-[0.5px] border-black rounded-lg'
@@ -156,6 +177,8 @@ const Header = () => {
                     Password
                   </div>
                   <input
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
                     type='password'
                     placeholder='Password'
                     className='w-[80%] mb-3 p-2 border-[0.5px] border-black rounded-lg'
@@ -169,6 +192,7 @@ const Header = () => {
                   </div>
                   <div className='w-[80%] flex justify-between mt-4'>
                     <button
+                      type="submit"
                       className='flex items-center gap-2 bg-white text-sm py-2 px-6 border-[0.5px] border-black rounded-3xl'
                       onClick={googleSignIn}>
                       <FaGoogle className='text-[22px]' />
@@ -178,7 +202,8 @@ const Header = () => {
                       <GrNext />
                     </button>
                   </div>
-                </>
+                  <div/>
+                </form>
               )}
 
               {/* Sign-Up Form */}

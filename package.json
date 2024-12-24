@@ -10,10 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",
     "@material-tailwind/react": "^2.1.10",
     "@mui/base": "^5.0.0-beta.61",
+    "@mui/icons-material": "^6.3.0",
+    "@mui/material": "^6.3.0",
     "@splidejs/splide": "^4.1.4",
     "axios": "^1.7.9",
     "core-js": "^3.39.0",

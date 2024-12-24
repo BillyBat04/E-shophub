@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import generateRandomPassword from '../../helpers/generatePassword';
-import axiosInstance from '../../config/api';
 import axios from 'axios';
 const AddEmployee = () => {
     const [startDate, setStartDate] = useState("");
