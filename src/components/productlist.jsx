@@ -50,8 +50,8 @@ const ProductList1 = () => {
     return (
         <div className="flex flex-wrap gap-4 justify-center mt-[5%]">
             {productList.map((product, index) => (
-                <div className="w-1/5 group" key={index}>
-                    <div className="product-card transition-transform transform group-hover:scale-110 ">
+                <div className="w-1/5 group flex" key={index}>
+                    <div className="product-card transition-transform transform group-hover:scale-110">
                         <ProductCard displayedProduct={product} />
                     </div>
                 </div>

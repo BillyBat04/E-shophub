@@ -54,10 +54,12 @@ const UserAvatarDropdown = ({image}) => {
         }}
       >
         <MenuItem onClick={handleProfile}>
-          <Typography>Thông tin</Typography>
+          <Link to='/personal/information'>
+            <Typography>Thông tin cá nhân</Typography>
+          </Link>
         </MenuItem>
         <MenuItem onClick={handleOrderTracking}>
-          <Link to='/personal'>
+          <Link to='/personal/history'>
             <Typography>Theo dõi đơn hàng</Typography>
           </Link>
         </MenuItem>

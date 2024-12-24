@@ -1,37 +1,82 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useUser from "../hooks/useUser";
+import axiosInstance from "../config/api";
+import formatDate from "../helpers/formatDate";
+import axios from "axios";
 
 export default function Information() {
+    const {user} = useUser()
+    const [customer, setCustomer] = useState()
     const [userInfo, setUserInfo] = useState({
         fullName: "John Doe",
         email: "johndoe@example.com",
-        birth: "01/01/2001",
-        sex: "Male",
-        phone: "123-456-7890",
+        birthday: "01/01/2001",
+        gender: "Male",
+        phoneNumber: "123-456-7890",
         address: "123 Main St, Springfield",
+        dateCreated: '00/00/0000'
     });
     const [selectedAvatar, setSelectedAvatar] = useState(null);
-
-    const handleAvatarChange = (event) => {
+    const [, setFile] = useState()
+    const handleAvatarChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const imageURL = URL.createObjectURL(file);
             setSelectedAvatar(imageURL);
+            setFile(file)
+        }
+        const data = new FormData()
+        if (file) data.append('image', file)
+        const response = await axios({
+            method: 'PATCH',
+            url: `http://localhost:3000/api/user/${user.id}`,
+            data,
+            headers: {'Content-Type': 'multipart/form-data'}
+        })
+        if (response.status === 200) {
+            localStorage.setItem('user', JSON.stringify(response.data))
+            window.location.reload();
         }
     };
 
     const [isEditing, setIsEditing] = useState(false);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+        if (name === "birthday") value = formatDate(value)
         setUserInfo({
             ...userInfo,
             [name]: value,
         });
     };
 
-    const handleSave = () => {
+    const handleSave = async (e) => {
+        e.preventDefault()
+        // eslint-disable-next-line no-unused-vars
+        const { email, dateCreated, ...updatedUserInfo } = userInfo;
+        await axiosInstance.patch(`/customer/${customer.id}`, updatedUserInfo)
         setIsEditing(false);
+        window.location.reload()
     };
+
+    useEffect(() => {
+        const getUser = async () => {
+            console.log(user.id)
+            const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`)
+            setCustomer(response.data)
+            const existCustomer = response.data
+            setUserInfo(() => ({
+                fullName: existCustomer.fullName,
+                email: user.email,
+                birthday: existCustomer.birthday,
+                gender: existCustomer.gender,
+                phoneNumber: existCustomer.phoneNumber,
+                address: existCustomer.address,
+                dateCreated: formatDate(user.createdAt)
+            }))
+        }
+        getUser()
+    }, [user])
 
     return (
         <div className="w-full ml-6 gap-3 flex">
@@ -47,7 +92,11 @@ export default function Information() {
                             />
                         ) : (
                             <div className="h-full w-full flex items-center justify-center">
-                                No Avatar
+                                <img
+                                    src={user?.image}
+                                    alt="Selected Avatar"
+                                    className="h-full w-full object-cover"
+                                />
                             </div>
                         )}
                     </div>
@@ -104,13 +153,14 @@ export default function Information() {
                         {isEditing ? (
                             <input
                                 type="date"
-                                name="birth"
-                                value={userInfo.birth}
+                                name="birthday"
+                                value={userInfo.birthday}
                                 onChange={handleChange}
+                                placeholder={userInfo.birthday}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             />
                         ) : (
-                            <p className="mt-1 text-gray-600">{userInfo.birth}</p>
+                            <p className="mt-1 text-gray-600">{userInfo.birthday}</p>
                         )}
                     </div>
 
@@ -122,9 +172,9 @@ export default function Information() {
                                 <label>
                                     <input
                                         type="radio"
-                                        name="sex"
+                                        name="gender"
                                         value="Male"
-                                        checked={userInfo.sex === "Male"}
+                                        checked={userInfo.gender === "Male"}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
@@ -135,7 +185,7 @@ export default function Information() {
                                         type="radio"
                                         name="sex"
                                         value="Female"
-                                        checked={userInfo.sex === "Female"}
+                                        checked={userInfo.gender === "Female"}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
@@ -146,7 +196,7 @@ export default function Information() {
                                         type="radio"
                                         name="sex"
                                         value="Other"
-                                        checked={userInfo.sex === "Other"}
+                                        checked={userInfo.gender === "Other"}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
@@ -154,7 +204,7 @@ export default function Information() {
                                 </label>
                             </div>
                         ) : (
-                            <p className="mt-1 text-gray-600">{userInfo.sex}</p>
+                            <p className="mt-1 text-gray-600">{userInfo.gender}</p>
                         )}
                     </div>
 
@@ -163,13 +213,13 @@ export default function Information() {
                         {isEditing ? (
                             <input
                                 type="text"
-                                name="phone"
-                                value={userInfo.phone}
+                                name="phoneNumber"
+                                value={userInfo.birthday}
                                 onChange={handleChange}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             />
                         ) : (
-                            <p className="mt-1 text-gray-600">{userInfo.phone}</p>
+                            <p className="mt-1 text-gray-600">{userInfo.phoneNumber}</p>
                         )}
                     </div>
 
@@ -187,6 +237,20 @@ export default function Information() {
                             <p className="mt-1 text-gray-600">{userInfo.address}</p>
                         )}
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Date created</label>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="dateCreated"
+                                value={userInfo.dateCreated}
+                                onChange={handleChange}
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            />
+                        ) : (
+                            <p className="mt-1 text-gray-600">{userInfo.dateCreated}</p>
+                        )}
+                    </div>
                 </div>
 
                 <div className="mt-6 flex justify-end space-x-4">
@@ -199,7 +263,7 @@ export default function Information() {
                                 Cancel
                             </button>
                             <button
-                                onClick={handleSave}
+                                onClick={e => handleSave(e)}
                                 className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
                             >
                                 Save

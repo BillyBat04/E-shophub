@@ -1,5 +1,4 @@
-import { IoAdd } from "react-icons/io5";
-import employeeData from "../../SampleData/employeeList.json";
+
 import { IoIosSearch } from "react-icons/io";
 import { FaFilter } from "react-icons/fa6";
 import { Card, Typography } from "@material-tailwind/react";
@@ -66,7 +65,7 @@ const CustomerList = () => {
             </thead>
             <tbody>
               {CustomerList.map((row, index) => {
-                const isLast = index === customerData.length - 1;
+                const isLast = index === CustomerList.length - 1;
                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
                 return (

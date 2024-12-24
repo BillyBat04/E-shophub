@@ -8,26 +8,6 @@ import formatNumber from '../helpers/formatNumber';
 
 const Shoppingcart = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Apple iPhone 16 Pro",
-      description: "8GB, Titan Desert",
-      price: 12999000,
-      quantity: 1,
-      image: "src/assets/16pr.svg",
-      selected: false,
-    },
-    {
-      id: 2,
-      name: "Apple iPhone 16 Pro",
-      description: "8GB, Titan Desert",
-      price: 12999000,
-      quantity: 1,
-      image: "src/assets/16pr.svg",
-      selected: false,
-    }
-  ]);
   const [productList, setProductList] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
   const [quantity, setQuantity] = useState(
@@ -38,9 +18,9 @@ const Shoppingcart = () => {
     );
   const { updateCartItemCount } = useCart();
   useEffect(() => {
-    const count = cartItems.reduce((total, item) => total + item.quantity, 0);
-    updateCartItemCount(count);
-  }, [cartItems, updateCartItemCount]);
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    updateCartItemCount(cart.length);
+  }, [updateCartItemCount]);
 
   const handleDelete = (id) => {
     setIsModalOpen(prevState => !prevState)
@@ -66,6 +46,8 @@ const Shoppingcart = () => {
         [id]: newQuantity,
       };
     });
+    console.log(cart.length)
+    updateCartItemCount(cart.length)
   };
   const handleDecrement = (id, e, price) => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];

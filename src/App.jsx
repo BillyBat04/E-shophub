@@ -13,7 +13,7 @@ import CustomerDetail from "./pages/shopowner/customerDetail";
 import History from "./pages/history";
 import { CartProvider } from "./components/cartcontext";
 import DropdownMenu from "./components/dropdownmenu";
-import Information from "./pages/imformation";
+import Information from "./pages/information";
 import MainPage from "./pages/shopowner/mainpage";
 import EmployeeList from "./pages/shopowner/NewEmployee";
 import Supplier from "./pages/shopowner/Supplier";

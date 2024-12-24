@@ -3,10 +3,13 @@ import { useCallback, useEffect, useState } from 'react';
 import AddressModal from '../components/addressmodal';
 import axiosInstance from '../config/api';
 import formatNumber from '../helpers/formatNumber';
+import useUser from '../hooks/useUser';
+import { useNavigate } from 'react-router-dom';
 
 const PaymentPage = () => {
     const [selectedPayment, setSelectedPayment] = useState(null);
     const [address, setAddress] = useState({})
+    const navigate = useNavigate()
     const [productList, setProductList] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
     const [quantity, setQuantity] = useState(
@@ -15,6 +18,7 @@ const PaymentPage = () => {
           return acc;
         }, {})
       );
+    const {user} = useUser()
     const handlePaymentSelection = (method) => {
         setSelectedPayment(method);
     };
@@ -39,16 +43,18 @@ const PaymentPage = () => {
 
     const handleSubmit = async () => {
         const fullAddress = `${address.address}, ${address.ward}, ${address.district}, ${address.city}`
+        const response = await axiosInstance.get(`/customer/get-by-user/${user.id}`)
+        const customer = response.data
+        console.log(customer.id)
         const invoiceData = {
             totalPrice,
             address: fullAddress,
-            customerId: 'cm51botdm000214lf5retwca8',
+            customerId: customer.id,
             invoiceDate: new Date(),
             status: 'PROCESSING'
         }
         const newInvoice = await axiosInstance.post('/invoice', invoiceData)
         const invoiceId = newInvoice.data.id 
-        
         for (let product of productList){
 
             const displayedProduct = await axiosInstance.get(`/displayed-product/${product.SKU}`)
@@ -59,6 +65,8 @@ const PaymentPage = () => {
                 displayedProductId: displayedProduct.data[0].id
             } )
         }
+        navigate('/personal/history')
+        window.location.reload()
     }
 
     useEffect(() => {

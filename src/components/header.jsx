@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGoogle, FaMagnifyingGlass } from "react-icons/fa6";
 import { GrNext } from "react-icons/gr";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ import useUser from "../hooks/useUser";
 import UserAvatarDropdown from "./avatar";
 
 const Header = () => {
-  const { cartItemCount } = useCart();
+  const { cartItemCount, updateCartItemCount } = useCart();
   const [inputValue, setInputValue] = useState("");
   const [isChatboxVisible, setChatboxVisible] = useState(false);
   const [isLoginVisible, setLoginVisible] = useState(false);
@@ -41,6 +41,11 @@ const Header = () => {
       window.location.reload()
     }
   }
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || []
+    updateCartItemCount(cart.length)
+  }, [updateCartItemCount])
 
   return (
     <div className='w-full bg-customBlack py-4 flex justify-between items-center'>
@@ -74,7 +79,7 @@ const Header = () => {
       <div className='mr-5 flex items-center'>
         <button onClick={() => toggleLogin()}>
           {!user ? <img src='/src/assets/user.png' className='h-[20px] w-[20px]' /> :
-          <UserAvatarDropdown image="https://mui.com/static/images/avatar/3.jpg"/>}
+          <UserAvatarDropdown image={user.image}/>}
         </button>
         <div className='relative ml-5'>
           <Link to='shoppingcart'>

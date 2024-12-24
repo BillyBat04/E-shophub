@@ -7,10 +7,13 @@ const SplideSlider = ({ product }) => {
   useEffect(() => {
     if (product?.featuresImages?.length) {
       const splideCheck = document.getElementById("main-slider");
-
+  
       if (splideCheck) {
         console.log(`Splide is present`);
-
+  
+        // Xóa các instance Splide cũ nếu tồn tại
+        splideCheck.splide?.destroy();
+  
         const main = new Splide("#main-slider", {
           fixedWidth: 400,
           type: "fade",
@@ -18,7 +21,7 @@ const SplideSlider = ({ product }) => {
           pagination: false,
           arrows: false,
         });
-
+  
         const thumbnails = new Splide("#thumbnail-slider", {
           fixedWidth: 100,
           gap: 30,
@@ -28,7 +31,7 @@ const SplideSlider = ({ product }) => {
           focus: "center",
           isNavigation: true,
         });
-
+  
         main.sync(thumbnails);
         main.mount();
         thumbnails.mount();
@@ -36,7 +39,7 @@ const SplideSlider = ({ product }) => {
         console.log(`Splide is NOT present`);
       }
     }
-  }, [product]); // Depend on the `product` prop to re-run when it changes
+  }, [product?.featuresImages]); // Depend on the `product` prop to re-run when it changes
 
   return (
     <div>

@@ -7,26 +7,36 @@ import Thumbnail from "../components/thumbnail";
 import '@splidejs/splide/dist/css/splide.min.css';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "../components/cartcontext";
+import formatNumber from "../helpers/formatNumber";
+import ModalFeedback from "../components/modalfeedback";
 function DetailProduct() {
   const params = useParams()
   const SKU = params.sku
-
+  const {updateCartItemCount} = useCart()
   const [activeFilter, setActiveFilter] = useState('Tất cả');
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({})
+  const [feedbackList, setFeedbackList] = useState([])
   const getProduct = useCallback(async () => {
     const response = await axiosInstance.get(`/product/${SKU}`)
     setProduct(response.data)
   }, [SKU])
 
+  const getFeedbackList = useCallback(async () => {
+    const displayedProduct = await axiosInstance.get(`/displayed-product/${SKU}`)
+    const response = await axiosInstance.get(`/feedback/${displayedProduct.data[0].id}`)
+    setFeedbackList(response.data)
+  }, [SKU])
+
   useEffect(() => {
     getProduct()
-  }, [getProduct])
+    getFeedbackList()
+  }, [getProduct, getFeedbackList])
 
   const filters = [
-    'Tất cả', 
-    'Mới nhất', 
-    'Lọc theo 5 sao', 
+    'Tất cả',
+    '5 sao', 
     '4 sao', 
     '3 sao', 
     '2 sao', 
@@ -38,15 +48,16 @@ function DetailProduct() {
     const productIndex = cart.findIndex(item => item[product.SKU]);
 
     if (productIndex !== -1) {
-      cart[productIndex][product.SKU] += 1;
+      cart[productIndex][product.SKU] += quantity;
     } else {
-      cart.push({ [product.SKU]: 1 });
+      cart.push({ [product.SKU]: quantity });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
     toast.success("Thêm vào giỏ hàng thành công!", {
       autoClose: 3000, 
       hideProgressBar: true,
     });
+    if (cart.length) updateCartItemCount(cart.length)
   };
 
   const handleSubmit = () => {
@@ -54,15 +65,48 @@ function DetailProduct() {
     const shoppingCart = JSON.parse(localStorage.getItem('payment')) || [];
     shoppingCart.push({[product.SKU] : quantity})
     localStorage.setItem('payment', JSON.stringify(shoppingCart));
-    console.log(shoppingCart)
   }
 
-  const handleFilterClick = (filter) => {
-    setActiveFilter(filter); // Cập nhật filter đang được chọn
+  const handleFilterClick = async (filter) => {
+    setActiveFilter(filter);
+    let rating = 0 
+    switch(filter) {
+      case '5 sao': {
+        rating = 5
+        break
+      }
+      case '4 sao': {
+        rating = 4
+        break
+      }
+      case '3 sao': {
+        rating = 3
+        break
+      }
+      case '2 sao': {
+        rating = 2
+        break
+      }
+      case '1 sao': {
+        rating = 1
+        break
+      }
+      default: {
+        break
+      }
+    }
+    const displayedProduct = await axiosInstance.get(`/displayed-product/${SKU}`)
+    if (rating === 0){
+      const response = await axiosInstance.get(`/feedback/${displayedProduct.data[0].id}`)
+      setFeedbackList(response.data)
+      return
+    }
+    const response = await axiosInstance.get(`/feedback/rating/${rating}?productId=${displayedProduct.data[0].id}`)
+    setFeedbackList(response.data)
   };
 
   const handleDecrement = () => {
-    if (quantity > 0) {
+    if (quantity > 1) {
       setQuantity(quantity - 1); // Decrement the quantity
     }
   };
@@ -142,7 +186,7 @@ function DetailProduct() {
       </div>
     </form>
           <p className="my-2 text-xl">Tạm tính</p>
-          <p className="font-bold text-xl">{43000000 * quantity} VNĐ</p>
+          <p className="font-bold text-xl">{formatNumber(product.sellingPrice * quantity)} VNĐ</p>
           <Link to='/payment'><button onClick={() => handleSubmit()} className="w-full mt-2 py-2 bg-[#FF424E] text-white rounded">
             Mua ngay
           </button></Link>
@@ -235,90 +279,37 @@ function DetailProduct() {
               </div>
             </div>
             <div>
-              <div className="flex items-center mt-8 p-2 border border-black rounded-md">
-                <div className="flex items-center">
-                  <img className="w-[50px] h-[50px]" src = 'https://cdn-icons-png.freepik.com/512/147/147142.png'/>
-                  <p className="ml-2">Nguyễn Phi Học</p>
-                </div>
-                <div className="ml-8">
-                  <div className="flex items-center">
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <p className='ml-4'>Cực kì hài lòng</p>
+              {feedbackList.map((item, index) => {
+                return (
+                  <div key={index} className="flex items-center mt-8 p-2 border border-[#FFF5EE] shadow-md rounded-md">
+                    <div className="flex items-center">
+                      <img className="w-[50px] h-[50px]" src={item.customer.user.image} alt="Customer" />
+                      <div className="ml-6">
+                        <p className="">{item.customer.fullName}</p>
+                        <p className="text-sm text-gray-500 mt-2">Thời gian: {new Date(item.createdAt).toLocaleString()}</p>
+                      </div>
+                    </div>
+                    <div className="ml-8">
+                      <div className="flex items-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            className={`text-3xl ${
+                              star <= item.rating ? "text-yellow-500" : "text-gray-300"
+                            }`}
+                          >
+                            ★
+                          </button>
+                        ))}
+                      </div>
+                      <p>{item.content}</p>
+                    </div>
                   </div>
-                  <p>Giao hàng nhanh, giá thành tốt sản phẩm khuyến mại kèm theo chính hãng đúng như xam kết</p>
-                </div>
-              </div>
-              <div className="flex items-center mt-8 p-2 border border-black rounded-md">
-                <div className="flex items-center">
-                  <img className="w-[50px] h-[50px]" src = 'https://cdn-icons-png.freepik.com/512/147/147142.png'/>
-                  <p className="ml-2">Nguyễn Phi Học</p>
-                </div>
-                <div className="ml-8">
-                  <div className="flex items-center">
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <p className='ml-4'>Cực kì hài lòng</p>
-                  </div>
-                  <p>Giao hàng nhanh, giá thành tốt sản phẩm khuyến mại kèm theo chính hãng đúng như xam kết</p>
-                </div>
-              </div>
-              <div className="flex items-center mt-8 p-2 border border-black rounded-md">
-                <div className="flex items-center">
-                  <img className="w-[50px] h-[50px]" src = 'https://cdn-icons-png.freepik.com/512/147/147142.png'/>
-                  <p className="ml-2">Nguyễn Phi Học</p>
-                </div>
-                <div className="ml-8">
-                  <div className="flex items-center">
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <p className='ml-4'>Cực kì hài lòng</p>
-                  </div>
-                  <p>Giao hàng nhanh, giá thành tốt sản phẩm khuyến mại kèm theo chính hãng đúng như xam kết</p>
-                </div>
-              </div>
-              <div className="flex items-center mt-8 p-2 border border-black rounded-md">
-                <div className="flex items-center">
-                  <img className="w-[50px] h-[50px]" src = 'https://cdn-icons-png.freepik.com/512/147/147142.png'/>
-                  <p className="ml-2">Nguyễn Phi Học</p>
-                </div>
-                <div className="ml-8">
-                  <div className="flex items-center">
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <p className='ml-4'>Cực kì hài lòng</p>
-                  </div>
-                  <p>Giao hàng nhanh, giá thành tốt sản phẩm khuyến mại kèm theo chính hãng đúng như xam kết</p>
-                </div>
-              </div>
-              <div className="flex items-center mt-8 p-2 border border-black rounded-md">
-                <div className="flex items-center">
-                  <img className="w-[50px] h-[50px]" src = 'https://cdn-icons-png.freepik.com/512/147/147142.png'/>
-                  <p className="ml-2">Nguyễn Phi Học</p>
-                </div>
-                <div className="ml-8">
-                  <div className="flex items-center">
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <FaStar className="text-[#ffd700]"/>
-                    <p className='ml-4'>Cực kì hài lòng</p>
-                  </div>
-                  <p>Giao hàng nhanh, giá thành tốt sản phẩm khuyến mại kèm theo chính hãng đúng như xam kết</p>
-                </div>
+
+                )
+              })}
+              <div className="mt-4">
+                <ModalFeedback SKU = {SKU}/>
               </div>
             </div>
         </div>
