@@ -10,9 +10,10 @@ import CustomerList from "./pages/shopowner/customerlist";
 import OrderDetail from "./pages/shopowner/OrderDetail";
 import Reports from "./pages/shopowner/report";
 import CustomerDetail from "./pages/shopowner/customerDetail";
-import OrderHistory from "./pages/personal";
+import History from "./pages/history";
 import { CartProvider } from "./components/cartcontext";
 import DropdownMenu from "./components/dropdownmenu";
+import Information from "./pages/imformation";
 import MainPage from "./pages/shopowner/mainpage";
 import EmployeeList from "./pages/shopowner/NewEmployee";
 import Supplier from "./pages/shopowner/Supplier";
@@ -30,6 +31,7 @@ import DetailProduct from "./pages/DetailProduct";
 import { FooterWithSitemap } from "./components/footer";
 import DisplayedProduct from "./pages/shopowner/DisplayProduct";
 import CreateDisplayedProduct from "./pages/shopowner/CreateDisplayProduct";
+import Personal from "./pages/personal";
 
 function App() {
   const location = useLocation();
@@ -58,7 +60,11 @@ function App() {
             <Route path="/shoppingcart" element={<Shoppingcart />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/pdescript" element={<Pdescript />} />
-            <Route path="/personal" element={<OrderHistory />} />
+            <Route path="/personal" element={<Personal />}>
+              <Route path="history" element={<History />} />
+              <Route path="information" element={<Information />} />
+            </Route>
+            <Route path="/information" element={<Information />} />
             <Route path="/listproduct" element={<Listproduct />} />
             <Route path="/detail-product/:sku" element={<DetailProduct />} />
             <Route path="/admin" element={<MainPage />}>
@@ -78,7 +84,7 @@ function App() {
               </Route>
               <Route path="customerId" element={<CustomerDetail />} />
               <Route path="customers" element={<CustomerList />}>
-                
+
               </Route>
               <Route path="products" element={<ProductList />}>
                 <Route path=":productId" element={<ProductDetail />} />

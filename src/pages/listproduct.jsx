@@ -1,28 +1,20 @@
 import { useState, useEffect } from 'react';
-import { FaFilter } from "react-icons/fa6";
-import { Range } from 'react-range';
+
+import Arrange from '../components/arrange';
 import ProductList1 from '../components/productlist';
 
 const Listproduct = () => {
-    const [selectedOption, setSelectedOption] = useState('');
-    const handleChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
-
-
-    const [values, setValues] = useState([0, 100]);
     const banners = [
         { id: 1, img: "src/assets/banner1.jpg" },
         { id: 2, img: "src/assets/banner2.jpg" },
         { id: 3, img: "src/assets/banner3.jpg" },
     ];
-    const brands = [
-        { id: 1, name: "iPhone" },
-        { id: 2, name: "Samsung" },
-        { id: 3, name: "Vivo" },
-        { id: 4, name: "Xiaomi" },
-        { id: 5, name: "Oppo" },
-        { id: 6, name: "Realmi" },
+    const cates = [
+        { id: 1, name: "Phone", img: "src/assets/ph.png" },
+        { id: 2, name: "Laptop", img: "src/assets/lap.png" },
+        { id: 3, name: "Tablet", img: "src/assets/tab.png" },
+        { id: 4, name: "Earpods", img: "src/assets/ears.png" },
+        { id: 5, name: "Accessories", img: "src/assets/access.png" },
     ]
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -35,7 +27,7 @@ const Listproduct = () => {
     }, [banners.length]);
 
     return (
-        <div className="xl:pl-[15%] xl:pr-[15%]  w-screen ">
+        <div className="xl:pl-[15%] xl:pr-[15%] h-screen w-screen overflow-x-hidden ">
             <div className="relative w-full h-full ">
                 <div
                     className="flex transition-transform duration-500 ease-in-out"
@@ -56,91 +48,37 @@ const Listproduct = () => {
                     ))}
                 </div>
                 <div className='p-3 w-full h-[12%] flex justify-between'>
-                    <div className='flex w-[70%]'>
-                        <button className='h-full w-24 rounded-md border border-customBlack justify-center flex items-center'>
-                            <FaFilter className='mr-2' />
-                            <span>Filter</span>
-                        </button>
-                        <div className='pl-3  h-full w-full flex flex-col justify-between'>
-                            <div className='h-1/2 flex gap-2'>
-                                {
-                                    brands.map((brand) => (
-
-                                        <button className='h-full w-20 rounded-md border border-customBlack justify-center flex items-center' key={brand.id}>
-                                            {brand.name}
-                                        </button>
-                                    ))
-                                }
-                            </div>
-                            <div className="h-1/2 flex items-center space-x-6">
-                                <span className='h-[80%] flex justify-center items-center w-20 text-white text-sm rounded-md bg-customBlack'>{values[0] * 50} $</span>
-                                <div className="w-64 h-1 customShadow flex items-center rounded-full">
-                                    <Range
-                                        values={values}
-                                        step={1}
-                                        min={0}
-                                        max={100}
-                                        onChange={(newValues) => setValues(newValues)}
-                                        renderTrack={({ props, children }) => (
-                                            <div
-                                                {...props}
-                                                className="w-full h-1 rounded-full"
-                                                style={{
-                                                    // eslint-disable-next-line react/prop-types
-                                                    ...props.style,
-                                                }}
-                                            >
-                                                <div
-                                                    className="absolute h-full bg-black rounded-full"
-                                                    style={{
-                                                        left: `${(values[0] / 100) * 100}%`,
-                                                        width: `${((values[1] - values[0]) / 100) * 100}%`,
-                                                    }}
-                                                />
-                                                {children}
-                                            </div>
-                                        )}
-                                        renderThumb={({ props }) => (
-                                            <div
-                                                {...props}
-                                                className="w-4 h-4 bg-customBlack rounded-full flex justify-center items-center shadow-md"
-                                                style={{
-                                                    // eslint-disable-next-line react/prop-types
-                                                    ...props.style,
-                                                }}
-                                            >
-                                            </div>
-                                        )}
-                                    />
-                                </div>
-                                <span className='h-[80%] flex justify-center items-center w-20 text-white text-sm rounded-md bg-customBlack'>{values[1] * 50} $</span>
-
+                    <div className='flex flex-col w-[70%]'>
+                        <span className='font-medium pr-3 pb-2'> Explore by category</span>
+                        <div className='flex gap-8'>
+                            {
+                                cates.map((cate, id) => (
+                                    <button className='flex flex-col gap-1 items-center' key={id} >
+                                        <div className='w-16 flex justify-center items-center h-16 bg-slate-200 rounded-full'>
+                                            <img src = {cate.img} className='w-10 h-10'/>
+                                        </div>
+                                        <span className='font-normal text-sm'>{cate.name}</span>
+                                    </button>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    <div className="w-[30%] h-full flex flex-col items-end justify-start">
+                        <div className="w-full justify-end flex items-center">
+                            <span className="font-medium pr-3 ">Arrange</span>
+                            <div className="flex justify-end">
+                                <Arrange />
                             </div>
                         </div>
                     </div>
-                    <div className='w-[30%] h-full flex flex-col items-end justify-center'>
-                        <div className='w-[40%] justify-start'>
-                            <span className='text-center font-medium'>Arrange</span>
-                            <div className="mt-2 w-[100%]">
-                                <select
-                                    value={selectedOption}
-                                    onChange={handleChange}
-                                    className="w-full h-7 border border-customBlack rounded-md"
-                                >
-                                    <option value="">Select Sorting Option</option>
-                                    <option value="low-to-high">Price from low to high</option>
-                                    <option value="high-to-low">Price from high to low</option>
-                                    <option value="outstanding">Outstanding</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
                 <div className='w-full h-full'>
                     <ProductList1 />
                 </div>
             </div>
         </div >
+
     );
 };
 

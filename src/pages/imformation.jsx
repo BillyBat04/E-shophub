@@ -1,0 +1,220 @@
+import { useState } from "react";
+
+export default function Information() {
+    const [userInfo, setUserInfo] = useState({
+        fullName: "John Doe",
+        email: "johndoe@example.com",
+        birth: "01/01/2001",
+        sex: "Male",
+        phone: "123-456-7890",
+        address: "123 Main St, Springfield",
+    });
+    const [selectedAvatar, setSelectedAvatar] = useState(null);
+
+    const handleAvatarChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageURL = URL.createObjectURL(file);
+            setSelectedAvatar(imageURL);
+        }
+    };
+
+    const [isEditing, setIsEditing] = useState(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUserInfo({
+            ...userInfo,
+            [name]: value,
+        });
+    };
+
+    const handleSave = () => {
+        setIsEditing(false);
+    };
+
+    return (
+        <div className="w-full ml-6 gap-3 flex">
+            <div className='w-1/3 h-full p-5 bg-white rounded-lg'>
+                <h3 className="text-base mb-3 font-semibold">Avatar</h3>
+                <div className="flex flex-col items-center">
+                    <div className="h-32 w-32 mb-4 rounded-full overflow-hidden border-2 border-gray-300">
+                        {selectedAvatar ? (
+                            <img
+                                src={selectedAvatar}
+                                alt="Selected Avatar"
+                                className="h-full w-full object-cover"
+                            />
+                        ) : (
+                            <div className="h-full w-full flex items-center justify-center">
+                                No Avatar
+                            </div>
+                        )}
+                    </div>
+                    <label className="text-xs cursor-pointer bg-blue-500 text-white px-3 py-2 rounded-lg">
+                        Select Avatar
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleAvatarChange}
+                        />
+                    </label>
+                </div>
+            </div>
+
+            <div className="w-2/3 mx-auto p-6 bg-white rounded-lg shadow-md">
+                <h3 className="text-base mb-3 font-semibold">Personal Information</h3>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    {/* Full Name */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="fullName"
+                                value={userInfo.fullName}
+                                onChange={handleChange}
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            />
+                        ) : (
+                            <p className="mt-1 text-gray-600">{userInfo.fullName}</p>
+                        )}
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        {isEditing ? (
+                            <input
+                                type="email"
+                                name="email"
+                                value={userInfo.email}
+                                onChange={handleChange}
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            />
+                        ) : (
+                            <p className="mt-1 text-gray-600">{userInfo.email}</p>
+                        )}
+                    </div>
+
+                    {/* Birthday */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Birthday</label>
+                        {isEditing ? (
+                            <input
+                                type="date"
+                                name="birth"
+                                value={userInfo.birth}
+                                onChange={handleChange}
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            />
+                        ) : (
+                            <p className="mt-1 text-gray-600">{userInfo.birth}</p>
+                        )}
+                    </div>
+
+                    {/* Sex */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Sex</label>
+                        {isEditing ? (
+                            <div className="flex items-center space-x-4">
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="sex"
+                                        value="Male"
+                                        checked={userInfo.sex === "Male"}
+                                        onChange={handleChange}
+                                        className="mr-2"
+                                    />
+                                    Male
+                                </label>
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="sex"
+                                        value="Female"
+                                        checked={userInfo.sex === "Female"}
+                                        onChange={handleChange}
+                                        className="mr-2"
+                                    />
+                                    Female
+                                </label>
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="sex"
+                                        value="Other"
+                                        checked={userInfo.sex === "Other"}
+                                        onChange={handleChange}
+                                        className="mr-2"
+                                    />
+                                    Other
+                                </label>
+                            </div>
+                        ) : (
+                            <p className="mt-1 text-gray-600">{userInfo.sex}</p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Phone</label>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="phone"
+                                value={userInfo.phone}
+                                onChange={handleChange}
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            />
+                        ) : (
+                            <p className="mt-1 text-gray-600">{userInfo.phone}</p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Address</label>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="address"
+                                value={userInfo.address}
+                                onChange={handleChange}
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            />
+                        ) : (
+                            <p className="mt-1 text-gray-600">{userInfo.address}</p>
+                        )}
+                    </div>
+                </div>
+
+                <div className="mt-6 flex justify-end space-x-4">
+                    {isEditing ? (
+                        <>
+                            <button
+                                onClick={() => setIsEditing(false)}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleSave}
+                                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                            >
+                                Save
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            onClick={() => setIsEditing(true)}
+                            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                        >
+                            Edit
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
