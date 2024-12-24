@@ -4,7 +4,7 @@ import axiosInstance from "../../config/api";
 import { Input } from "@mui/base";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const CreateDisplayedProduct = () => {
+const CreateInventory = () => {
     const { productId } = useParams();
     const navigate = useNavigate()
     const [categoryList, setCategoryList] = useState([])
@@ -12,7 +12,6 @@ const CreateDisplayedProduct = () => {
     const [productList, setProductList] = useState([])
     const [product, setProduct] = useState(null)
     const [quantity, setQuantity] = useState(0)
-    const [inventory ,setInventory] = useState()
     const getCategoryList = useCallback(async () => {
         const response = await axiosInstance.get('/category')
         setCategoryList(response.data)
@@ -34,8 +33,6 @@ const CreateDisplayedProduct = () => {
         const productSKU = e.target.value 
         const response = await axiosInstance.get(`/product/${productSKU}`)
         setProduct(response.data)
-        const response2 = await axiosInstance.get(`/inventory/${productSKU}`)
-        setInventory(response2.data)
     }
 
     const handleSubmit = async (e) => {
@@ -45,27 +42,21 @@ const CreateDisplayedProduct = () => {
             productId: product.SKU,
             sellingPrice: product.sellingPrice
         }
-        if (quantity > inventory.quantity) {
-          alert("Số lượng nhập vào không được lớn hơn số lượng tồn kho")
-          return
-        }
+
         const response = await axiosInstance.post('/displayed-product', data)
-        await axiosInstance.patch(`/inventory/${inventory.id}`, {
-          quantity: inventory.quantity - quantity
-        })
+
         if (response.data) {
-            toast.success("Thêm sản phẩm thành công !!!", {
+            toast.success("Thêm vào giỏ hàng thành công!", {
                 autoClose: 3000, 
                 hideProgressBar: true,
               });
             navigate('/admin/displayed-product')
             window.location.reload()
-        } else {
-          toast.error("Đã xảy ra lỗi trong quá trình xác nhận", {
+        } 
+        toast.error("Đã xảy ra lỗi trong quá trình xác nhận", {
             autoClose: 3000, 
             hideProgressBar: true,
           });
-        }
     }
 
     useEffect(() => {
@@ -137,7 +128,7 @@ const CreateDisplayedProduct = () => {
                 <div className="flex flex-col items-center">
                     <img src={product?.image} className="w-[150px] h-[150px]" />
                     <p className="w-1/2 text-center font-bold">{product?.productName || ''}</p>
-                    <p>Số lượng tồn kho: {inventory?.quantity}</p>
+                    <p>Số lượng tồn kho: {product?.quantity}</p>
                 </div>
                 <Input
                     slotProps={{
@@ -166,4 +157,4 @@ const CreateDisplayedProduct = () => {
   );
 };
 
-export default CreateDisplayedProduct;
+export default CreateInventory;

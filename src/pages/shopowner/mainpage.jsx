@@ -12,6 +12,7 @@ const MainPage = () => {
     { label: "Order", icon: FaReceipt, link: "orders" },
     { label: "Product", icon: FaBox, link: "products" },
     { label: "Displayed Product", icon: FaBox, link: "displayed-product" },
+    { label: "Inventory", icon: FaBox, link: "inventory" },
     { label: "Customer", icon: MdManageAccounts, link: "customers" },
     { label: "Employee", icon: IoMdPeople, link: "employees" },
     { label: "Supplier", icon: MdTrolley, link: "supplier" },

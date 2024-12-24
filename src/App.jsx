@@ -32,6 +32,8 @@ import { FooterWithSitemap } from "./components/footer";
 import DisplayedProduct from "./pages/shopowner/DisplayProduct";
 import CreateDisplayedProduct from "./pages/shopowner/CreateDisplayProduct";
 import Personal from "./pages/personal";
+import Inventory from "./pages/shopowner/Inventory";
+import CreateInventory from "./pages/shopowner/CreateInventory";
 
 function App() {
   const location = useLocation();
@@ -41,6 +43,7 @@ function App() {
     "products",
     "orders",
     "employees",
+    "inventory",
     "supplier",
     "admin",
   ].some((page) => location.pathname.includes(page));
@@ -92,6 +95,9 @@ function App() {
               </Route>
               <Route path="displayed-product" element={<DisplayedProduct />}>
                 <Route path="create" element={<CreateDisplayedProduct />} />
+              </Route>
+              <Route path="inventory" element={<Inventory />}>
+                <Route path="create" element={<CreateInventory />} />
               </Route>
             </Route>
           </Routes>
