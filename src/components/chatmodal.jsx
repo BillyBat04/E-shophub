@@ -34,7 +34,7 @@ function ChatModal() {
   }, [messages]); // Mỗi khi messages thay đổi, cuộn xuống
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 font-sans relative z-[999]">
+    <div className="flex justify-center items-center bg-gray-100 font-sans relative z-[999]">
       {/* Button fixed ở góc dưới bên phải */}
       <button
         onClick={openModal}

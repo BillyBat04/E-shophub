@@ -4,6 +4,8 @@ import PhoneList from '../components/phonecart';
 import LaptopList from '../components/laptopcart'
 import AccessoryCard from '../components/accessorycart';
 import ChatModal from '../components/chatmodal';
+import { FooterWithSitemap } from '../components/footer';
+import { Link } from 'react-router-dom';
 
 const products = [
   {
@@ -58,12 +60,10 @@ const Mainpage = () => {
 
     return () => clearInterval(interval);
   }, []);
-
   return (
-    <div className="xl:pl-[15%] xl:pr-[15%]  w-screen h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
-      {/* Section 1 */}
-      <ChatModal/>
-      <section className="snap-start  w-full h-[95%] flex flex-col">
+    <div className="xl:pl-[15%] xl:pr-[15%]  w-screen h-screen overflow-y-scroll ">
+
+      <section className="w-full h-[95%] flex flex-col">
         <div className="relative w-full  h-[95%]">
           <div className=' absolute inset-0 w-full h-[60%] bg-black'>
           </div>
@@ -111,42 +111,45 @@ const Mainpage = () => {
           </div>
         </div>
       </section >
-
-      {/* Section 2 */}
-      < section className="snap-start w-full h-[95%] flex items-center justify-center bg-customGray1" >
+      < section className="w-full h-[95%] flex items-center justify-center bg-customGray1" >
         <div className='w-[80%] h-[80%] flex flex-col'>
           <div className='flex flex-row justify-between items-end w-full h-[5%]'>
             <label className='font-semibold text-[40px]'> New phones.</label>
-            <button className='mb-2 flex flex-row items-center '>
-              <label>Discover more </label>
-              <GrNext className='ml-1' /> </button>
+            <Link to="/listproduct/Phone">
+              <button className='mb-2 flex flex-row items-center '>
+                <label>Discover more </label>
+                <GrNext className='ml-1' /> </button>
+            </Link>
           </div>
           <div className='h-[95%] w-full '>
             <PhoneList />
           </div>
         </div>
       </section >
-      
-      < section className="selection:snap-start w-full h-[95%] flex items-center justify-center bg-customGray2" >
+      < section className="w-full h-[95%] flex items-center justify-center bg-customGray2" >
         <div className='w-[80%] h-[80%]  flex flex-col'>
           <div className='flex flex-row justify-between items-end w-full h-[10%]'>
             <label className='font-semibold text-white text-[40px]'> New laptops.</label>
-            <button className='mb-2 text-white flex flex-row items-center '>
-              <label>Discover more </label>
-              <GrNext className='ml-1' /> </button>
+            <Link to="/listproduct/Laptop">
+              <button className='mb-2 text-white flex flex-row items-center '>
+                <label>Discover more </label>
+                <GrNext className='ml-1' /> </button>
+            </Link>
           </div>
           <div className='h-[95%] w-full '>
             <LaptopList />
           </div>
         </div>
       </section >
-      <section className='snap-start w-full h-full flex items-center justify-center'>
+      <section className='w-full h-full flex items-center justify-center'>
         <div className='w-[80%] h-[100%]  flex flex-col'>
           <div className='flex flex-row justify-between items-end w-full h-[20%]'>
             <label className='font-semibold  text-[40px]'> New accessories.</label>
-            <button className='mb-2  flex flex-row items-center '>
-              <label>Discover more </label>
-              <GrNext className='ml-1' /> </button>
+            <Link to="/listproduct/Accessories">
+              <button className='mb-2  flex flex-row items-center '>
+                <label>Discover more </label>
+                <GrNext className='ml-1' /> </button>
+            </Link>
           </div>
           <div className='h-[80%] w-full grid grid-cols-2 '>
             <div className=' h-full w-full '>
@@ -176,6 +179,8 @@ const Mainpage = () => {
           </div>
         </div>
       </section >
+      <FooterWithSitemap />
+      <ChatModal />
     </div >
   );
 };

@@ -4,13 +4,13 @@ import Mainpage from "./pages/mainpage";
 import Header from "./components/header";
 import Shoppingcart from "./pages/shoppingcart";
 import PaymentPage from "./pages/payment";
-import Pdescript from "./pages/pdescript";
 import Chat from "./pages/shopowner/chat";
 import CustomerList from "./pages/shopowner/customerlist";
 import OrderDetail from "./pages/shopowner/OrderDetail";
 import Reports from "./pages/shopowner/report";
 import CustomerDetail from "./pages/shopowner/customerDetail";
 import History from "./pages/history";
+import CategoryProductList from "./pages/CategoryProductList";
 import { CartProvider } from "./components/cartcontext";
 import DropdownMenu from "./components/dropdownmenu";
 import Information from "./pages/information";
@@ -53,22 +53,23 @@ function App() {
       <div className="app">
         {!showNav && (
           <>
-            <Header />
-            <DropdownMenu />
+            <Header className="header" />
+            <DropdownMenu className="dropdown-menu" />
           </>
         )}
         <div className="content">
           <Routes>
-            <Route path="/mainpage" element={<Mainpage />} />
+            <Route path="/" element={<Mainpage />} />
             <Route path="/shoppingcart" element={<Shoppingcart />} />
             <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/pdescript" element={<Pdescript />} />
             <Route path="/personal" element={<Personal />}>
               <Route path="history" element={<History />} />
               <Route path="information" element={<Information />} />
             </Route>
             <Route path="/information" element={<Information />} />
-            <Route path="/listproduct" element={<Listproduct />} />
+            <Route path="/listproduct" element={<Listproduct />}>
+              <Route path=":category" element={<CategoryProductList />}></Route>
+            </Route>
             <Route path="/detail-product/:sku" element={<DetailProduct />} />
             <Route path="/admin" element={<MainPage />}>
               <Route path="chat" element={<Chat />} />
@@ -87,7 +88,6 @@ function App() {
               </Route>
               <Route path="customerId" element={<CustomerDetail />} />
               <Route path="customers" element={<CustomerList />}>
-
               </Route>
               <Route path="products" element={<ProductList />}>
                 <Route path=":productId" element={<ProductDetail />} />
@@ -103,11 +103,9 @@ function App() {
           </Routes>
           {!showNav && (
             <>
-              <FooterWithSitemap />
             </>
           )}
         </div>
-
       </div>
     </CartProvider>
   );

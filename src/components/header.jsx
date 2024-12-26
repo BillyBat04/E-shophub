@@ -147,15 +147,14 @@ const Header = () => {
   return (
     <div className='w-full bg-customBlack py-4 flex justify-between items-center'>
       <div className='ml-5 flex flex-row w-[50%] h-full items-center'>
-        <Link to='mainpage'>
+        <Link to='/'>
           <label className='text-white font-roboto text-[20px]'>
             E-ShopHub
           </label>
         </Link>
-        {/* Search Bar */}
         <div
-          className={`ml-5 h-[70%] bg-white rounded-full flex flex-row items-center transition-all duration-300 ${
-            isSearchFocused ? "w-[60%]" : "w-[40%]"
+          className={`ml-5 h-[100%] bg-white rounded-full flex flex-row items-center transition-all duration-300 ${
+            isSearchFocused ? "w-[50%]" : "w-[40%]"
           }`}>
           <input
             type='text'
@@ -198,7 +197,6 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Chatbox Popup */}
       {isChatboxVisible && (
         <div className='z-30 fixed bottom-2 right-5 w-[300px] h-[250px] bg-white border border-gray-300 rounded-3xl shadow-lg flex flex-col justify-center items-center'>
           <div className='h-[90%] w-[90%]'>

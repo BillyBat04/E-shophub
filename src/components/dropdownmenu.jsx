@@ -6,10 +6,9 @@ const DropdownMenu = () => {
   return (
     <div
       className="w-full h-[35px] z-50 flex justify-center bg-customGray">
-      <div className="w-auto h-full flex items-center"
+      <div className="relative w-full h-full justify-center flex items-center"
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}>
-        {/* Button Group */}
         <div className="flex space-x-16 items-center">
           <button className="flex flex-row items-center">
             <img
@@ -51,7 +50,7 @@ const DropdownMenu = () => {
         {/* Dropdown Menu */}
         {isOpen && (
           <div
-            className="mt-5 absolute left-0 top-16 bg-customBlack text-white p-6 w-full grid grid-cols-3 gap-8
+            className="absolute left-0 top-full bg-customBlack text-white p-6 w-full grid grid-cols-3 gap-8
                     transition-opacity duration-300 opacity-100"
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => setIsOpen(false)}>

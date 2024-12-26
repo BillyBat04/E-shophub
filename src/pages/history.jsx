@@ -6,7 +6,6 @@ import ModalOrder from '../components/modalorder';
 
 const History = () => {
     const [selectedTab, setSelectedTab] = useState('Tất cả');
-    const [selected, setSelected] = useState('History');
     const [orderList, setOrderList] = useState([]);
     const [invoiceId, setInvoiceId] = useState('');
     const [isOpen, setIsOpen] = useState(false);
@@ -52,13 +51,12 @@ const History = () => {
 
     return (
         <div className="flex items-center flex-col w-full ml-6">
-            {/* Tab navigation for order status */}
             <div className="bg-white shadow-md py-4 w-[80%] rounded-full justify-center flex items-center space-x-7 mb-4">
-                {['Tất cả', 'Đang xử lý', 'Đang vận chuyển', 'Hoàn thành', 'Đã hủy'].map((tab) => (
+                {['All', 'Pending', 'On Shipping', 'Complete', 'Cancled'].map((tab) => (
                     <button
                         key={tab}
                         onClick={() => handleSelectTab(tab)}
-                        className={`px-4 py-2 text-sm rounded-full ${selectedTab === tab ? 'bg-black text-white' : 'text-black'}`}
+                        className={`px-8 py-2 text-sm rounded-full ${selectedTab === tab ? 'bg-black text-white' : 'text-black'}`}
                     >
                         {tab}
                     </button>

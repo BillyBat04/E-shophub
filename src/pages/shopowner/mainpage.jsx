@@ -2,8 +2,9 @@ import Nav from "../../components/shopowner/nav/nav";
 import Header from "../../components/shopowner/header";
 import { Outlet} from "react-router-dom";
 import { IoIosChatbubbles, IoMdPeople } from "react-icons/io";
-import { FaBox, FaReceipt } from "react-icons/fa6";
+import { FaBox, FaReceipt, FaDisplay } from "react-icons/fa6";
 import { BiSolidReport } from "react-icons/bi";
+import { MdInventory } from "react-icons/md";
 import { MdTrolley, MdManageAccounts } from "react-icons/md";
 const MainPage = () => {
 
@@ -11,8 +12,8 @@ const MainPage = () => {
     { label: "Chat", icon: IoIosChatbubbles, link: "chat" },
     { label: "Order", icon: FaReceipt, link: "orders" },
     { label: "Product", icon: FaBox, link: "products" },
-    { label: "Displayed Product", icon: FaBox, link: "displayed-product" },
-    { label: "Inventory", icon: FaBox, link: "inventory" },
+    { label: "Displayed Product", icon: FaDisplay, link: "displayed-product" },
+    { label: "Inventory", icon: MdInventory, link: "inventory" },
     { label: "Customer", icon: MdManageAccounts, link: "customers" },
     { label: "Employee", icon: IoMdPeople, link: "employees" },
     { label: "Supplier", icon: MdTrolley, link: "supplier" },
