@@ -1,30 +1,53 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Card, Typography } from "@material-tailwind/react";
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { Link, Outlet } from "react-router-dom";
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { IoAdd } from 'react-icons/io5';
+import { FaFilter } from "react-icons/fa6";
 import axiosInstance from '../../config/api';
 import formatDate from '../../helpers/formatDate';
+
 const ImportOrder = () => {
   const TABLE_HEAD = ["No", "Order Date", "Shipping Address", "Total Price", "Supplier", "Status"];
-  const [supplyOrders, setSupplyOrders] = useState([])
+  const [supplyOrders, setSupplyOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [filter, setFilter] = useState({ sortBy: "date", sortOrder: "asc", open: false });
+
+  const location = useLocation();
 
   const getList = useCallback(async () => {
-    const response = await axiosInstance.get('/supply-order')
-    setSupplyOrders(response.data)
-  }, [])
+    const response = await axiosInstance.get('/supply-order');
+    setSupplyOrders(response.data);
+    setFilteredOrders(response.data); // Initially, show all data
+  }, []);
 
   useEffect(() => {
-    getList()
-  }, [getList])
+    getList();
+  }, [getList]);
 
+  // Handle sorting
+  const handleSort = (sortBy, sortOrder) => {
+    let sortedOrders = [...supplyOrders];
+    if (sortBy === "date") {
+      sortedOrders.sort((a, b) => {
+        const dateA = new Date(a.orderDate);
+        const dateB = new Date(b.orderDate);
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+      });
+    } else if (sortBy === "status") {
+      sortedOrders.sort((a, b) => {
+        const statusA = a.status.toUpperCase();
+        const statusB = b.status.toUpperCase();
+        return sortOrder === "asc" ? statusA.localeCompare(statusB) : statusB.localeCompare(statusA);
+      });
+    }
+    setFilteredOrders(sortedOrders);
+  };
 
   const handleStatusChange = async (id, status) => {
-    await axiosInstance.patch(`/supply-order/${id}`, {
-      status
-    })
-    window.location.reload()
+    await axiosInstance.patch(`/supply-order/${id}`, { status });
+    getList(); // Refresh the list after the status is updated
   };
 
   const getStatusColor = (status) => {
@@ -41,16 +64,18 @@ const ImportOrder = () => {
         return "text-gray-600 bg-gray-400";
     }
   };
+
   const isDetailPage = location.pathname !== "/admin/orders";
 
   if (isDetailPage) {
-    return <Outlet></Outlet>
+    return <Outlet />;
   }
+
   return (
     <div className='w-full h-full flex'>
-      <div className='w-full h-fullflex flex-col'>
+      <div className='w-full h-full flex flex-col'>
         <div className='mb-5 max-h-[140px] w-full flex h-1/5 space-x-5'>
-          <div className='w-[25%] p-6 h-full font-semibold text-white bg-black shadow-md rounded-[20px]'>
+        <div className='w-[25%] p-6 h-full font-semibold text-white bg-black shadow-md rounded-[20px]'>
             <div className='w-full h-[100%] flex flex-row items-center justify-between'>
               <div className='flex flex-col h-full justify-between'>
                 <label className='text-base '>
@@ -92,24 +117,45 @@ const ImportOrder = () => {
 
         </div>
         <Card className="p-5 w-full flex h-4/5 bg-white shadow-md rounded-[20px] overflow-scroll px-6">
-          <Link className=" bg-black rounded-[20px] px-6 py-2 w-[200px] ml-auto text-center" to="/admin/orders/create"> 
+          <div className='flex items-center h-14 mb-2 justify-between'>
+            {/* Menu component for Filter with Chevron */}
+            <Menu as="div" className="relative inline-block text-left">
+              <MenuButton
+                className="flex items-center bg-white text-sm font-medium p-2 rounded-md hover:bg-gray-100"
+                onClick={() => setFilter({ ...filter, open: !filter.open })}
+              >
+                <FaFilter className="w-6 h-6 mr-2" />
+                <span>Filter</span>
+                <ChevronDownIcon className="w-5 h-5 ml-2 text-gray-400" />
+              </MenuButton>
+              {filter.open && (
+                <MenuItems className="flex flex-col items-start absolute right-auto z-10 w-56 bg-white rounded-lg customShadow">
+                  <MenuItem className="w-full" onClick={() => handleSort("date", filter.sortOrder)}>
+                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sort by Date</span>
+                  </MenuItem>
+                  <MenuItem className="w-full" onClick={() => handleSort("status", filter.sortOrder)}>
+                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sort by Status</span>
+                  </MenuItem>
+                </MenuItems>
+              )}
+            </Menu>
+
+            <Link className="bg-black rounded-[20px] h-10 w-[160px] flex justify-center" to="/admin/orders/create">
               <button className="flex items-center">
                 <span className="text-white font-bold">Create order</span>
-                <IoAdd className="w-6 h-6 text-white"></IoAdd>
+                <IoAdd className="w-6 h-6 ml-2 text-white" />
               </button>
             </Link>
+          </div>
+
           <table className="w-full min-w-max table-auto text-center">
             <thead>
-              <tr >
+              <tr>
                 {TABLE_HEAD.map((head, index) => (
                   <th key={head} className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
                     ${index === 0 ? 'rounded-l-2xl' : ''} 
                     ${index === TABLE_HEAD.length - 1 ? 'rounded-r-2xl' : ''}`}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-bold leading-none"
-                    >
+                    <Typography variant="small" color="blue-gray" className="font-bold leading-none">
                       {head}
                     </Typography>
                   </th>
@@ -117,51 +163,35 @@ const ImportOrder = () => {
               </tr>
             </thead>
             <tbody>
-              {supplyOrders.map((row, index) => {
-                const isLast = index === supplyOrders.length - 1;
+              {filteredOrders.map((row, index) => {
+                const isLast = index === filteredOrders.length - 1;
                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
                 return (
                   <tr key={row.no} className="hover:bg-gray-50">
                     <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-bold"
-                      >
+                      <Typography variant="small" color="blue-gray" className="font-bold">
                         {index + 1}
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
+                      <Typography variant="small" className="font-normal text-gray-600">
                         {formatDate(row.orderDate)}
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
+                      <Typography variant="small" className="font-normal text-gray-600">
                         {row.shippingAddress}
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
+                      <Typography variant="small" className="font-normal text-gray-600">
                         {row.totalPrice}
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
-                        {row.supplierId.slice(0,3)}
+                      <Typography variant="small" className="font-normal text-gray-600">
+                        {row.supplierId.slice(0, 3)}
                       </Typography>
                     </td>
                     <td className={`${classes} flex justify-center items-center`}>
@@ -174,7 +204,7 @@ const ImportOrder = () => {
                         </MenuButton>
                         <MenuItems className="flex flex-col items-start absolute right-0 z-10  w-56 bg-white rounded-lg shadow-lg">
                           {["PROCESSING", "SHIPPING", "COMPLETED", "CANCELED"].map((status) => (
-                            <MenuItem className= "w-full" key={status} as="button" onClick={() => handleStatusChange(row.id, status)}>
+                            <MenuItem className="w-full" key={status} as="button" onClick={() => handleStatusChange(row.id, status)}>
                               <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{status}</span>
                             </MenuItem>
                           ))}
@@ -182,10 +212,7 @@ const ImportOrder = () => {
                       </Menu>
                     </td>
                     <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-white"
-                      >
+                      <Typography variant="small" className="font-normal text-white">
                         <Link to={row.no}>
                           <button className='bg-black w-20 h-6 rounded-xl'>
                             Detail
@@ -201,7 +228,7 @@ const ImportOrder = () => {
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 export default ImportOrder;

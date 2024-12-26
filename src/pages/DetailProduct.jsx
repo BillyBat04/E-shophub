@@ -35,12 +35,12 @@ function DetailProduct() {
   }, [getProduct, getFeedbackList])
 
   const filters = [
-    'Tất cả',
-    '5 sao', 
-    '4 sao', 
-    '3 sao', 
-    '2 sao', 
-    '1 sao'
+    'All',
+    '5 Stars', 
+    '4 Stars', 
+    '3 Stars', 
+    '2 Stars', 
+    '1 Star'
   ];
 
   const handleAddToCart = () => {
@@ -53,7 +53,7 @@ function DetailProduct() {
       cart.push({ [product.SKU]: quantity });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
-    toast.success("Thêm vào giỏ hàng thành công!", {
+    toast.success("Add to shopping cart successfully!", {
       autoClose: 3000, 
       hideProgressBar: true,
     });
@@ -71,23 +71,23 @@ function DetailProduct() {
     setActiveFilter(filter);
     let rating = 0 
     switch(filter) {
-      case '5 sao': {
+      case '5 stars': {
         rating = 5
         break
       }
-      case '4 sao': {
+      case '4 stars': {
         rating = 4
         break
       }
-      case '3 sao': {
+      case '3 stars': {
         rating = 3
         break
       }
-      case '2 sao': {
+      case '2 stars': {
         rating = 2
         break
       }
-      case '1 sao': {
+      case '1 star': {
         rating = 1
         break
       }
@@ -130,12 +130,12 @@ function DetailProduct() {
           <h2 className="text-xl font-bold mb-4">{product.productName}</h2>
           <div className="flex items-center">
             <p className="mr-2">5.0</p>
-            <FaStar className="text-[#ffd700]"/>
-            <FaStar className="text-[#ffd700]"/>
-            <FaStar className="text-[#ffd700]"/>
-            <FaStar className="text-[#ffd700]"/>
-            <FaStar className="text-[#ffd700]"/>
-            <p className="ml-2">Đã bán: 500</p>
+            <FaStar className="text-customBlack"/>
+            <FaStar className="text-customBlack"/>
+            <FaStar className="text-customBlack"/>
+            <FaStar className="text-customBlack"/>
+            <FaStar className="text-customBlack"/>
+            <p className="ml-2">Sold: 500</p>
           </div>
           <p className="text-2xl font-bold mt-4">
             {product.sellingPrice}
@@ -151,7 +151,7 @@ function DetailProduct() {
         <div className="flex-1 p-4 ml-4 bg-white rounded-md mx-auto">
         <form className="max-w-xs">
       <label htmlFor="quantity-input" className="block mb-2 text-xl font-medium text-gray-900 dark:text-white">
-        Số lượng:
+        Quantity:
       </label>
       <div className="relative flex items-center max-w-[8rem]">
         <button
@@ -185,18 +185,18 @@ function DetailProduct() {
         </button>
       </div>
     </form>
-          <p className="my-2 text-xl">Tạm tính</p>
+          <p className="my-2 text-xl">Sub-General</p>
           <p className="font-bold text-xl">{formatNumber(product.sellingPrice * quantity)} VNĐ</p>
-          <Link to='/payment'><button onClick={() => handleSubmit()} className="w-full mt-2 py-2 bg-[#FF424E] text-white rounded">
-            Mua ngay
+          <Link to='/payment'><button onClick={() => handleSubmit()} className="w-full mt-2 py-2 bg-customBlack text-white rounded">
+            Buy
           </button></Link>
           <button onClick={() => handleAddToCart()} className="my-4 w-full py-2 border border-[#0A68FF] text-[#0A68FF] rounded">
-            Thêm vào giỏ
+            Add to cart
           </button>
         </div>
       </div>
-        <div className="w-[1400px] mx-auto">
-            <p className="text-2xl font-bold">Sản phẩm tương tự</p>
+        <div className="w-[1400px] p-10 mx-auto">
+            <p className="text-2xl font-bold">Relative</p>
             <div className="flex flex-wrap justify-center">
               <SimilarProduct/>
               <SimilarProduct/>
@@ -209,44 +209,44 @@ function DetailProduct() {
               <SimilarProduct/>
             </div>
         </div>
-        <div className="w-[1400px] mx-auto p-4 bg-white rounded-md">
-            <p className="text-2xl font-bold">Khách hàng đánh giá</p>
-            <p className="text-xl">Tổng quan</p>
+        <div className="w-[1400px] m-10 p-6 bg-white rounded-md">
+            <p className="text-2xl font-bold">Rating</p>
+            <p className="text-xl">Overview</p>
             <div className="flex flex-wrap justify-center flex-col mt-2">
                 <div className="flex items-center">
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
                   <p className='ml-4'>2</p>
                 </div>
                 <div className="flex items-center">
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
                   <FaStar className="text-[#c0c0c0]"/>
                   <p className='ml-4'>0</p>
                 </div>
                 <div className="flex items-center">
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#c0c0c0]"/>
-                  <FaStar className="text-[#c0c0c0]"/>
-                  <p className='ml-4'>0</p>
-                </div>
-                <div className="flex items-center">
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#ffd700]"/>
-                  <FaStar className="text-[#c0c0c0]"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
                   <FaStar className="text-[#c0c0c0]"/>
                   <FaStar className="text-[#c0c0c0]"/>
                   <p className='ml-4'>0</p>
                 </div>
                 <div className="flex items-center">
-                  <FaStar className="text-[#ffd700]"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-customBlack"/>
+                  <FaStar className="text-[#c0c0c0]"/>
+                  <FaStar className="text-[#c0c0c0]"/>
+                  <FaStar className="text-[#c0c0c0]"/>
+                  <p className='ml-4'>0</p>
+                </div>
+                <div className="flex items-center">
+                  <FaStar className="text-customBlack"/>
                   <FaStar className="text-[#c0c0c0]"/>
                   <FaStar className="text-[#c0c0c0]"/>
                   <FaStar className="text-[#c0c0c0]"/>
@@ -255,7 +255,7 @@ function DetailProduct() {
                 </div>
             </div>
             <div className="my-4">
-              <p>Lọc theo: </p>
+              <p>Filter: </p>
               <div className="mt-4">
                 <ul style={{ display: 'flex', gap: '10px', listStyle: 'none', padding: '0', margin: '0' }}>
                   {filters.map((filter) => (
@@ -286,7 +286,7 @@ function DetailProduct() {
                       <img className="w-[50px] h-[50px]" src={item.customer.user.image} alt="Customer" />
                       <div className="ml-6">
                         <p className="">{item.customer.fullName}</p>
-                        <p className="text-sm text-gray-500 mt-2">Thời gian: {new Date(item.createdAt).toLocaleString()}</p>
+                        <p className="text-sm text-gray-500 mt-2">Time: {new Date(item.createdAt).toLocaleString()}</p>
                       </div>
                     </div>
                     <div className="ml-8">

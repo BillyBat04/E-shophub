@@ -21,6 +21,7 @@ const Header = () => {
   const [isChatboxVisible, setChatboxVisible] = useState(false);
   const [isLoginVisible, setLoginVisible] = useState(false);
   const [isSearchFocused, setSearchFocused] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [view, setView] = useState("login");
 
   const [loginEmail, setLoginEmail] = useState("");
@@ -40,6 +41,14 @@ const Header = () => {
     password: "",
     repass: "",
   });
+
+  const [errors, setErrors] = useState({
+    dob: "",
+    address: "",
+    phoneNumber: "",
+    gender: "",
+  });
+
 
   const handleChange = (e) => setInputValue(e.target.value);
   const toggleChatbox = () => setChatboxVisible(!isChatboxVisible);
@@ -104,8 +113,6 @@ const Header = () => {
     if (!validateForgotPassword()) {
       return;
     }
-
-    // call api
   };
 
   const validateSignup = () => {
@@ -128,15 +135,59 @@ const Header = () => {
     setSignupError(error);
     return isValid;
   };
-
+  const handleClicked = () => {
+    setIsModalOpen(true);
+  }
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateSignup()) {
       return;
     }
+  };
+  const handleAdditionalDetailsSubmit = (event) => {
+    event.preventDefault();
 
-    // call api
+    const dob = event.target.dateOfBirth.value;
+    const address = event.target.address.value;
+    const phoneNumber = event.target.phoneNumber.value;
+    const gender = event.target.gender.value;
+
+    let errorMessages = {
+      dob: "",
+      address: "",
+      phoneNumber: "",
+      gender: "",
+    };
+
+    // Validate Date of Birth
+    if (!dob) {
+      errorMessages.dob = "Please select a valid Date of Birth.";
+    }
+
+    // Validate Address
+    if (!address) {
+      errorMessages.address = "Please enter your address.";
+    }
+
+    // Validate Phone Number using a regex pattern for basic phone number validation
+    const phonePattern = /^[0-9]{10}$/;  // For a 10-digit phone number
+    if (!phoneNumber || !phonePattern.test(phoneNumber)) {
+      errorMessages.phoneNumber = "Please enter a valid phone number (10 digits).";
+    }
+
+    // Validate Gender
+    if (!gender) {
+      errorMessages.gender = "Please select a gender.";
+    }
+
+    // If there are any errors, set the error state
+    if (Object.values(errorMessages).some((message) => message !== "")) {
+      setErrors(errorMessages);
+      return;
+    }
+
+    setIsModalOpen(false); // Close the modal if no errors
   };
 
   useEffect(() => {
@@ -153,9 +204,8 @@ const Header = () => {
           </label>
         </Link>
         <div
-          className={`ml-5 h-[100%] bg-white rounded-full flex flex-row items-center transition-all duration-300 ${
-            isSearchFocused ? "w-[50%]" : "w-[40%]"
-          }`}>
+          className={`ml-5 h-[100%] bg-white rounded-full flex flex-row items-center transition-all duration-300 ${isSearchFocused ? "w-[50%]" : "w-[40%]"
+            }`}>
           <input
             type='text'
             value={inputValue}
@@ -171,7 +221,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Other elements like Login, Shopping Cart, Chatbox, etc. */}
       <div className='mr-5 flex items-center'>
         <button onClick={() => toggleLogin()}>
           {!user ? (
@@ -243,8 +292,8 @@ const Header = () => {
                     {view === "signup"
                       ? "Sign Up"
                       : view === "forgot"
-                      ? "Forgot Password"
-                      : "Login"}
+                        ? "Forgot Password"
+                        : "Login"}
                   </h1>
                   {view === "login" && (
                     <button
@@ -270,11 +319,10 @@ const Header = () => {
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     placeholder='Email'
-                    className={`w-[80%] mb-3 p-2 rounded-lg ${
-                      loginError.email
-                        ? "border-2 border-red-500"
-                        : "border-[0.5px] border-black"
-                    }`}
+                    className={`w-[80%] mb-3 p-2 rounded-lg ${loginError.email
+                      ? "border-2 border-red-500"
+                      : "border-[0.5px] border-black"
+                      }`}
                     onFocus={() =>
                       setLoginError((prevError) => ({
                         ...prevError,
@@ -295,11 +343,10 @@ const Header = () => {
                     onChange={(e) => setLoginPassword(e.target.value)}
                     type='password'
                     placeholder='Password'
-                    className={`w-[80%] mb-3 p-2 rounded-lg ${
-                      loginError.password
-                        ? "border-2 border-red-500"
-                        : "border-[0.5px] border-black"
-                    }`}
+                    className={`w-[80%] mb-3 p-2 rounded-lg ${loginError.password
+                      ? "border-2 border-red-500"
+                      : "border-[0.5px] border-black"
+                      }`}
                     onFocus={() =>
                       setLoginError((prevError) => ({
                         ...prevError,
@@ -356,11 +403,10 @@ const Header = () => {
                         onFocus={() =>
                           setSignupError((prev) => ({ ...prev, name: "" }))
                         }
-                        className={`border ${
-                          signupError.name
-                            ? "border-2 border-red-500"
-                            : "border-[0.5px] border-black"
-                        } rounded-lg p-2`}
+                        className={`border ${signupError.name
+                          ? "border-2 border-red-500"
+                          : "border-[0.5px] border-black"
+                          } rounded-lg p-2`}
                       />
                       {signupError.name && (
                         <p className='text-red-500 text-sm mt-1 self-end'>
@@ -381,11 +427,10 @@ const Header = () => {
                         onFocus={() =>
                           setSignupError((prev) => ({ ...prev, email: "" }))
                         }
-                        className={`border ${
-                          signupError.email
-                            ? "border-2 border-red-500"
-                            : "border-[0.5px] border-black"
-                        } rounded-lg p-2`}
+                        className={`border ${signupError.email
+                          ? "border-2 border-red-500"
+                          : "border-[0.5px] border-black"
+                          } rounded-lg p-2`}
                       />
                       {signupError.email && (
                         <p className='text-red-500 text-sm mt-1 self-end'>
@@ -406,11 +451,10 @@ const Header = () => {
                         onFocus={() =>
                           setSignupError((prev) => ({ ...prev, password: "" }))
                         }
-                        className={`border ${
-                          signupError.password
-                            ? "border-2 border-red-500"
-                            : "border-[0.5px] border-black"
-                        } rounded-lg p-2`}
+                        className={`border ${signupError.password
+                          ? "border-2 border-red-500"
+                          : "border-[0.5px] border-black"
+                          } rounded-lg p-2`}
                       />
                       {signupError.password && (
                         <p className='text-red-500 text-sm mt-1 self-end'>
@@ -431,11 +475,10 @@ const Header = () => {
                         onFocus={() =>
                           setSignupError((prev) => ({ ...prev, repass: "" }))
                         }
-                        className={`border ${
-                          signupError.repass
-                            ? "border-2 border-red-500"
-                            : "border-[0.5px] border-black"
-                        } rounded-lg p-2`}
+                        className={`border ${signupError.repass
+                          ? "border-2 border-red-500"
+                          : "border-[0.5px] border-black"
+                          } rounded-lg p-2`}
                       />
                       {signupError.repass && (
                         <p className='text-red-500 text-sm mt-1 self-end'>
@@ -453,11 +496,68 @@ const Header = () => {
                       <FaGoogle className='text-[22px]' />
                       Sign up with Google
                     </button>
-                    <button className='flex justify-center items-center w-[50px] h-[50px] bg-black text-white rounded-full'>
+                    <button onClick={handleClicked} className='flex justify-center items-center w-[50px] h-[50px] bg-black text-white rounded-full'>
                       <GrNext />
                     </button>
                   </div>
                 </form>
+              )}
+              {isModalOpen && (
+                <div className="fixed inset-0 flex justify-center items-center z-50">
+                  <div className="bg-white h-full p-6 rounded-lg w-[90%] max-w-md relative">
+                    <h2 className="text-lg font-bold mb-4">Additional Details</h2>
+                    <form onSubmit={(e) => handleAdditionalDetailsSubmit(e)}>
+                      <div className="mb-4">
+                        <label className="block mb-2">Date of Birth</label>
+                        <input
+                          type="date"
+                          className="w-full border rounded px-3 py-2"
+                          required
+                          name="dateOfBirth"
+                        />
+                        {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
+                      </div>
+                      <div className="mb-4">
+                        <label className="block mb-2">Address</label>
+                        <input
+                          type="text"
+                          className="w-full border rounded px-3 py-2"
+                          placeholder="Enter your address"
+                          required
+                          name="address"
+                        />
+                        {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+                      </div>
+                      <div className="mb-4">
+                        <label className="block mb-2">Phone Number</label>
+                        <input
+                          type="tel"
+                          className="w-full border rounded px-3 py-2"
+                          placeholder="Enter your phone number"
+                          required
+                          name="phoneNumber"
+                        />
+                        {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
+                      </div>
+                      <div className="mb-4">
+                        <label className="block mb-2">Gender</label>
+                        <select className="w-full border rounded h-10" required name="gender">
+                          <option value="">Select Gender</option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                        </select>
+                        {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
+                      </div>
+                      <button
+                        type="submit"
+                        className="ml-auto flex justify-center items-center w-[50px] h-[50px] bg-black text-white rounded-full"
+                      >
+                        <GrNext />
+                      </button>
+                    </form>
+                  </div>
+                </div>
               )}
 
               {/* Forgot Password Form */}
@@ -489,11 +589,10 @@ const Header = () => {
                           onChange={(e) =>
                             setForgotPasswordEmail(e.target.value)
                           }
-                          className={`p-2 h-[50px] rounded-lg flex-grow ${
-                            forgotPasswordError !== ""
-                              ? "border-2 border-red-500"
-                              : "border-[0.5px] border-black"
-                          }`}
+                          className={`p-2 h-[50px] rounded-lg flex-grow ${forgotPasswordError !== ""
+                            ? "border-2 border-red-500"
+                            : "border-[0.5px] border-black"
+                            }`}
                           onFocus={() => setForgotPasswordError("")}
                         />
                         <button className='ml-2 w-[50px] flex justify-center items-center h-[50px] bg-black text-white rounded-full'>

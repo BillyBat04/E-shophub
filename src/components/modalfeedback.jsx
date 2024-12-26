@@ -38,14 +38,15 @@ const ModalFeedback = ({SKU}) => {
         className="px-4 py-2 bg-black font-bold text-white rounded-md"
         onClick={() => setIsModalOpen(true)}
       >
-        Viết đánh giá
+        Write a review
       </button>
 
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">Viết đánh giá của bạn về sản phẩm này</h2>
+            <h2 className="text-xl font-semibold mb-4">Write your review about this product
+</h2>
 
             {/* Star Rating */}
             <div className="flex justify-center mb-4">
