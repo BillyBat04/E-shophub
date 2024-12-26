@@ -37,7 +37,7 @@ const Listproduct = () => {
     }, [banners.length]);
 
     return (
-        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen w-screen overflow-x-hidden ">
+        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen overflow-x-hidden ">
             <div className="relative w-full h-full ">
                 <div
                     className="flex transition-transform duration-500 ease-in-out"
@@ -87,7 +87,7 @@ const Listproduct = () => {
                         </div>
                     </div>
                 </div>
-                <div className="rounded-md bg-white m-2 -mt-10 w-full h-full">
+                <div className="rounded-md bg-white m-2 w-full overflow-hidden">
                     <ProductList1 />
                 </div>
             </div>
