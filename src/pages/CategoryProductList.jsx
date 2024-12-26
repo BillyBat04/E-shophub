@@ -27,7 +27,7 @@ const CategoryProductList = () => {
 
 
     return (
-        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen w-screen overflow-x-hidden ">
+        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] w-screen overflow-x-hidden ">
             <div className="relative w-full h-full ">
                 <div
                     className="flex transition-transform duration-500 ease-in-out"
