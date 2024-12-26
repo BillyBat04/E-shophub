@@ -7,21 +7,44 @@ import { IoIosArrowBack } from "react-icons/io";
 import axiosInstance from "../config/api";
 import useUser from "../hooks/useUser";
 import UserAvatarDropdown from "./avatar";
+import {
+  validateConfirmPassword,
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "../schemas/LoginVadiation";
 
 const Header = () => {
+  const { user } = useUser();
   const { cartItemCount, updateCartItemCount } = useCart();
   const [inputValue, setInputValue] = useState("");
   const [isChatboxVisible, setChatboxVisible] = useState(false);
   const [isLoginVisible, setLoginVisible] = useState(false);
-  const [view, setView] = useState("login");
   const [isSearchFocused, setSearchFocused] = useState(false);
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const {user} = useUser()
+  const [view, setView] = useState("login");
+
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState({ email: "", password: "" });
+
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [forgotPasswordError, setForgotPasswordError] = useState("");
+
+  const [signupName, setSignupName] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupRepass, setSignupRepass] = useState("");
+  const [signupError, setSignupError] = useState({
+    name: "",
+    email: "",
+    password: "",
+    repass: "",
+  });
+
   const handleChange = (e) => setInputValue(e.target.value);
   const toggleChatbox = () => setChatboxVisible(!isChatboxVisible);
   const toggleLogin = () => {
-    if(user) return
+    if (user) return;
     setLoginVisible(!isLoginVisible);
     setView("login");
   };
@@ -30,22 +53,96 @@ const Header = () => {
     window.open("http://localhost:3000/api/auth/google", "_self");
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault()
-    const response = await axiosInstance.post('/user/login', {
-      email,
-      password
-    })
-    if (response.data.account) {
-      localStorage.setItem('user', JSON.stringify(response.data.account))
-      window.location.reload()
+  const validateSignIn = () => {
+    let isValid = true;
+    const error = { email: "", password: "" };
+
+    const emailError = validateEmail(loginEmail);
+    const passwordError = validatePassword(loginPassword);
+
+    if (emailError || passwordError) {
+      isValid = false;
+      error.email = emailError;
+      error.password = passwordError;
     }
-  }
+
+    setLoginError(error);
+    return isValid;
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateSignIn()) {
+      return;
+    }
+
+    const response = await axiosInstance.post("/user/login", {
+      email: loginEmail,
+      password: loginPassword,
+    });
+    if (response.data.account) {
+      localStorage.setItem("user", JSON.stringify(response.data.account));
+      window.location.reload();
+    }
+  };
+
+  const validateForgotPassword = () => {
+    const error = validateEmail(forgotPasswordEmail);
+    let isValid = true;
+
+    if (error !== "") {
+      isValid = false;
+      setForgotPasswordError(error);
+    }
+    return isValid;
+  };
+
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForgotPassword()) {
+      return;
+    }
+
+    // call api
+  };
+
+  const validateSignup = () => {
+    const error = { name: "", email: "", password: "", repass: "" };
+    let isValid = true;
+
+    const nameError = validateName(signupName);
+    const emailError = validateEmail(signupEmail);
+    const passwordError = validatePassword(signupPassword);
+    const repassError = validateConfirmPassword(signupPassword, signupRepass);
+
+    if (nameError || emailError || passwordError || repassError) {
+      isValid = false;
+      error.name = nameError;
+      error.email = emailError;
+      error.password = passwordError;
+      error.repass = repassError;
+    }
+
+    setSignupError(error);
+    return isValid;
+  };
+
+  const handleSignupSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateSignup()) {
+      return;
+    }
+
+    // call api
+  };
 
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem('cart')) || []
-    updateCartItemCount(cart.length)
-  }, [updateCartItemCount])
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    updateCartItemCount(cart.length);
+  }, [updateCartItemCount]);
 
   return (
     <div className='w-full bg-customBlack py-4 flex justify-between items-center'>
@@ -78,8 +175,11 @@ const Header = () => {
       {/* Other elements like Login, Shopping Cart, Chatbox, etc. */}
       <div className='mr-5 flex items-center'>
         <button onClick={() => toggleLogin()}>
-          {!user ? <img src='/src/assets/user.png' className='h-[20px] w-[20px]' /> :
-          <UserAvatarDropdown image={user.image}/>}
+          {!user ? (
+            <img src='/src/assets/user.png' className='h-[20px] w-[20px]' />
+          ) : (
+            <UserAvatarDropdown image={user.image} />
+          )}
         </button>
         <div className='relative ml-5'>
           <Link to='shoppingcart'>
@@ -155,38 +255,59 @@ const Header = () => {
                       I don&apos;t have an account.
                     </button>
                   )}
-                  {/* {view === "signup" && (
-                    <button
-                      className='mb-[2px] font-bold text-sm'
-                      onClick={() => setView("login")}>
-                      I already have an account.
-                    </button>
-                  )} */}
                 </div>
               </div>
 
               {/* Login Form */}
               {view === "login" && (
-                <form onSubmit={(e) => handleSubmit(e)} className="w-full flex flex-col items-center">
+                <form
+                  noValidate
+                  onSubmit={(e) => handleLoginSubmit(e)}
+                  className='w-full flex flex-col items-center'>
                   <div className='mb-2 w-[80%] font-medium flex flex-col'>
                     Email
                   </div>
                   <input
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    type='text'
+                    type='email'
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
                     placeholder='Email'
-                    className='w-[80%] mb-3 p-2 border-[0.5px] border-black rounded-lg'
+                    className={`w-[80%] mb-3 p-2 rounded-lg ${
+                      loginError.email
+                        ? "border-2 border-red-500"
+                        : "border-[0.5px] border-black"
+                    }`}
+                    onFocus={() =>
+                      setLoginError((prevError) => ({
+                        ...prevError,
+                        email: "",
+                      }))
+                    }
                   />
                   <div className='mb-2 w-[80%] font-medium flex flex-col justify-start'>
                     Password
+                    {loginError.password !== "" && (
+                      <span className='text-red-500 text-sm'>
+                        {loginError.password}
+                      </span>
+                    )}
                   </div>
                   <input
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
                     type='password'
                     placeholder='Password'
-                    className='w-[80%] mb-3 p-2 border-[0.5px] border-black rounded-lg'
+                    className={`w-[80%] mb-3 p-2 rounded-lg ${
+                      loginError.password
+                        ? "border-2 border-red-500"
+                        : "border-[0.5px] border-black"
+                    }`}
+                    onFocus={() =>
+                      setLoginError((prevError) => ({
+                        ...prevError,
+                        password: "",
+                      }))
+                    }
                   />
                   <div className='flex flex-col justify-end items-end w-[80%]'>
                     <button
@@ -197,7 +318,7 @@ const Header = () => {
                   </div>
                   <div className='w-[80%] flex justify-between mt-4'>
                     <button
-                      type="submit"
+                      type='submit'
                       className='flex items-center gap-2 bg-white text-sm py-2 px-6 border-[0.5px] border-black rounded-3xl'
                       onClick={googleSignIn}>
                       <FaGoogle className='text-[22px]' />
@@ -207,14 +328,17 @@ const Header = () => {
                       <GrNext />
                     </button>
                   </div>
-                  <div/>
+                  <div />
                 </form>
               )}
 
               {/* Sign-Up Form */}
               {view === "signup" && (
-                <>
-                  <div className='w-[80%]'>
+                <form
+                  noValidate
+                  className='w-[80%]'
+                  onSubmit={(e) => handleSignupSubmit(e)}>
+                  <div>
                     <button
                       className='bg-none border-none self-start flex gap-1.5 items-center hover:underline font-light text-sm mb-5'
                       onClick={() => setView("login")}>
@@ -222,36 +346,112 @@ const Header = () => {
                       Login
                     </button>
                   </div>
-                  <div className='mb-5 h-10 w-[80%] items-center font-medium flex flex-row justify-between'>
-                    Username
-                    <input
-                      type='text'
-                      className='w-[65%] h-full border-[0.5px] border-black rounded-lg p-2'
-                    />
+
+                  {/* Full Name */}
+                  <div className='mb-5 items-center font-medium flex flex-row'>
+                    <p className='w-[35%]'>Full name</p>
+                    <div className='flex-grow flex flex-col'>
+                      <input
+                        type='text'
+                        value={signupName}
+                        onChange={(e) => setSignupName(e.target.value)}
+                        onFocus={() =>
+                          setSignupError((prev) => ({ ...prev, name: "" }))
+                        }
+                        className={`border ${
+                          signupError.name
+                            ? "border-2 border-red-500"
+                            : "border-[0.5px] border-black"
+                        } rounded-lg p-2`}
+                      />
+                      {signupError.name && (
+                        <p className='text-red-500 text-sm mt-1 self-end'>
+                          {signupError.name}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className='mb-5 h-10 w-[80%] items-center font-medium flex flex-row justify-between'>
-                    Email
-                    <input
-                      type='text'
-                      className='w-[65%] h-full border-[0.5px] border-black rounded-lg p-2'
-                    />
+
+                  {/* Email */}
+                  <div className='mb-5 items-center font-medium flex flex-row'>
+                    <p className='w-[35%]'>Email</p>
+                    <div className='flex-grow flex flex-col'>
+                      <input
+                        type='email'
+                        value={signupEmail}
+                        onChange={(e) => setSignupEmail(e.target.value)}
+                        onFocus={() =>
+                          setSignupError((prev) => ({ ...prev, email: "" }))
+                        }
+                        className={`border ${
+                          signupError.email
+                            ? "border-2 border-red-500"
+                            : "border-[0.5px] border-black"
+                        } rounded-lg p-2`}
+                      />
+                      {signupError.email && (
+                        <p className='text-red-500 text-sm mt-1 self-end'>
+                          {signupError.email}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className='mb-5 h-10 w-[80%] items-center font-medium flex flex-row justify-between'>
-                    Password
-                    <input
-                      type='password'
-                      className='w-[65%] h-full border-[0.5px] border-black rounded-lg p-2'
-                    />
+
+                  {/* Password */}
+                  <div className='mb-5 items-center font-medium flex flex-row'>
+                    <p className='w-[35%]'>Password</p>
+                    <div className='flex-grow flex flex-col'>
+                      <input
+                        type='password'
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                        onFocus={() =>
+                          setSignupError((prev) => ({ ...prev, password: "" }))
+                        }
+                        className={`border ${
+                          signupError.password
+                            ? "border-2 border-red-500"
+                            : "border-[0.5px] border-black"
+                        } rounded-lg p-2`}
+                      />
+                      {signupError.password && (
+                        <p className='text-red-500 text-sm mt-1 self-end'>
+                          {signupError.password}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className='mb-5 h-10 w-[80%] items-center font-medium flex flex-row justify-between'>
-                    Confirm password
-                    <input
-                      type='password'
-                      className='w-[65%] h-full border-[0.5px] border-black rounded-lg p-2'
-                    />
+
+                  {/* Confirm Password */}
+                  <div className='mb-5 items-center font-medium flex flex-row'>
+                    <p className='w-[35%]'>Confirm password</p>
+                    <div className='flex-grow flex flex-col'>
+                      <input
+                        type='password'
+                        value={signupRepass}
+                        onChange={(e) => setSignupRepass(e.target.value)}
+                        onFocus={() =>
+                          setSignupError((prev) => ({ ...prev, repass: "" }))
+                        }
+                        className={`border ${
+                          signupError.repass
+                            ? "border-2 border-red-500"
+                            : "border-[0.5px] border-black"
+                        } rounded-lg p-2`}
+                      />
+                      {signupError.repass && (
+                        <p className='text-red-500 text-sm mt-1 self-end'>
+                          {signupError.repass}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className='w-[80%] flex justify-between mt-4'>
-                    <button className='flex items-center gap-2 bg-white text-sm py-2 px-6 border-[0.5px] border-black rounded-3xl' onClick={googleSignIn}>
+
+                  <div className='flex justify-between mt-4'>
+                    <button
+                      type='button'
+                      className='flex items-center gap-2 bg-white text-sm py-2 px-6 border-[0.5px] border-black rounded-3xl'
+                      onClick={googleSignIn}>
                       <FaGoogle className='text-[22px]' />
                       Sign up with Google
                     </button>
@@ -259,7 +459,7 @@ const Header = () => {
                       <GrNext />
                     </button>
                   </div>
-                </>
+                </form>
               )}
 
               {/* Forgot Password Form */}
@@ -272,19 +472,37 @@ const Header = () => {
                       <IoIosArrowBack />
                       Login
                     </button>
-                    <span>
+                    <div>
                       Type your email and we&apos;ll send you a new password
-                    </span>
-                    <div className='mt-3 flex flex-row items-center gap-4'>
-                      <input
-                        type='text'
-                        placeholder='Email'
-                        className='p-2 h-[50px] border-[0.5px] border-black rounded-lg flex-grow'
-                      />
-                      <button className='ml-2 w-[50px] flex justify-center items-center h-[50px] bg-black text-white rounded-full'>
-                        <GrNext className='w-[15px] h-[15px]' />
-                      </button>
+                      {forgotPasswordError && (
+                        <p className='text-red-500 text-sm'>
+                          {forgotPasswordError}
+                        </p>
+                      )}
                     </div>
+
+                    <form
+                      noValidate
+                      onSubmit={(e) => handleForgotPasswordSubmit(e)}>
+                      <div className='mt-3 flex flex-row items-center gap-4'>
+                        <input
+                          type='email'
+                          placeholder='Email'
+                          onChange={(e) =>
+                            setForgotPasswordEmail(e.target.value)
+                          }
+                          className={`p-2 h-[50px] rounded-lg flex-grow ${
+                            forgotPasswordError !== ""
+                              ? "border-2 border-red-500"
+                              : "border-[0.5px] border-black"
+                          }`}
+                          onFocus={() => setForgotPasswordError("")}
+                        />
+                        <button className='ml-2 w-[50px] flex justify-center items-center h-[50px] bg-black text-white rounded-full'>
+                          <GrNext className='w-[15px] h-[15px]' />
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </>
               )}
