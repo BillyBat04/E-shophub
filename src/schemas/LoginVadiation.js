@@ -1,7 +1,6 @@
 export function validateEmail(email) {
-  console.log(email);
   let error = "";
-
+  
   if (!email) {
     error = "Email is required.";
   } else if (!/\S+@\S+\.\S+/.test(email)) {
@@ -12,7 +11,6 @@ export function validateEmail(email) {
 }
 
 export function validatePassword(password) {
-  console.log(password);
   let error = "";
 
   if (!password) {

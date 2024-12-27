@@ -10,7 +10,7 @@ import formatDate from "../../helpers/formatDate";
 
 const EmployeeList = () => {
   const isDetailPage = location.pathname !== "/admin/employees";
-  const TABLE_HEAD = ["ID", "Image", "Full Name", "Phone Number", "Begin Date", "Email", "Role"];
+  const TABLE_HEAD = ["ID", "Full Name", "Image", "Phone Number", "Begin Date", "Email", "Role"];
   const [employeeList, setEmployeeList] = useState([])
 
   const getList = useCallback(async () => {

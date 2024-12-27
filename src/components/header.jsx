@@ -313,6 +313,11 @@ const Header = () => {
                   className='w-full flex flex-col items-center'>
                   <div className='mb-2 w-[80%] font-medium flex flex-col'>
                     Email
+                    {loginError.email !== "" && (
+                      <span className='text-red-500 text-sm'>
+                        {loginError.email}
+                      </span>
+                    )}
                   </div>
                   <input
                     type='email'
