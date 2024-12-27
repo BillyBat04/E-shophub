@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ProductList1 from '../components/productlist';
 import { CiFilter } from "react-icons/ci";
 import Arrange from '../components/arrange';
+import FilterPopup from '../components/filterpopup';
 
 const CategoryProductList = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,9 +12,9 @@ const CategoryProductList = () => {
     };
 
     const banners = [
-        { id: 4, img: "src/assets/banner1.jpg" },
-        { id: 5, img: "src/assets/banner2.jpg" },
-        { id: 6, img: "src/assets/banne3.jpg" },
+        { id: 4, img: "/src/assets/banner1.jpg" },
+        { id: 5, img: "/src/assets/banner2.jpg" },
+        { id: 6, img: "/src/assets/banner3.jpg" },
     ];
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -27,30 +28,29 @@ const CategoryProductList = () => {
 
 
     return (
-        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] w-screen overflow-x-hidden ">
-            <div className="relative w-full h-full ">
+        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen w-screen overflow-x-hidden ">
+            <div className="relative w-full h-full overflow-hidden">
                 <div
                     className="flex transition-transform duration-500 ease-in-out"
                     style={{
                         transform: `translateX(-${currentIndex * 100}%)`,
-                        width: `${banners.length * 100}%`,
                     }}
                 >
-                    {banners.map((ban) => (
+                    {banners.map((banner) => (
                         <div
-                            key={ban.id}
-                            className="w-full h-[300px] flex-shrink-0"
-                            style={{ width: "100%" }}
+                            key={banner.id}
+                            className="flex-shrink-0 w-full h-[250px]"
                         >
                             <img
-                                src={ban.img}
-                                alt={`Banner ${ban.id}`}
-                                className="h-full object-contain"
+                                src={banner.img}
+                                alt={`Banner ${banner.id}`}
+                                className="h-full w-full object-cover"
                             />
                         </div>
                     ))}
                 </div>
-                <div className="w-full p-5 m-2 rounded-md bg-white shadow">
+
+                <div className="w-full p-5 mt-3 rounded-md bg-white shadow">
                     <h1 className="text-xl font-bold mb-4">All products</h1>
                     <div className="flex flex-wrap items-center gap-4">
                         <div className="flex items-center gap-2 border-r-2 border-gray-300">
@@ -116,97 +116,11 @@ const CategoryProductList = () => {
                             <span>Arrange</span>
                             <Arrange />
                         </div>
-                        {isOpen && (
-                            <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-                                <div className="bg-white rounded-lg w-[90%] max-w-xl p-6 shadow-lg relative">
-                                    <button
-                                        onClick={togglePopup}
-                                        className="absolute top-3 right-3 text-gray-500 hover:text-black"
-                                    >
-                                        ✕
-                                    </button>
-                                    <h2 className="text-lg font-bold mb-4">All filters</h2>
+                        <FilterPopup isOpen={isOpen} togglePopup={togglePopup}/>
 
-                                    <div className="mb-6 border-b-[1px] border-gray-200 pb-4">
-                                        <h3 className="font-medium mb-2">Rating</h3>
-                                        <div className="flex items-center space-x-4">
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="mr-2" />
-                                                <span className="flex items-center">
-                                                    ★★★★★ từ 4 sao
-                                                </span>
-                                            </label>
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="mr-2" />
-                                                <span className="flex items-center">
-                                                    ★★★★★ từ 5 sao
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-6 border-b-[1px] border-gray-200 pb-4">
-                                        <h3 className="font-medium mb-2">Price</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            <button className="px-3 py-1 border rounded-full">
-                                                Dưới 3.000.000
-                                            </button>
-                                            <button className="px-3 py-1 border rounded-full">
-                                                3.000.000 → 4.000.000
-                                            </button>
-                                            <button className="px-3 py-1 border rounded-full">
-                                                4.000.000 → 13.500.000
-                                            </button>
-                                            <button className="px-3 py-1 border rounded-full">
-                                                Trên 2.000.000
-                                            </button>
-                                        </div>
-                                        <div className="flex items-center mt-4 ">
-                                            <input
-                                                type="text"
-                                                placeholder="From"
-                                                className="border rounded p-2 w-1/2 mr-2"
-                                            />
-                                            <input
-                                                type="text"
-                                                placeholder="To"
-                                                className="border rounded p-2 w-1/2"
-                                            />
-                                            <button className="text-blue-500 ml-2">Delete</button>
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-6 border-b-[1px] border-gray-200 pb-4">
-                                        <h3 className="font-medium mb-2">Brand</h3>
-                                        <div className="flex items-center space-x-4">
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="mr-2" />
-                                                Samsung
-                                            </label>
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="mr-2" />
-                                                Xiaomi
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex justify-between items-center">
-                                        <button
-                                            className="px-4 py-2 border border-gray-300 rounded text-gray-600"
-                                            onClick={togglePopup}
-                                        >
-                                            Delete all
-                                        </button>
-                                        <button className="px-4 py-2 bg-customBlack text-white rounded">
-                                            Apply
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
-                <div className="w-full -mt-10 m-2 bg-white rounded-md h-full">
+                <div className="w-full -mt-10 bg-white rounded-md h-full">
                     <ProductList1 />
                 </div>
             </div>

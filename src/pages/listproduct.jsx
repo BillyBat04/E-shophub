@@ -37,31 +37,30 @@ const Listproduct = () => {
     }, [banners.length]);
 
     return (
-        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen overflow-x-hidden ">
-            <div className="relative w-full h-full ">
+        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen w-screen overflow-x-hidden ">
+            <div className="relative w-full h-full overflow-hidden">
                 <div
                     className="flex transition-transform duration-500 ease-in-out"
                     style={{
                         transform: `translateX(-${currentIndex * 100}%)`,
-                        width: `${banners.length * 100}%`,
                     }}
                 >
                     {banners.map((banner) => (
                         <div
                             key={banner.id}
-                            className="w-full h-[300px] flex-shrink-0"
-                            style={{ width: "100%" }}
+                            className="flex-shrink-0 w-full h-[250px]"
                         >
                             <img
                                 src={banner.img}
                                 alt={`Banner ${banner.id}`}
-                                className="h-full object-contain"
+                                className="h-full w-full object-cover"
                             />
                         </div>
                     ))}
                 </div>
-                <div className="p-5 w-full m-2 h-[20%] rounded-md bg-white items-center flex justify-between">
-                    <div className="flex   flex-col w-[70%]">
+
+                <div className="p-5 w-full mt-3 h-[20%] rounded-md bg-white flex justify-between items-center">
+                    <div className="flex flex-col w-[70%]">
                         <span className="font-medium pr-3 pb-2">Explore by category</span>
                         <div className="flex gap-8">
                             {cates.map((cate) => (
@@ -78,16 +77,16 @@ const Listproduct = () => {
                             ))}
                         </div>
                     </div>
-                    <div className="w-[30%] h-full flex flex-col items-end justify-start">
-                        <div className="w-full justify-end flex items-center">
+                    <div className="w-[30%] h-full flex flex-col items-end">
+                        <div className="w-full flex items-center justify-end">
                             <span className="font-medium pr-3">Arrange</span>
-                            <div className="flex justify-end">
+                            <div>
                                 <Arrange />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="rounded-md bg-white m-2 w-full overflow-hidden">
+                <div className="rounded-md bg-white -mt-10 w-full h-full">
                     <ProductList1 />
                 </div>
             </div>
