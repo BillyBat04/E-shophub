@@ -4,7 +4,7 @@ import { Outlet} from "react-router-dom";
 import { IoIosChatbubbles, IoMdPeople } from "react-icons/io";
 import { FaBox, FaReceipt, FaDisplay } from "react-icons/fa6";
 import { BiSolidReport } from "react-icons/bi";
-import { MdInventory } from "react-icons/md";
+import { MdCategory, MdInventory } from "react-icons/md";
 import { MdTrolley, MdManageAccounts } from "react-icons/md";
 const MainPage = () => {
 
@@ -12,6 +12,7 @@ const MainPage = () => {
     { label: "Chat", icon: IoIosChatbubbles, link: "chat" },
     { label: "Order", icon: FaReceipt, link: "orders" },
     { label: "Product", icon: FaBox, link: "products" },
+    { label: "Category", icon: MdCategory, link: "category"},
     { label: "Displayed Product", icon: FaDisplay, link: "displayed-product" },
     { label: "Inventory", icon: MdInventory, link: "inventory" },
     { label: "Customer", icon: MdManageAccounts, link: "customers" },
