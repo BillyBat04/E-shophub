@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Avatar, Menu, MenuItem, IconButton, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../config/api";
 
 const UserAvatarDropdown = ({image}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
+  const navigate = useNavigate()
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -15,10 +16,17 @@ const UserAvatarDropdown = ({image}) => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    console.log("Đăng xuất");
+  const handleLogout = async () => {
+    const response = await axiosInstance.get('/user/logout')
+    if (response.status === 200) {
+      handleCloseMenu();
+      localStorage.removeItem('user')
+      localStorage.removeItem('cart')
+      localStorage.removeItem('payment')
+      navigate('/')
+      window.location.reload()
+    }
     // Thêm logic đăng xuất tại đây
-    handleCloseMenu();
   };
 
   const handleProfile = () => {

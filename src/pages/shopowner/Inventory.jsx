@@ -11,7 +11,7 @@ const Inventory = () => {
   const [list, setList] = useState([])
 
   const getList = useCallback(async () => {
-    const response = await axiosInstance.get('/displayed-product')
+    const response = await axiosInstance.get('/inventory')
     console.log(response)
     setList(response.data)
   }, []) 
@@ -42,12 +42,6 @@ const Inventory = () => {
             <FaFilter className="w-6 h-6"></FaFilter>
           </button>
         </form>
-        <Link className=" bg-black rounded-[20px] px-6 py-2" to="/admin/inventory/create"> 
-          <button className="flex items-center">
-            <span className="text-white font-bold">Add Product</span>
-            <IoAdd className="w-6 h-6 text-white"></IoAdd>
-          </button>
-        </Link>
       </div>
 
       <div className="mt-4 h-[92%] overflow-y-scroll">
@@ -107,7 +101,7 @@ const Inventory = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.product.sellingPrice}
+                        {row.quantity}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -115,7 +109,7 @@ const Inventory = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.quantity}
+                        {row.wareHouse.name}
                       </Typography>
                     </td>
                   </tr>

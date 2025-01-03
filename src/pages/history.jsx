@@ -52,7 +52,7 @@ const History = () => {
     return (
         <div className="flex items-center flex-col w-full ml-6">
             <div className="bg-white shadow-md py-4 w-[80%] rounded-full justify-center flex items-center space-x-7 mb-4">
-                {['All', 'Pending', 'On Shipping', 'Complete', 'Cancled'].map((tab) => (
+                {['Tất cả', 'Đang xử lý', 'Đang vận chuyển', 'Hoàn thành', 'Đã hủy'].map((tab) => (
                     <button
                         key={tab}
                         onClick={() => handleSelectTab(tab)}

@@ -92,7 +92,7 @@ const AddEmployee = () => {
                     </div>
                 </div>
                 <div>
-                    <div className=' h-[80%] bg-white rounded-lg p-5'>
+                    <div className=' h-fit bg-white rounded-lg p-5'>
                         <h3 className="text-base mb-3 font-semibold">Information</h3>
                         <div className='pt-1'>
                             <h5 className='font-normal text-slate-400 mb-2'>Full Name</h5>

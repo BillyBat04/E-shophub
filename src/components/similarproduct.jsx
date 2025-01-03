@@ -1,13 +1,24 @@
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom"
+import formatNumber from "../helpers/formatNumber"
 
-const SimilarProduct = () => {
+const SimilarProduct = ({SKU, sellingPrice, image}) => {
     return (
-        <Link to={`/products/${4565}`} className="p-2 mx-2 my-2 bg-white rounded-md overflow-hidden hover:scale-110 transition-transform duration-300">
-    <div className="w-[250px] h-[250px]">
-        <img className="w-full h-full rounded-md" src='https://salt.tikicdn.com/cache/750x750/ts/product/27/04/0f/455b9d3e001963e89cabc903afe9f1d1.jpg.webp' />
-    </div>
-        <p className="text-[18px] font-bold mt-2">43.990.000₫</p>
-    </Link>
+        <Link 
+  to={`/detail-product/${SKU}`} 
+  className="group p-4 mx-2 my-2 bg-white rounded-lg shadow-md overflow-hidden hover:scale-105 hover:shadow-lg transition-transform duration-300 ease-in-out"
+>
+  <div className="">
+    <img 
+      className="w-[150px] h-[150px] rounded-md group-hover:opacity-90 transition-opacity duration-300" 
+      src={image} 
+      alt="Product"
+    />
+  </div>
+  <p className="text-[18px] font-bold mt-3 text-gray-800 group-hover:text-gray-600">
+    {formatNumber(sellingPrice)}đ
+  </p>
+</Link>
 
     )
 }

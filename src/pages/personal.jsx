@@ -21,7 +21,6 @@ const Personal = () => {
     
     useEffect(() => {
         const getUser = async () => {
-            console.log(user.id)
             const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`)
             setCustomer(response.data)
         }

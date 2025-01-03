@@ -17,11 +17,8 @@ const LaptopCard = ({ product }) => {
             <h2 className="text-xl font-semibold">{product.name}</h2>
             <p className="text-lg font-bold text-gray-700 mb-6">{product.price}</p>
             <div className="flex gap-4">
-                <button className="mr-2 h-[40px] w-[100px] bg-white text-black rounded-full text-[12px] shadow-lg ">
-                    Learn more
-                </button>
                 <button className="h-[40px] w-[100px] bg-black text-white rounded-full text-[12px] ">
-                    Buy
+                    Xem chi tiết
                 </button>
             </div>
         </div>

@@ -9,7 +9,7 @@ import formatDate from "../../helpers/formatDate";
 
 const CustomerList = () => {
   const isDetailPage = location.pathname !== "/admin/customers";
-  const TABLE_HEAD = ["ID", "Username", "Full Name", "Phone Number"];
+  const TABLE_HEAD = ["No", "Email", "Họ Tên", "Giới tính" ,"Số điện thoại", "Ngày sinh", "Địa chỉ"];
   const [CustomerList, setCustomerList] = useState([])
 
   const getList = useCallback(async () => {
@@ -64,7 +64,7 @@ const CustomerList = () => {
               </tr>
             </thead>
             <tbody>
-              {CustomerList.map((row, index) => {
+              {CustomerList.length > 0 && CustomerList.map((row, index) => {
                 const isLast = index === CustomerList.length - 1;
                 const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
@@ -84,7 +84,7 @@ const CustomerList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.userName}
+                        {row.user.email}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -100,10 +100,33 @@ const CustomerList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
+                        {row.gender}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
                         {row.phoneNumber}
                       </Typography>
                     </td>
-                    
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        {row.birthday}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                      >
+                        {row.address}
+                      </Typography>
+                    </td>
                     <td className={classes}>
                       <Typography
                         variant="small"

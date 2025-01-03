@@ -4,7 +4,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 export default function Arrange() {
-    const items = ["Popular", "Best sellers", "Low to high price", "High to low price"];
+    const items = ["Low to high price", "High to low price"];
     const [selectedItem, setSelectedItem] = useState("Options"); 
 
     const handleSelect = (item) => {

@@ -35,6 +35,7 @@ import Personal from "./pages/personal";
 import Inventory from "./pages/shopowner/Inventory";
 import CreateInventory from "./pages/shopowner/CreateInventory";
 import PrdCategory from "./pages/shopowner/PrdCategory";
+import CustomerOrderManagement from "./pages/shopowner/CustomerOrder";
 
 function App() {
   const location = useLocation();
@@ -43,6 +44,7 @@ function App() {
     "reports",
     "products",
     "orders",
+    "customer-order",
     "employees",
     "inventory",
     "supplier",
@@ -75,6 +77,7 @@ function App() {
             <Route path="/admin" element={<MainPage />}>
               <Route path="chat" element={<Chat />} />
               <Route path="reports" element={<Reports />} />
+              <Route path="customer-order" element={<CustomerOrderManagement />} />
               <Route path="supplier" element={<Supplier />} >
                 <Route path="addsupplier" element={<AddSupplier />} ></Route>
                 <Route path=":supplierId" element={<SupplierDetail />}></Route>

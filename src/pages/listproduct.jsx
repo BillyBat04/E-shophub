@@ -7,12 +7,10 @@ import ProductList1 from '../components/productlist';
 const Listproduct = () => {
     const location = useLocation();
     const isCatePage = location.pathname !== "/listproduct";
-
     // Render child routes (e.g., /listproduct/:id) if it's not the main /listproduct page
     if (isCatePage && location.pathname.startsWith("/listproduct")) {
         return <Outlet />;
     }
-
     const banners = [
         { id: 1, img: "src/assets/banner1.jpg" },
         { id: 2, img: "src/assets/banner2.jpg" },
@@ -37,27 +35,8 @@ const Listproduct = () => {
     }, [banners.length]);
 
     return (
-        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen w-screen overflow-x-hidden ">
+        <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen w-screen">
             <div className="relative w-full h-full overflow-hidden">
-                <div
-                    className="flex transition-transform duration-500 ease-in-out"
-                    style={{
-                        transform: `translateX(-${currentIndex * 100}%)`,
-                    }}
-                >
-                    {banners.map((banner) => (
-                        <div
-                            key={banner.id}
-                            className="flex-shrink-0 w-full h-[250px]"
-                        >
-                            <img
-                                src={banner.img}
-                                alt={`Banner ${banner.id}`}
-                                className="h-full w-full object-cover"
-                            />
-                        </div>
-                    ))}
-                </div>
 
                 <div className="p-5 w-full mt-3 h-[20%] rounded-md bg-white flex justify-between items-center">
                     <div className="flex flex-col w-[70%]">

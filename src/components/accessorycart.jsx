@@ -9,11 +9,8 @@ const AccessoryCard = ({product}) => {
                         <h2 className="text-xl font-semibold">{product.name}</h2>
                         <p className="text-lg font-bold text-gray-700 mb-6">{product.price}</p>
                         <div className="flex gap-4">
-                            <button className=" h-[40px] w-[80px] bg-white text-black rounded-full text-[12px] shadow-lg ">
-                                Learn more
-                            </button>
                             <button className="h-[40px] w-[80px] bg-black text-white rounded-full text-[12px] ">
-                                Buy
+                                Xem chi tiết
                             </button>
                         </div>
                     </div>

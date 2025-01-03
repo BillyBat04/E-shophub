@@ -17,10 +17,8 @@ import {
 const Header = () => {
   const { user } = useUser();
   const { cartItemCount, updateCartItemCount } = useCart();
-  const [inputValue, setInputValue] = useState("");
   const [isChatboxVisible, setChatboxVisible] = useState(false);
   const [isLoginVisible, setLoginVisible] = useState(false);
-  const [isSearchFocused, setSearchFocused] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [view, setView] = useState("login");
 
@@ -49,8 +47,6 @@ const Header = () => {
     gender: "",
   });
 
-
-  const handleChange = (e) => setInputValue(e.target.value);
   const toggleChatbox = () => setChatboxVisible(!isChatboxVisible);
   const toggleLogin = () => {
     if (user) return;
@@ -93,6 +89,7 @@ const Header = () => {
     if (response.data.account) {
       localStorage.setItem("user", JSON.stringify(response.data.account));
       window.location.reload();
+      if (response.data.account.role === 'ADMIN' || response.data.account.role === 'DEEMPLOYEE' || response.data.account.role === 'WHEMPLOYEE') window.location.href='/admin'
     }
   };
 
@@ -195,56 +192,68 @@ const Header = () => {
     updateCartItemCount(cart.length);
   }, [updateCartItemCount]);
 
-  return (
-    <div className='w-full bg-customBlack py-4 flex justify-between items-center'>
-      <div className='ml-5 flex flex-row w-[50%] h-full items-center'>
-        <Link to='/'>
-          <label className='text-white font-roboto text-[20px]'>
-            E-ShopHub
-          </label>
-        </Link>
-        <div
-          className={`ml-5 h-[100%] bg-white rounded-full flex flex-row items-center transition-all duration-300 ${isSearchFocused ? "w-[50%]" : "w-[40%]"
-            }`}>
-          <input
-            type='text'
-            value={inputValue}
-            onChange={handleChange}
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
-            className='border ml-4 h-full w-full text-sm border-gray-50 focus:outline-none'
-            placeholder='Search'
-          />
-          <button className='mr-3'>
-            <FaMagnifyingGlass />
-          </button>
-        </div>
-      </div>
+  
 
-      <div className='mr-5 flex items-center'>
-        <button onClick={() => toggleLogin()}>
-          {!user ? (
-            <img src='/src/assets/user.png' className='h-[20px] w-[20px]' />
-          ) : (
-            <UserAvatarDropdown image={user.image} />
-          )}
-        </button>
-        <div className='relative ml-5'>
-          <Link to='shoppingcart'>
-            <img
-              src='/src/assets/trolley.png'
-              className='h-[25px] w-[25px]'
-              alt='Shopping Cart Icon'
-            />
-          </Link>
-          <span className='absolute top-0 left-4 inline-flex items-center justify-center h-3 w-3 text-[8px] font-bold text-black bg-white border-[0.5px] rounded-full'>
-            {cartItemCount}
-          </span>
-        </div>
-        <button onClick={toggleChatbox}>
-          <img src='/src/assets/chat.png' className='ml-5 h-[20px] w-[20px]' />
-        </button>
-      </div>
+  return (
+    <div className='w-full bg-customBlack py-4 flex justify-between items-center overflow-hidden '>
+      <div className="flex items-center justify-between px-5 w-full h-[70px] bg-[#1a1a1a]">
+  {/* Logo Section */}
+  <div className="flex items-center">
+    <Link to="/">
+      <span className="text-white text-2xl font-semibold tracking-wide font-roboto">
+        E-ShopHub
+      </span>
+    </Link>
+  </div>
+
+  {/* Action Section */}
+  <div className="flex items-center space-x-6">
+    {/* User Profile */}
+    <button
+      onClick={toggleLogin}
+      className="flex items-center justify-center w-10 h-10 bg-[#2b2b2b] rounded-full hover:bg-[#3b3b3b] transition duration-300"
+    >
+      {!user ? (
+        <img
+          src="/src/assets/user.png"
+          alt="User Icon"
+          className="h-6 w-6"
+        />
+      ) : (
+        <UserAvatarDropdown image={user?.image} />
+      )}
+    </button>
+
+    {/* Shopping Cart */}
+    <div className="relative">
+      <Link to="shoppingcart">
+        <img
+          src="/src/assets/trolley.png"
+          alt="Shopping Cart Icon"
+          className="h-8 w-8 hover:scale-110 transition duration-300"
+        />
+      </Link>
+      {cartItemCount > 0 && (
+        <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-black bg-white rounded-full border-[0.5px] border-black">
+          {cartItemCount}
+        </span>
+      )}
+    </div>
+
+    {/* Chatbox */}
+    <button
+      onClick={toggleChatbox}
+      className="flex items-center justify-center w-10 h-10 bg-[#2b2b2b] rounded-full hover:bg-[#3b3b3b] transition duration-300"
+    >
+      <img
+        src="/src/assets/chat.png"
+        alt="Chat Icon"
+        className="h-5 w-5"
+      />
+    </button>
+  </div>
+</div>
+
 
       {isChatboxVisible && (
         <div className='z-30 fixed bottom-2 right-5 w-[300px] h-[250px] bg-white border border-gray-300 rounded-3xl shadow-lg flex flex-col justify-center items-center'>
@@ -367,13 +376,12 @@ const Header = () => {
                     </button>
                   </div>
                   <div className='w-[80%] flex justify-between mt-4'>
-                    <button
-                      type='submit'
-                      className='flex items-center gap-2 bg-white text-sm py-2 px-6 border-[0.5px] border-black rounded-3xl'
+                    <p
+                      className='cursor-pointer flex items-center gap-2 bg-white text-sm py-2 px-6 border-[0.5px] border-black rounded-3xl'
                       onClick={googleSignIn}>
                       <FaGoogle className='text-[22px]' />
                       Sign in with Google
-                    </button>
+                    </p>
                     <button className='flex justify-center items-center w-[50px] h-[50px] bg-black text-white rounded-full'>
                       <GrNext />
                     </button>

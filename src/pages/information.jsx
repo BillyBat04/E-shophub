@@ -61,11 +61,11 @@ export default function Information() {
 
     useEffect(() => {
         const getUser = async () => {
-            console.log(user.id)
             const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`)
             setCustomer(response.data)
             const existCustomer = response.data
-            setUserInfo(() => ({
+            if (existCustomer){
+                setUserInfo(() => ({
                 fullName: existCustomer.fullName,
                 email: user.email,
                 birthday: existCustomer.birthday,
@@ -74,6 +74,7 @@ export default function Information() {
                 address: existCustomer.address,
                 dateCreated: formatDate(user.createdAt)
             }))
+            }
         }
         getUser()
     }, [user])
@@ -214,7 +215,7 @@ export default function Information() {
                             <input
                                 type="text"
                                 name="phoneNumber"
-                                value={userInfo.birthday}
+                                value={userInfo.phoneNumber}
                                 onChange={handleChange}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             />

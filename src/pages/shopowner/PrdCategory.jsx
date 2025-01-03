@@ -8,7 +8,7 @@ import axiosInstance from "../../config/api";
 import { Link } from "react-router-dom";
 
 const PrdCategory = () => {
-  const TABLE_HEAD = ["No", "Name", "Products", "Brands"];
+  const TABLE_HEAD = ["No", "Name", "Products"];
   const [isAdding, setIsAdding] = useState(false);
   const newCategoryInputRef = useRef("");
 
@@ -109,59 +109,36 @@ const PrdCategory = () => {
             <tbody>
               {categoryList.map((row, index) => {
                 const isLast = index === categoryList.length - 1;
-                const classes = isLast
-                  ? "py-4"
-                  : "py-4 border-b border-gray-300";
+                const classes = isLast ? "py-4" : "py-4 border-b border-gray-300";
 
                 return (
-                  <tr key={row.id} className='hover:bg-gray-50'>
+                  <tr key={row.id} className="hover:bg-gray-50">
                     <td className={classes}>
-                      <Typography
-                        variant='small'
-                        color='blue-gray'
-                        className='font-bold'>
-                        CategoryId
+                      <Typography variant="small" color="blue-gray" className="font-bold">
+                        {index + 1}
                       </Typography>
                     </td>
-                    <td
-                      className={`${classes} flex items-center justify-center gap-2`}>
-                      <Typography
-                        variant='small'
-                        className='font-normal text-gray-600'>
+                    <td className={`${classes} text-center`}>
+                      <Typography variant="small" className="font-normal text-gray-600">
                         {row.categoryName}
                       </Typography>
-                      <button>
-                        <RiEditBoxLine className='w-5 h-5 text-gray-600' />
-                      </button>
                     </td>
                     <td className={classes}>
-                      <Typography
-                        variant='small'
-                        className='font-normal text-gray-600'>
+                      <Typography variant="small" className="font-normal text-gray-600">
                         {row.productCount}
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Typography
-                        variant='small'
-                        className='font-normal text-gray-600'>
-                        NumberOfBrands
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant='small'
-                        className='font-normal text-white'>
+                      <Typography variant="small" className="font-normal text-white">
                         <Link to={row.id}>
-                          <button className='bg-black w-20 h-6 rounded-xl'>
-                            Detail
-                          </button>
+                          <button className="bg-black w-20 h-6 rounded-xl">Detail</button>
                         </Link>
                       </Typography>
                     </td>
                   </tr>
                 );
               })}
+
             </tbody>
           </table>
         </Card>

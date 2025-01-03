@@ -11,19 +11,33 @@ import formatDate from "../../helpers/formatDate";
 const EmployeeList = () => {
   const isDetailPage = location.pathname !== "/admin/employees";
   const TABLE_HEAD = ["ID", "Full Name", "Image", "Phone Number", "Begin Date", "Email", "Role"];
-  const [employeeList, setEmployeeList] = useState([])
+  const [employeeList, setEmployeeList] = useState([]);
 
   const getList = useCallback(async () => {
-    const response = await axiosInstance.get('/employee')
-    setEmployeeList(response.data)
-  }, [])
+    const response = await axiosInstance.get('/employee');
+    setEmployeeList(response.data);
+  }, []);
 
   useEffect(() => {
-    getList()
-  }, [getList])
+    getList();
+  }, [getList]);
+
+  const handleRoleChange = async (id, newRole) => {
+    try {
+      await axiosInstance.patch(`/user/${id}`, { role: newRole });
+      setEmployeeList((prevList) =>
+        prevList.map((employee) =>
+          employee.id === id ? { ...employee, user: { ...employee.user, role: newRole } } : employee
+        )
+      );
+      window.location.reload()
+    } catch (error) {
+      console.error("Failed to update role", error);
+    }
+  };
 
   if (isDetailPage) {
-    return <Outlet></Outlet>
+    return <Outlet></Outlet>;
   }
 
   return (
@@ -54,7 +68,7 @@ const EmployeeList = () => {
         <Card className="p-5 w-full flex h-full overflow-scroll px-6">
           <table className="w-full min-w-max table-auto text-center">
             <thead>
-              <tr >
+              <tr>
                 {TABLE_HEAD.map((head, index) => (
                   <th key={head} className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
                     ${index === 0 ? 'rounded-l-2xl' : ''} 
@@ -127,12 +141,14 @@ const EmployeeList = () => {
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
+                      <select
+                        value={row.user.role}
+                        onChange={(e) => handleRoleChange(row.user.id, e.target.value)}
+                        className="bg-white border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
-                        {row.user.role}
-                      </Typography>
+                        <option value="DEEMPLOYEE">DEEMPLOYEE</option>
+                        <option value="WHEMPLOYEE">WHEMPLOYEE</option>
+                      </select>
                     </td>
                     <td className={classes}>
                       <Typography

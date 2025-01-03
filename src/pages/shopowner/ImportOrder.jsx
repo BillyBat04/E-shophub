@@ -13,18 +13,42 @@ const ImportOrder = () => {
   const [supplyOrders, setSupplyOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [filter, setFilter] = useState({ sortBy: "date", sortOrder: "asc", open: false });
-
+  const [pending, setPending] = useState(0)
+  const [completed, setCompleted] = useState(0)
   const location = useLocation();
 
   const getList = useCallback(async () => {
     const response = await axiosInstance.get('/supply-order');
     setSupplyOrders(response.data);
-    setFilteredOrders(response.data); // Initially, show all data
+    setFilteredOrders(response.data); // Initia
+    
   }, []);
+
 
   useEffect(() => {
     getList();
-  }, [getList]);
+  }, []);
+
+  // Tính toán số lượng sau khi danh sách cập nhật
+  useEffect(() => {
+    const statistics = () => {
+      let pendingCount = 0;
+      let completedCount = 0;
+
+      for (let item of supplyOrders) {
+        if (item?.status === "PROCESSING") {
+          pendingCount += 1;
+        } else if (item?.status === "COMPLETED") {
+          completedCount += 1;
+        }
+      }
+
+      setPending(pendingCount);
+      setCompleted(completedCount);
+    };
+
+  statistics();
+  }, [supplyOrders]);
 
   // Handle sorting
   const handleSort = (sortBy, sortOrder) => {
@@ -81,7 +105,7 @@ const ImportOrder = () => {
                 <label className='text-base '>
                   Total orders
                 </label>
-                <span className='text-5xl'>100</span>
+                <span className='text-5xl'>{supplyOrders?.length}</span>
               </div>
               <div className='h-[70px] w-[70px] rounded-full flex justify-center items-center bg-white'>
                 <img src="/src/assets/total.png" />
@@ -94,7 +118,7 @@ const ImportOrder = () => {
                 <label className='text-base '>
                   Pending orders
                 </label>
-                <span className='text-5xl'>100</span>
+                <span className='text-5xl'>{pending}</span>
               </div>
               <div className='h-[70px] w-[70px] rounded-full flex justify-center items-center border border-black bg-white'>
                 <img src="/src/assets/pending.png" />
@@ -107,7 +131,7 @@ const ImportOrder = () => {
                 <label className='text-base '>
                   Successful ords
                 </label>
-                <span className='text-5xl'>100</span>
+                <span className='text-5xl'>{completed}</span>
               </div>
               <div className='h-[70px] w-[70px] rounded-full flex justify-center items-center bg-white border border-black'>
                 <img src="/src/assets/success.png" />

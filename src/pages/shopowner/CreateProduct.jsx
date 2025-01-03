@@ -10,6 +10,8 @@ const CreateProduct = () => {
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
   const [brand, setBrand] = useState('')
+  const [ROM, setROM] = useState('')
+  const [cameraMP, setCameraMP] = useState('')
   const [purchasePrice, setPurchasePrice] = useState(0)
   const [sellingPrice, setSellingPrice] = useState(0)
   const [supplier, setSupplier] = useState('')
@@ -122,6 +124,8 @@ const CreateProduct = () => {
     data.append('categoryId', category)
     data.append('description', description)
     data.append('brand', brand)
+    data.append('camera', cameraMP)
+    data.append('rom', ROM)
 
     const response = await axios({
             method: 'POST',
@@ -171,6 +175,32 @@ const CreateProduct = () => {
               placeholder="Mô tả sản phẩm..."
               value={description}
               onChange={e => setDescription(e.target.value)}
+            />
+            <h5 className='font-normal text-slate-400 mb-2'>Camera MP</h5>
+            <Input
+              id="product-name"
+              slotProps={{
+                input: {
+                  className:
+                    "pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black",
+                },
+              }}
+              placeholder="Nhập Camera MP"
+              value={cameraMP}
+              onChange={e => setCameraMP(e.target.value)}
+            />
+            <h5 className='font-normal text-slate-400 mb-2'>ROM</h5>
+            <Input
+              id="product-name"
+              slotProps={{
+                input: {
+                  className:
+                    "pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black",
+                },
+              }}
+              placeholder="Nhập ROM"
+              value={ROM}
+              onChange={e => setROM(e.target.value)}
             />
           </fieldset>
           <fieldset className="px-8 py-6 bg-white shadow-md rounded-xl">
