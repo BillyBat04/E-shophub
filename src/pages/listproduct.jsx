@@ -37,7 +37,7 @@ const Listproduct = () => {
     return (
         <div className="xl:pl-[15%] bg-slate-100 xl:pr-[15%] h-screen w-screen">
             <div className="relative w-full h-full overflow-hidden">
-
+                
                 <div className="p-5 w-full mt-3 h-[20%] rounded-md bg-white flex justify-between items-center">
                     <div className="flex flex-col w-[70%]">
                         <span className="font-medium pr-3 pb-2">Explore by category</span>

@@ -21,6 +21,15 @@ export default {
         customGray3:'#D9D9D9',
         customBlue: '#F5F8FF',
       },
+      keyframes: {
+        fall: {
+          "0%": { transform: "translateY(-100px)", opacity: "1" },
+          "100%": { transform: "translateY(100vh)", opacity: "0.5" },
+        },
+      },
+      animation: {
+        fall: "fall 5s linear infinite",
+      },
       
     },
     plugins: [],
