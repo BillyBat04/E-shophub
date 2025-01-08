@@ -36,6 +36,7 @@ import Inventory from "./pages/shopowner/Inventory";
 import CreateInventory from "./pages/shopowner/CreateInventory";
 import PrdCategory from "./pages/shopowner/PrdCategory";
 import CustomerOrderManagement from "./pages/shopowner/CustomerOrder";
+import ConfirmOrder from "./pages/ConfirmOrder";
 
 function App() {
   const location = useLocation();
@@ -63,6 +64,7 @@ function App() {
         <div className="content">
           <Routes>
             <Route path="/" element={<Mainpage />} />
+            <Route path="/confirm-order/:id" element={<ConfirmOrder />} />
             <Route path="/shoppingcart" element={<Shoppingcart />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/personal" element={<Personal />}>

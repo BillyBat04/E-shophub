@@ -129,7 +129,7 @@ const CreateProduct = () => {
     data.append("camera", cameraMP);
     data.append("rom", ROM);
     data.append("cpu", computerCPU);
-    data.append("disk", hardDisk);
+    data.append("hardDrive", hardDisk);
     data.append("ram", computerRAM);
 
     const response = await axios({
@@ -265,7 +265,7 @@ const CreateProduct = () => {
                 />
               </>
             )}
-            { category === "Laptop" && (
+            { category === "cm5glxigq0001zdt1boof4vvv" && (
               <>
                 <h5 className='font-normal text-slate-400 mb-2'>
                   CPU

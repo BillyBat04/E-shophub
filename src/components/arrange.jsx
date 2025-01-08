@@ -1,14 +1,32 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { FaCircleCheck } from "react-icons/fa6";
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
-export default function Arrange() {
-    const items = ["Low to high price", "High to low price"];
+export default function Arrange({setList}) {
+    const items = ["Options", "Low to high price", "High to low price"];
     const [selectedItem, setSelectedItem] = useState("Options"); 
 
     const handleSelect = (item) => {
         setSelectedItem(item); 
+        switch (item) {
+            case "Low to high price": {
+                setList((prevList) => 
+                    [...prevList].sort((a, b) => a.product.sellingPrice - b.product.sellingPrice)
+                );
+                break;
+            }
+            case "High to low price": {
+                setList((prevList) => 
+                    [...prevList].sort((a, b) => b.product.sellingPrice - a.product.sellingPrice)
+                );
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     };
 
     return (

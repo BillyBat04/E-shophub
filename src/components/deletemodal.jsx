@@ -1,15 +1,17 @@
 /* eslint-disable react/prop-types */
-function DeleteModal({isModalOpen, setIsModalOpen}) {
+function DeleteModal({isModalOpen, setIsModalOpen, SKU}) {
 
-  // Close the modal
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  // Handle confirmation action
+
   const handleConfirm = () => {
-    alert("Confirmed!");
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    localStorage.setItem('cart', JSON.stringify(cart.filter(item => Object.keys(item)[0] !== SKU)));
     setIsModalOpen(false);
+    window.location.reload()
   };
 
   return (

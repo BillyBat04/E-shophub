@@ -101,6 +101,10 @@ const CreateImportOrder = () => {
         }
         await axiosInstance.post('/supply-order-detail', data)
       }
+      await axiosInstance.post('/supply-order/send-email', {
+        supplierId: activeSupplierId,
+        supplyOrderId: newSupplyOrder.id
+      })
       navigate('/admin/orders')
       window.location.reload()
 

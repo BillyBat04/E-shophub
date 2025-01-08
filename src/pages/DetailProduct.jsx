@@ -14,7 +14,7 @@ function DetailProduct() {
   const params = useParams()
   const SKU = params.sku
   const {updateCartItemCount} = useCart()
-  const [activeFilter, setActiveFilter] = useState('Tất cả');
+  const [activeFilter, setActiveFilter] = useState('All');
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({})
   const [category, setCategory] = useState('')
@@ -73,7 +73,7 @@ function DetailProduct() {
       cart.push({ [product.SKU]: quantity });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
-    toast.success("Add to shopping cart successfully!", {
+    toast.success("Thêm vào giỏ hàng thành công", {
       autoClose: 3000, 
       hideProgressBar: true,
     });
@@ -157,7 +157,7 @@ function DetailProduct() {
         )}
         <p className="ml-4 text-gray-600">Đã bán: 10 sản phẩm</p>
       </div>
-      <p className="text-3xl font-extrabold text-blue-600">{formatNumber(product?.sellingPrice || 0)}đ</p>
+      <p className="text-3xl text-red-500 font-bold">{formatNumber(product?.sellingPrice || 0)}đ</p>
       <p className="mt-4 text-gray-700 leading-relaxed">{product.description}</p>
     </div>
 
@@ -195,10 +195,10 @@ function DetailProduct() {
         </div>
       </form>
       <p className="text-xl mb-4">Subtotal:</p>
-      <p className="text-2xl font-bold text-green-600">{formatNumber(product.sellingPrice * quantity)} VNĐ</p>
+      <p className="text-2xl text-red-500 font-bold">{formatNumber(product.sellingPrice * quantity)} VNĐ</p>
       <Link to='/payment'><button
         onClick={handleSubmit}
-        className="w-full py-3 mt-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+        className="w-full py-3 mt-4 bg-red-600 text-white font-semibold rounded-lg duration-150 hover:bg-red-700"
       >
         Buy Now
       </button></Link>

@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../config/api';
+import formatNumber from '../helpers/formatNumber';
 
 const fadeUpVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -15,38 +15,32 @@ const ProductCard = ({ displayedProduct }) => {
     return (
         <Link to={`/detail-product/${displayedProduct.product.SKU}`}>
             <motion.div
-                className="p-4 bg-white rounded-xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 flex flex-col items-center h-full border border-gray-200"
                 variants={fadeUpVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.1 }}
             >
-                <div className="relative mb-4">
-                    <img
-                        src={displayedProduct.product.image}
-                        alt={displayedProduct.product.productName}
-                        className="w-[200px] h-[200px] object-contain"
-                    />
-                </div>
-                <div className="text-center">
-                    <h2 className="text-base font-semibold">{displayedProduct.product.productName}</h2>
-                    <p className="text-gray-500 text-sm">{displayedProduct.product.brand}</p>
-                    <p className="text-[#FF424E] text-lg font-bold">{displayedProduct.sellingPrice}</p>
-                </div>
-                <div className="flex gap-2 mt-4">
-                    {/* Mô phỏng các lựa chọn màu sắc */}
-                    {displayedProduct.product.colors?.map((color, index) => (
-                        <div
-                            key={index}
-                            className="w-4 h-4 rounded-full border border-gray-300"
-                            style={{ backgroundColor: color }}
-                        ></div>
-                    ))}
+                <div className="bg-white shadow-lg rounded-lg p-4 w-[250px] h-[350px]">
+                    <div className="relative">
+                    <img src={displayedProduct.product.image} alt={displayedProduct.product.productName} className="w-full h-40 object-cover rounded" />
+                    </div>
+                    <h3 className="text-sm font-semibold mt-4">{displayedProduct.product.productName}</h3>
+                    <p className="text-xs text-gray-500">{displayedProduct.product.cpu} | {displayedProduct.product.ram}GB | {displayedProduct.product.hardDrive}GB</p>
+                    <div className="flex items-center mt-2">
+                    <span className="text-red-500 font-bold">{formatNumber(displayedProduct.product.sellingPrice)}</span>
+                    <span className="text-gray-400 text-sm line-through ml-2">{formatNumber(displayedProduct.product.sellingPrice + 1000000)}</span>
+                    </div>
+                    <div className="flex justify-between items-center mt-4">
+                    <span className="text-yellow-500 text-sm">
+                        {'★'.repeat(3)}{'☆'.repeat(5 - 3)}
+                    </span>
+                    </div>
                 </div>
             </motion.div>
         </Link>
     );
 };
+
 
 const ProductList1 = ({list, category}) => {
     const [productList, setProductList] = useState([])

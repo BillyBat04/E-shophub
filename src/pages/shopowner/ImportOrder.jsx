@@ -215,7 +215,7 @@ const ImportOrder = () => {
                     </td>
                     <td className={classes}>
                       <Typography variant="small" className="font-normal text-gray-600">
-                        {row.supplierId.slice(0, 3)}
+                        {row.supplier.supplierName}
                       </Typography>
                     </td>
                     <td className={`${classes} flex justify-center items-center`}>

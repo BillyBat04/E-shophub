@@ -6,6 +6,7 @@ import { Card, Typography } from "@material-tailwind/react";
 import { Link, Outlet } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import axiosInstance from "../../config/api";
+import formatNumber from "../../helpers/formatNumber";
 
 const ProductList = () => {
   const [list, setList] = useState([])
@@ -21,7 +22,7 @@ const ProductList = () => {
   }, [getList])
 
   const isDetailPage = location.pathname !== "/admin/products";
-  const TABLE_HEAD = ["SKU", "Product Name", "Image","Selling Price", "Purchase Price", "Supplier"];
+  const TABLE_HEAD = ["SKU", "Product Name", "Image","Purchase Price", "Selling Price", "Supplier"];
   if (isDetailPage) {
     return <Outlet></Outlet>
   }
@@ -107,7 +108,7 @@ const ProductList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.purchasePrice}
+                        {formatNumber(row.purchasePrice)}đ
                       </Typography>
                     </td>
                     {/* <td className={classes}>
@@ -123,7 +124,7 @@ const ProductList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.purchasePrice}
+                        {formatNumber(row.sellingPrice)}đ
                       </Typography>
                     </td>
                     <td className={classes}>

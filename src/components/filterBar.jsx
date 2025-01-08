@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 const basicFilters = [
-  { id: 1, label: 'Sẵn hàng', icon: '🚴‍♂️', hasDropdown: false },
   { id: 2, label: 'Giá', icon: '💰', hasDropdown: true },
 ]
 
@@ -19,8 +18,10 @@ const phoneFilters = [
 
 const FilterBar = () => {
   const location = useLocation();
+  const [searchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState(null);
-  const [selectedValues, setSelectedValues] = useState({});
+  const [price, setPrice] = useState(0)
+  const [selectedValues, setSelectedValues] = useState(searchParams.get('brand') ? {"brand": searchParams.get('brand') } : {});
   const [highlightedItem, setHighlightedItem] = useState(null);  // Highlighted item state
   const navigate = useNavigate();
   const [filters, setFilters] = useState(basicFilters.slice());;
@@ -35,30 +36,55 @@ const FilterBar = () => {
     }
   }, [location.pathname]);
 
+  // Xử lý khi click vào bộ lọc
   const handleFilterClick = (filterId) => {
     setActiveFilter((prev) => (prev === filterId ? null : filterId));
-    setHighlightedItem(null); // Reset highlight when switching filters
+    setHighlightedItem(null); // Reset trạng thái khi chuyển bộ lọc
   };
 
-  const handleDropdownChange = (filterId, value) => {
-    setSelectedValues((prev) => ({
-      ...prev,
-      [filterId]: value,
-    }));
+  // Xử lý khi chọn giá trị trong dropdown
+  const handleDropdownChange = (filterName, value) => {
+    const updatedValues = {
+      ...selectedValues,
+      [filterName]: value,
+    };
 
-    // Build query string with updated filter values
-    const queryParams = new URLSearchParams(selectedValues).toString();
+    // Cập nhật giá trị đã chọn
+    setSelectedValues(updatedValues);
 
-    // Update the URL with query params
+    // Tạo query string từ giá trị đã chọn
+    const queryParams = new URLSearchParams(updatedValues).toString();
+
+    // Điều hướng URL với query string
     navigate({
       pathname: window.location.pathname,
       search: `?${queryParams}`,
     });
   };
 
+  const handleApplyFilter = (filterId, value = price) => {
+    const updatedValues = {
+      ...selectedValues,
+      ["price"]: value,
+    };
+
+    setSelectedValues(updatedValues);
+
+
+    const queryParams = new URLSearchParams(updatedValues).toString();
+
+
+    navigate({
+      pathname: window.location.pathname,
+      search: `?${queryParams}`,
+    });
+  }
+
+  // Xử lý khi hover vào mục
   const handleItemHover = (item) => {
     setHighlightedItem(item);
   };
+
 
   return (
     <div className="bg-gray-100 p-4 rounded-lg shadow">
@@ -98,25 +124,23 @@ const FilterBar = () => {
                 {filter.id === 2 && (
                   <div>
                     <div className="flex justify-between items-center text-gray-700">
-                      <span>69.410.000₫</span>
-                      <span>194.990.000₫</span>
+                      <span>10.000.000₫</span>
+                      <span>50.000.000₫</span>
                     </div>
                     <div className="relative mt-2">
                       <input
                         type="range"
-                        min="69410000"
-                        max="194990000"
+                        min="10000000"
+                        max="50000000"
                         className="w-full"
-                        onChange={(e) =>
-                          handleDropdownChange(filter.id, e.target.value)
-                        }
+                        onChange={e => setPrice(e.target.value)}
                       />
                     </div>
                     <div className="flex justify-between mt-4">
                       <button className="bg-red-100 text-red-500 px-4 py-2 rounded-lg">
                         Đóng
                       </button>
-                      <button className="bg-red-500 text-white px-4 py-2 rounded-lg">
+                      <button onClick={() => handleApplyFilter(filter.id)} className="bg-red-500 text-white px-4 py-2 rounded-lg">
                         Xem kết quả
                       </button>
                     </div>
@@ -130,7 +154,7 @@ const FilterBar = () => {
                           className={`w-full text-left ${
                             highlightedItem === item ? 'bg-gray-100' : ''
                           }`}
-                          onClick={() => handleDropdownChange(filter.id, item)}
+                          onClick={() => handleDropdownChange("HardDrive", item)}
                           onMouseEnter={() => handleItemHover(item)}
                           onMouseLeave={() => setHighlightedItem(null)}
                         >
@@ -148,7 +172,7 @@ const FilterBar = () => {
                           className={`w-full text-left ${
                             highlightedItem === item ? 'bg-gray-100' : ''
                           }`}
-                          onClick={() => handleDropdownChange(filter.id, item)}
+                          onClick={() => handleDropdownChange("RAM", item)}
                           onMouseEnter={() => handleItemHover(item)}
                           onMouseLeave={() => setHighlightedItem(null)}
                         >
@@ -161,9 +185,9 @@ const FilterBar = () => {
                 {filter.id === 5 && (
                   <ul className="space-y-2 text-gray-700">
                     {[
-                      'Intel Core i3',
-                      'Intel Core i5',
-                      'Intel Core i7',
+                      'i3',
+                      'i5',
+                      'i7',
                       'AMD Ryzen 5',
                       'AMD Ryzen 7',
                     ].map((item) => (
@@ -172,7 +196,7 @@ const FilterBar = () => {
                           className={`w-full text-left ${
                             highlightedItem === item ? 'bg-gray-100' : ''
                           }`}
-                          onClick={() => handleDropdownChange(filter.id, item)}
+                          onClick={() => handleDropdownChange("CPU", item)}
                           onMouseEnter={() => handleItemHover(item)}
                           onMouseLeave={() => setHighlightedItem(null)}
                         >

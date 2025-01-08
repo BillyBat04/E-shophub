@@ -13,6 +13,7 @@ const PaymentPage = () => {
     const [productList, setProductList] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [file, setFile] = useState(null)
+    const [customer, setCustomer] = useState(null)
     const [quantity, setQuantity] = useState(
         productList.reduce((acc, item) => {
           acc[item.SKU] = 1;
@@ -22,6 +23,15 @@ const PaymentPage = () => {
     const [isQRCodeModalOpen, setQRCodeModalOpen] = useState(false); // Trạng thái hiển thị modal
     const navigate = useNavigate();
     const { user } = useUser();
+
+
+    useEffect(() => {
+        const getUser = async () => {
+            const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`)
+            setCustomer(response.data)
+        }
+        getUser()
+    }, [user])
 
     const handlePaymentSelection = (method) => {
         setSelectedPayment(method);
@@ -120,12 +130,28 @@ const PaymentPage = () => {
                         <p>Giao tới</p>
                         <AddressModal setAddress={setAddress} />
                     </div>
-                    <div className='border border-black p-4 my-4 rounded-md'>
-                        <div>
-                            <p>{address.name}</p>
-                            <p>{address.phone}</p>
+                    <div className="border border-gray-300 p-6 my-4 rounded-lg shadow-md bg-white">
+                        <div className="mb-4">
+                            <p className="text-sm font-semibold text-gray-700">Họ và tên:</p>
+                            <p className="text-lg text-gray-900">{address.name || customer?.fullName}</p>
                         </div>
-                        {Object.keys(address).length > 0 && <p>{address.address}, {address.ward}, {address.district}, {address.city}</p>}
+
+                        <div className="mb-4">
+                            <p className="text-sm font-semibold text-gray-700">Số điện thoại:</p>
+                            <p className="text-lg text-gray-900">{address.phone || customer?.phoneNumber}</p>
+                        </div>
+
+                        {Object.keys(address).length > 0 ? (
+                            <div>
+                                <p className="text-sm font-semibold text-gray-700">Địa chỉ:</p>
+                                <p className="text-lg text-gray-900">{address.address}, {address.ward}, {address.district}, {address.city}</p>
+                            </div>
+                        ) : (
+                            <div>
+                                <p className="text-sm font-semibold text-gray-700">Địa chỉ:</p>
+                                <p className="text-lg text-gray-900">{customer?.address}</p>
+                            </div>
+                        )}
                     </div>
                 </section>
 

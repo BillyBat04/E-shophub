@@ -57,7 +57,6 @@ const product = [
 ];
 const Mainpage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
 useEffect(() => {
   decode()
   // const interval = setInterval(() => {

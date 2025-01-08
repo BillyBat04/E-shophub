@@ -10,6 +10,7 @@ const Shoppingcart = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [productList, setProductList] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
+  const [paymentList, setPaymentList] = useState([])
   const [quantity, setQuantity] = useState(
       productList.reduce((acc, item) => {
         acc[item.SKU] = 1;
@@ -22,7 +23,7 @@ const Shoppingcart = () => {
     updateCartItemCount(cart.length);
   }, [updateCartItemCount]);
 
-  const handleDelete = (id) => {
+  const handleDelete = () => {
     setIsModalOpen(prevState => !prevState)
   };
 
@@ -110,13 +111,20 @@ const Shoppingcart = () => {
 }, [getProductList])
 
 
-  const toggleSelectItem = (id) => {
-    
+  const toggleSelectItem = (state, SKU) => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // setPaymentList(prevState => [...prevState, ])
+    if (state) {
+      setPaymentList(prevState => ([...prevState, cart.find(item => Object.keys(item)[0] === SKU)]))
+    } else {
+      setPaymentList(prevState => prevState.filter(item => Object.keys(item)[0] !== SKU))
+    }
+    console.log(paymentList)
   };
 
   const handleSubmit = () => {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    localStorage.setItem('payment', JSON.stringify(cart));
+
+    localStorage.setItem('payment', JSON.stringify(paymentList));
   }
 
   return (
@@ -130,7 +138,7 @@ const Shoppingcart = () => {
               <div className="inline-flex items-center">
                 <label className="flex items-center cursor-pointer relative">
                   <input type="checkbox" checked={item.selected}
-                    onChange={() => toggleSelectItem(item.id)} className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800" id="check" />
+                    onChange={(e) => toggleSelectItem(e.target.checked, item.SKU)} className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800" id="check" />
                   <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" strokeWidth="1">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
@@ -188,7 +196,7 @@ const Shoppingcart = () => {
               </button>
             </div>
 
-            {isModalOpen && <DeleteModal isModalOpen = {isModalOpen} setIsModalOpen={setIsModalOpen}/>}
+            {isModalOpen && <DeleteModal SKU = {item.SKU} isModalOpen = {isModalOpen} setIsModalOpen={setIsModalOpen}/>}
 
           </div>
         ))}
