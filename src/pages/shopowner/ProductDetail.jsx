@@ -150,7 +150,7 @@ const ProductDetail = () => {
       <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-[1fr_1fr] gap-4">
         <div className="flex flex-col gap-4">
           <fieldset className="px-8 py-6 bg-white shadow-md rounded-xl">
-            <h3 className="text-base font-semibold mb-3">General Infomation</h3>
+            <h3 className="text-base font-semibold mb-3">General Information</h3>
             <h5 className='font-normal text-slate-400 mb-2'>Product Name</h5>
             <Input
               id="product-name"

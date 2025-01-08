@@ -1,19 +1,39 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const filters = [
+const basicFilters = [
   { id: 1, label: 'Sẵn hàng', icon: '🚴‍♂️', hasDropdown: false },
   { id: 2, label: 'Giá', icon: '💰', hasDropdown: true },
+]
+
+const laptopFilters = [
   { id: 3, label: 'Ổ cứng', icon: '💾', hasDropdown: true },
   { id: 4, label: 'Dung lượng RAM', icon: '', hasDropdown: true },
   { id: 5, label: 'CPU', icon: '', hasDropdown: true },
 ];
 
+const phoneFilters = [
+  { id: 6, label: 'Bộ nhớ trong', icon: '💾', hasDropdown: true },
+  { id: 7, label: 'Camera', icon: '📷', hasDropdown: true }
+]
+
 const FilterBar = () => {
+  const location = useLocation();
   const [activeFilter, setActiveFilter] = useState(null);
   const [selectedValues, setSelectedValues] = useState({});
   const [highlightedItem, setHighlightedItem] = useState(null);  // Highlighted item state
   const navigate = useNavigate();
+  const [filters, setFilters] = useState(basicFilters.slice());;
+
+  useEffect(() => {
+    if (location.pathname.includes("Phone")) {
+      setFilters([...basicFilters, ...phoneFilters]);
+    } else if (location.pathname.includes("Laptop")) {
+      setFilters([...basicFilters, ...laptopFilters]);
+    } else {
+      setFilters(basicFilters);
+    }
+  }, [location.pathname]);
 
   const handleFilterClick = (filterId) => {
     setActiveFilter((prev) => (prev === filterId ? null : filterId));
@@ -146,6 +166,54 @@ const FilterBar = () => {
                       'Intel Core i7',
                       'AMD Ryzen 5',
                       'AMD Ryzen 7',
+                    ].map((item) => (
+                      <li key={item}>
+                        <button
+                          className={`w-full text-left ${
+                            highlightedItem === item ? 'bg-gray-100' : ''
+                          }`}
+                          onClick={() => handleDropdownChange(filter.id, item)}
+                          onMouseEnter={() => handleItemHover(item)}
+                          onMouseLeave={() => setHighlightedItem(null)}
+                        >
+                          {item}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {filter.id === 6 && (
+                  <ul className="space-y-2 text-gray-700">
+                    {[
+                      '64GB',
+                      '128GB',
+                      '256GB',
+                      '512GB',
+                      '1TB'
+                    ].map((item) => (
+                      <li key={item}>
+                        <button
+                          className={`w-full text-left ${
+                            highlightedItem === item ? 'bg-gray-100' : ''
+                          }`}
+                          onClick={() => handleDropdownChange(filter.id, item)}
+                          onMouseEnter={() => handleItemHover(item)}
+                          onMouseLeave={() => setHighlightedItem(null)}
+                        >
+                          {item}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {filter.id === 7 && (
+                  <ul className="space-y-2 text-gray-700">
+                    {[
+                      '12 MP',
+                      '18 MP',
+                      '24 MP',
+                      '50 MP',
+                      '108 MP',
                     ].map((item) => (
                       <li key={item}>
                         <button

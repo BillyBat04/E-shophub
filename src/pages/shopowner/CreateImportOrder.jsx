@@ -140,7 +140,7 @@ const CreateImportOrder = () => {
             </div>
           </fieldset>
           <fieldset className="px-8 py-6 bg-white shadow-md rounded-xl">
-            <h3 className="text-base font-semibold mb-3">General Infomation</h3>
+            <h3 className="text-base font-semibold mb-3">General Information</h3>
             <div className=''>
               <div className=' w-full h-[90%] bg-white'>
                 <h5 className='font-normal text-slate-400 mb-2'>Shipping Address</h5>
