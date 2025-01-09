@@ -17,8 +17,6 @@ const CategoryProductList = () => {
         setIsOpen(!isOpen);
     };
 
-    console.log(location.search)
-
     const getList = useCallback(async () => {
         const response = await axiosInstance.get(`/displayed-product/search/filter/${category}/${location.search}`)
         setList(response.data)
@@ -33,14 +31,14 @@ const CategoryProductList = () => {
         <div className="xl:pl-[15%] min-h-screen bg-slate-100 xl:pr-[15%] w-screen overflow-x-hidden ">
             <div className="relative w-full h-full overflow-hidden">
                 <BrandButtons/>
-                <FeaturedProducts/>
+                <FeaturedProducts categoryName={category}/>
                 <div className="w-full p-5 mt-3 rounded-md bg-white shadow">
-                    <h1 className="text-xl font-bold mb-4">All products</h1>
+                    <h1 className="text-xl font-bold mb-4">Tất cả sản phẩm</h1>
                     <FilterBar/>
 
                     <div className="flex justify-end items-center mt-4">
                         <div className="flex items-center gap-2">
-                            <span>Arrange</span>
+                            <span>Sắp xếp</span>
                             <Arrange setList = {setList} />
                         </div>
                         <FilterPopup isOpen={isOpen} togglePopup={togglePopup} />
