@@ -14,11 +14,11 @@ const PaymentPage = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [file, setFile] = useState(null)
     const [customer, setCustomer] = useState(null)
-    
+
     const [quantity, setQuantity] = useState(
         productList.reduce((acc, item) => {
-          acc[item.SKU] = 1;
-          return acc;
+            acc[item.SKU] = 1;
+            return acc;
         }, {})
     );
     const [isQRCodeModalOpen, setQRCodeModalOpen] = useState(false); // Trạng thái hiển thị modal
@@ -29,7 +29,7 @@ const PaymentPage = () => {
     const [validVoucher, setValidVoucher] = useState({})
     const handleApply = async () => {
         if (voucher.trim() === "") {
-        alert("Vui lòng nhập mã voucher!");
+            alert("Vui lòng nhập mã voucher!");
         } else {
             try {
                 const response = await axiosInstance.post('/voucher/check', {
@@ -73,8 +73,8 @@ const PaymentPage = () => {
                 setTotalPrice(prevState => prevState + response.data.sellingPrice * cart[i][productSKU]);
                 setQuantity((prevQuantities) => {
                     return {
-                      ...prevQuantities,
-                      [productSKU]: cart[i][productSKU],
+                        ...prevQuantities,
+                        [productSKU]: cart[i][productSKU],
                     };
                 });
             }
@@ -97,7 +97,7 @@ const PaymentPage = () => {
             method: 'POST',
             url: 'http://localhost:3000/api/invoice',
             data,
-            headers: {'Content-Type': 'multipart/form-data'}
+            headers: { 'Content-Type': 'multipart/form-data' }
         })
 
 
@@ -117,7 +117,7 @@ const PaymentPage = () => {
             }
         }
         await axiosInstance.post('/invoice/send-email', {
-            email: user.email, 
+            email: user.email,
             invoiceId: newInvoice.data.id
         })
         navigate('/personal/history');
@@ -153,7 +153,7 @@ const PaymentPage = () => {
 
             <div>
                 <section className="max-w-lg mx-auto ">
-                    <h2 className="text-xl font-semibold mb-4">Shipping address</h2>
+                    <h2 className="text-xl font-semibold mb-4">Địa chỉ giao hàng</h2>
                     <div className='flex justify-between'>
                         <p>Giao tới</p>
                         <AddressModal setAddress={setAddress} />
@@ -184,7 +184,7 @@ const PaymentPage = () => {
                 </section>
 
                 <section className="max-w-lg mb-6 w-full">
-                    <h2 className="text-xl font-semibold mb-4">Payment method</h2>
+                    <h2 className="text-xl font-semibold mb-4">Phương thức thanh toán</h2>
                     <div className="flex justify-center">
                         <div className="mt-6 flex flex-col items-center">
                             <div onClick={() => handlePaymentSelection('COD')}>
@@ -218,6 +218,12 @@ const PaymentPage = () => {
                         <p className='text-[#808090]'>Tổng tiền hàng: </p>
                         <p>{formatNumber(totalPrice)}đ</p>
                     </div>
+                    {validVoucher.discount && (
+                        <div className="flex justify-between my-4">
+                            <p className="text-[#808090]">Mức giảm giá ({validVoucher.discount}%):</p>
+                            <p>-{formatNumber((totalPrice * validVoucher.discount) / 100)}đ</p>
+                        </div>
+                    )}
                     <div className='flex justify-between my-4'>
                         <p className='text-[#808090]'>Phí vận chuyển: </p>
                         <p>16.500đ</p>
@@ -257,7 +263,7 @@ const PaymentPage = () => {
             </div>
 
             {/* QR Code Modal */}
-            {isQRCodeModalOpen && <QRCodeModal setFile = {setFile} amount={totalPrice + 16500} setQRCodeModalOpen={setQRCodeModalOpen} />}
+            {isQRCodeModalOpen && <QRCodeModal setFile={setFile} amount={totalPrice + 16500} setQRCodeModalOpen={setQRCodeModalOpen} />}
         </div>
     );
 };
