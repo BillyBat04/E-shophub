@@ -7,9 +7,10 @@ import { IoAdd } from 'react-icons/io5';
 import { FaFilter } from "react-icons/fa6";
 import axiosInstance from '../../config/api';
 import formatDate from '../../helpers/formatDate';
+import formatNumber from '../../helpers/formatNumber';
 
 const CustomerOrderManagement = () => {
-  const TABLE_HEAD = ["No", "Order Date", "Shipping Address", "Total Price", "Supplier", "Status"];
+  const TABLE_HEAD = ["No", "Order Date", "Shipping Address", "Total Price", "Supplier" , "Image" ,"Status"];
   const [supplyOrders, setSupplyOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [filter, setFilter] = useState({ sortBy: "date", sortOrder: "asc", status: "", open: false });
@@ -174,7 +175,7 @@ const CustomerOrderManagement = () => {
                     </td>
                     <td className={`${classes} p-4 border-b`}>
                       <Typography variant="small" className="text-green-600 font-semibold">
-                        ${row.totalPrice.toFixed(2)}
+                        {formatNumber(row.totalPrice)}đ
                       </Typography>
                     </td>
                     <td className={`${classes} p-4 border-b`}>
@@ -182,27 +183,35 @@ const CustomerOrderManagement = () => {
                         {row.customer.fullName}
                       </Typography>
                     </td>
-                    <td className={`${classes} p-4 border-b flex justify-center items-center`}>
-                      <span
-                        className={`px-3 py-1 text-sm rounded-full font-medium ${getStatusColor(row.status)}`}
-                      >
-                        {row.status}
-                      </span>
-                      <Menu as="div" className="relative ml-3">
-                        <MenuButton>
-                          <ChevronDownIcon className="h-5 w-5 text-gray-400 hover:text-blue-500 transition-all" />
-                        </MenuButton>
-                        <MenuItems className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg">
-                          {["PROCESSING", "SHIPPING", "COMPLETED", "CANCELED"].map((status) => (
-                            <MenuItem key={status} as="button" onClick={() => handleStatusChange(row.id, status)}>
-                              <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                {status}
-                              </span>
-                            </MenuItem>
-                          ))}
-                        </MenuItems>
-                      </Menu>
+                    <td className={`${classes} p-4 border-b`}>
+                      <Typography variant="small" className="text-gray-700">
+                        <img className="w-[60px] h-[60px] rounded-md" src={row.paymentImg} alt="Ảnh sản phẩm" />
+                      </Typography>
                     </td>
+                    <td className={`${classes} p-4 border-b`}>
+  <div className="flex items-center justify-center space-x-2">
+    <span
+      className={`px-3 py-1 text-sm rounded-full font-medium ${getStatusColor(row.status)}`}
+    >
+      {row.status}
+    </span>
+    <Menu as="div" className="relative">
+      <MenuButton>
+        <ChevronDownIcon className="h-5 w-5 text-gray-400 hover:text-blue-500 transition-all" />
+      </MenuButton>
+      <MenuItems className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg">
+        {["PROCESSING", "SHIPPING", "COMPLETED", "CANCELED"].map((status) => (
+          <MenuItem key={status} as="button" onClick={() => handleStatusChange(row.id, status)}>
+            <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              {status}
+            </span>
+          </MenuItem>
+        ))}
+      </MenuItems>
+    </Menu>
+  </div>
+</td>
+
                     <td className={`${classes} p-4 border-b`}>
                       <button
                         onClick={() => handleDetailClick(row)} // Mở modal khi click vào Detail

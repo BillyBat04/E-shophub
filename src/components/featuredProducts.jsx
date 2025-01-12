@@ -41,7 +41,7 @@ const FeaturedProducts = ({categoryName}) => {
               <div>
                 <img src={product.image} alt={product.title} className="w-full h-40 object-cover rounded" />
               </div>
-              <h3 className="text-sm font-semibold mt-4 line-clamp-2">{product.productName}</h3>
+              <h3 className="text-sm font-semibold mt-4 line-clamp-1">{product.productName}</h3>
               <p className="text-xs text-gray-500">{product.cpu} | {product.ram}GB | {product.hardDrive}GB</p>
               <div className="flex items-center mt-2">
                 <span className="text-red-500 font-bold">{formatNumber(product.sellingPrice)}đ</span>

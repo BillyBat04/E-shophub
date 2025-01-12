@@ -14,6 +14,7 @@ const PaymentPage = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [file, setFile] = useState(null)
     const [customer, setCustomer] = useState(null)
+    
     const [quantity, setQuantity] = useState(
         productList.reduce((acc, item) => {
           acc[item.SKU] = 1;
@@ -24,6 +25,28 @@ const PaymentPage = () => {
     const navigate = useNavigate();
     const { user } = useUser();
 
+    const [voucher, setVoucher] = useState("");
+    const [validVoucher, setValidVoucher] = useState({})
+    const handleApply = async () => {
+        if (voucher.trim() === "") {
+        alert("Vui lòng nhập mã voucher!");
+        } else {
+            try {
+                const response = await axiosInstance.post('/voucher/check', {
+                    name: voucher,
+                    currentDate: new Date()
+                })
+                if (response.data !== null) {
+                    setValidVoucher(response.data)
+                    setTotalPrice(prevState => prevState * (1 - response.data.discount / 100))
+                } else {
+                    alert(`Voucher: ${voucher} đã bị quá hạn`)
+                }
+            } catch (error) {
+                alert(`Voucher: ${voucher} đã bị quá hạn`)
+            }
+        }
+    };
 
     useEffect(() => {
         const getUser = async () => {
@@ -77,6 +100,7 @@ const PaymentPage = () => {
             headers: {'Content-Type': 'multipart/form-data'}
         })
 
+
         const invoiceId = newInvoice.data.id;
         for (let product of productList) {
             const displayedProduct = await axiosInstance.get(`/displayed-product/${product.SKU}`);
@@ -87,13 +111,17 @@ const PaymentPage = () => {
                     invoiceId,
                     displayedProductId: displayedProduct.data[0].id
                 });
-                navigate('/personal/history');
-                window.location.reload();
             } catch (err) {
                 console.log(err)
                 alert('Số lượng tồn kho hiện tại ít hơn số lượng bạn đặt')
             }
         }
+        await axiosInstance.post('/invoice/send-email', {
+            email: user.email, 
+            invoiceId: newInvoice.data.id
+        })
+        navigate('/personal/history');
+        window.location.reload();
     };
 
     useEffect(() => {
@@ -196,11 +224,26 @@ const PaymentPage = () => {
                     </div>
                     <div className='flex justify-between items-center'>
                         <p>Tổng tiền thanh toán: </p>
-                        <p className='ml-6 text-[#FF424E] text-2xl font-bold'>{formatNumber(totalPrice + 16500)}đ</p>
+                        <p className='ml-6 text-[#FF424E] text-2xl font-bold'>{validVoucher ? formatNumber(totalPrice + 16500) : formatNumber((totalPrice + 16500) * validVoucher.discount)}đ</p>
                     </div>
                 </section>
 
                 <section className="max-w-lg mx-auto mt-8">
+                    <div className="flex items-center space-x-2 p-4 bg-gray-100 rounded-md shadow-md">
+                        <input
+                            type="text"
+                            className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Nhập mã voucher"
+                            value={voucher}
+                            onChange={(e) => setVoucher(e.target.value)}
+                        />
+                        <button
+                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                            onClick={handleApply}
+                        >
+                            Áp dụng
+                        </button>
+                    </div>
                     <button
                         onClick={() => handleSubmit()}
                         className="w-full bg-[#FF424E] text-white py-3 rounded-lg font-semibold transition-all hover:bg-[#FF3040] flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-95"

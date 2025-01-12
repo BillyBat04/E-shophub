@@ -21,6 +21,11 @@ const ProductList = () => {
     getList()
   }, [getList])
 
+  const handleDelete = async (SKU) => {
+    await axiosInstance.delete(`/product/${SKU}`)
+    window.location.reload()
+  }
+
   const isDetailPage = location.pathname !== "/admin/products";
   const TABLE_HEAD = ["SKU", "Product Name", "Image","Purchase Price", "Selling Price", "Supplier"];
   if (isDetailPage) {
@@ -146,6 +151,9 @@ const ProductList = () => {
                             Detail
                           </button>
                         </Link>
+                        <button onClick={() => handleDelete(row.SKU)} className='ml-4 bg-black w-20 h-6 rounded-xl'>
+                            Delete
+                        </button>
                       </Typography>
                     </td>
                   </tr>

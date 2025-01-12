@@ -19,6 +19,7 @@ const MainPage = () => {
     { label: "Customer", icon: MdManageAccounts, link: "customers" },
     { label: "Employee", icon: IoMdPeople, link: "employees" },
     { label: "Supplier", icon: MdTrolley, link: "supplier" },
+    { label: "Voucher", icon: BiSolidReport, link: "voucher" },
     { label: "Report", icon: BiSolidReport, link: "reports" },
   ];
   const getFilteredItems = () => {

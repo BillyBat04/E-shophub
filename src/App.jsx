@@ -6,6 +6,7 @@ import Shoppingcart from "./pages/shoppingcart";
 import PaymentPage from "./pages/payment";
 import Chat from "./pages/shopowner/chat";
 import CustomerList from "./pages/shopowner/customerlist";
+import Voucher from "./pages/shopowner/voucher"
 import OrderDetail from "./pages/shopowner/OrderDetail";
 import Reports from "./pages/shopowner/report";
 import CustomerDetail from "./pages/shopowner/customerDetail";
@@ -37,6 +38,7 @@ import CreateInventory from "./pages/shopowner/CreateInventory";
 import PrdCategory from "./pages/shopowner/PrdCategory";
 import CustomerOrderManagement from "./pages/shopowner/CustomerOrder";
 import ConfirmOrder from "./pages/ConfirmOrder";
+import AddVoucher from "./pages/shopowner/CreateVoucher";
 
 function App() {
   const location = useLocation();
@@ -106,6 +108,9 @@ function App() {
               </Route>
               <Route path="inventory" element={<Inventory />}>
                 <Route path="create" element={<CreateInventory />} />
+              </Route>
+              <Route path="voucher" element={<Voucher />}>
+                <Route path="create" element={<AddVoucher />} />
               </Route>
             </Route>
           </Routes>
