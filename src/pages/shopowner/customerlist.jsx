@@ -9,7 +9,7 @@ import formatDate from "../../helpers/formatDate";
 
 const CustomerList = () => {
   const isDetailPage = location.pathname !== "/admin/customers";
-  const TABLE_HEAD = ["No", "Email", "Họ Tên", "Giới tính" ,"Số điện thoại", "Ngày sinh", "Địa chỉ"];
+  const TABLE_HEAD = ["No", "Email", "Họ Tên", "Giới tính", "Số điện thoại", "Ngày sinh", "Địa chỉ"];
   const [CustomerList, setCustomerList] = useState([])
 
   const getList = useCallback(async () => {
@@ -134,7 +134,7 @@ const CustomerList = () => {
                       >
                         <Link to={row.id}>
                           <button className='bg-black w-20 h-6 rounded-xl'>
-                            Detail
+                            Chi tiết
                           </button>
                         </Link>
                       </Typography>

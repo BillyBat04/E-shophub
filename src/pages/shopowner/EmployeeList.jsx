@@ -32,7 +32,7 @@ const EmployeeList = () => {
       );
       window.location.reload()
     } catch (error) {
-      console.error("Failed to update role", error);
+      console.error("Cập nhật vai trò thất bại", error);
     }
   };
 

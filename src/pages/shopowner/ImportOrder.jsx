@@ -21,7 +21,7 @@ const ImportOrder = () => {
     const response = await axiosInstance.get('/supply-order');
     setSupplyOrders(response.data);
     setFilteredOrders(response.data); // Initia
-    
+
   }, []);
 
 
@@ -47,7 +47,7 @@ const ImportOrder = () => {
       setCompleted(completedCount);
     };
 
-  statistics();
+    statistics();
   }, [supplyOrders]);
 
   // Handle sorting
@@ -99,11 +99,11 @@ const ImportOrder = () => {
     <div className='w-full h-full flex'>
       <div className='w-full h-full flex flex-col'>
         <div className='mb-5 max-h-[140px] w-full flex h-1/5 space-x-5'>
-        <div className='w-[25%] p-6 h-full font-semibold text-white bg-black shadow-md rounded-[20px]'>
+          <div className='w-[25%] p-6 h-full font-semibold text-white bg-black shadow-md rounded-[20px]'>
             <div className='w-full h-[100%] flex flex-row items-center justify-between'>
               <div className='flex flex-col h-full justify-between'>
                 <label className='text-base '>
-                  Total orders
+                  Tổng số đơn hàng
                 </label>
                 <span className='text-5xl'>{supplyOrders?.length}</span>
               </div>
@@ -116,7 +116,7 @@ const ImportOrder = () => {
             <div className='w-full h-[100%] flex flex-row items-center justify-between'>
               <div className='flex flex-col h-full justify-between'>
                 <label className='text-base '>
-                  Pending orders
+                  Đơn hàng đang chờ xử lý
                 </label>
                 <span className='text-5xl'>{pending}</span>
               </div>
@@ -129,7 +129,7 @@ const ImportOrder = () => {
             <div className='w-full h-[100%] flex flex-row items-center justify-between'>
               <div className='flex flex-col h-full justify-between'>
                 <label className='text-base '>
-                  Successful ords
+                  Đơn hàng xử lý thành công
                 </label>
                 <span className='text-5xl'>{completed}</span>
               </div>
@@ -149,16 +149,16 @@ const ImportOrder = () => {
                 onClick={() => setFilter({ ...filter, open: !filter.open })}
               >
                 <FaFilter className="w-6 h-6 mr-2" />
-                <span>Filter</span>
+                <span>Bộ lọc</span>
                 <ChevronDownIcon className="w-5 h-5 ml-2 text-gray-400" />
               </MenuButton>
               {filter.open && (
                 <MenuItems className="flex flex-col items-start absolute right-auto z-10 w-56 bg-white rounded-lg customShadow">
                   <MenuItem className="w-full" onClick={() => handleSort("date", filter.sortOrder)}>
-                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sort by Date</span>
+                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sắp xếp theo ngày</span>
                   </MenuItem>
                   <MenuItem className="w-full" onClick={() => handleSort("status", filter.sortOrder)}>
-                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sort by Status</span>
+                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sắp xếp theo Trạng thái</span>
                   </MenuItem>
                 </MenuItems>
               )}
@@ -166,7 +166,7 @@ const ImportOrder = () => {
 
             <Link className="bg-black rounded-[20px] h-10 w-[160px] flex justify-center" to="/admin/orders/create">
               <button className="flex items-center">
-                <span className="text-white font-bold">Create order</span>
+                <span className="text-white font-bold">Tạo đơn hàng</span>
                 <IoAdd className="w-6 h-6 ml-2 text-white" />
               </button>
             </Link>
@@ -239,7 +239,7 @@ const ImportOrder = () => {
                       <Typography variant="small" className="font-normal text-white">
                         <Link to={row.no}>
                           <button className='bg-black w-20 h-6 rounded-xl'>
-                            Detail
+                            Chi tiết
                           </button>
                         </Link>
                       </Typography>

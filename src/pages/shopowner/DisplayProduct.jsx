@@ -13,14 +13,14 @@ const DisplayedProduct = () => {
   const getList = useCallback(async () => {
     const response = await axiosInstance.get('/displayed-product')
     setList(response.data)
-  }, []) 
+  }, [])
 
   useEffect(() => {
     getList()
   }, [getList])
 
   const isDetailPage = location.pathname !== "/admin/displayed-product";
-  const TABLE_HEAD = ["No", "Product Name", "Image","Selling Price", "Quantity"];
+  const TABLE_HEAD = ["No", "Product Name", "Image", "Selling Price", "Quantity"];
   if (isDetailPage) {
     return <Outlet></Outlet>
   }
@@ -41,9 +41,9 @@ const DisplayedProduct = () => {
             <FaFilter className="w-6 h-6"></FaFilter>
           </button>
         </form>
-        <Link className=" bg-black rounded-[20px] px-6 py-2" to="/admin/displayed-product/create"> 
+        <Link className=" bg-black rounded-[20px] px-6 py-2" to="/admin/displayed-product/create">
           <button className="flex items-center">
-            <span className="text-white font-bold">Add Product</span>
+            <span className="text-white font-bold">Thêm sản phẩm</span>
             <IoAdd className="w-6 h-6 text-white"></IoAdd>
           </button>
         </Link>

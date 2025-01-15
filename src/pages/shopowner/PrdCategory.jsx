@@ -64,7 +64,7 @@ const PrdCategory = () => {
               className='h-full flex gap-2 items-center bg-black text-white px-3 rounded-[20px]'
               onClick={toggleInput}>
               <IoIosAdd className='w-6 h-6' />
-              <span className='font-medium'>Add category</span>
+              <span className='font-medium'>Thêm danh mục</span>
             </button>
           ) : (
             // Textbox with background
@@ -131,7 +131,7 @@ const PrdCategory = () => {
                     <td className={classes}>
                       <Typography variant="small" className="font-normal text-white">
                         <Link to={row.id}>
-                          <button className="bg-black w-20 h-6 rounded-xl">Detail</button>
+                          <button className="bg-black w-20 h-6 rounded-xl">Chi tiết</button>
                         </Link>
                       </Typography>
                     </td>

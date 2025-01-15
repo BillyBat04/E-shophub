@@ -71,7 +71,7 @@ const OrderManagement = () => {
             <div className='w-full h-[100%] flex flex-row items-center justify-between'>
               <div className='flex flex-col h-full justify-between'>
                 <label className='text-base '>
-                  Total orders
+                  Tổng số đơn hàng
                 </label>
                 <span className='text-5xl'>100</span>
               </div>
@@ -84,7 +84,7 @@ const OrderManagement = () => {
             <div className='w-full h-[100%] flex flex-row items-center justify-between'>
               <div className='flex flex-col h-full justify-between'>
                 <label className='text-base '>
-                  Pending orders
+                  Đơn hàng đang chờ xử lý
                 </label>
                 <span className='text-5xl'>100</span>
               </div>
@@ -97,7 +97,7 @@ const OrderManagement = () => {
             <div className='w-full h-[100%] flex flex-row items-center justify-between'>
               <div className='flex flex-col h-full justify-between'>
                 <label className='text-base '>
-                  Successful ords
+                  Đơn hàng xử lý thành công
                 </label>
                 <span className='text-5xl'>100</span>
               </div>
@@ -207,7 +207,7 @@ const OrderManagement = () => {
                       >
                         <Link to={row.no}>
                           <button className='bg-black w-20 h-6 rounded-xl'>
-                            Detail
+                            Chi tiết
                           </button>
                         </Link>
                       </Typography>

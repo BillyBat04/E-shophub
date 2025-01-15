@@ -10,7 +10,7 @@ import formatDate from '../../helpers/formatDate';
 import formatNumber from '../../helpers/formatNumber';
 
 const CustomerOrderManagement = () => {
-  const TABLE_HEAD = ["No", "Order Date", "Shipping Address", "Total Price", "Supplier" , "Image" ,"Status"];
+  const TABLE_HEAD = ["No", "Order Date", "Shipping Address", "Total Price", "Supplier", "Image", "Status"];
   const [supplyOrders, setSupplyOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [filter, setFilter] = useState({ sortBy: "date", sortOrder: "asc", status: "", open: false });
@@ -113,16 +113,16 @@ const CustomerOrderManagement = () => {
               {filter.open && (
                 <MenuItems className="flex flex-col items-start absolute right-auto z-10 w-56 bg-white rounded-lg customShadow">
                   <MenuItem className="w-full" onClick={() => handleSortAndFilter("date", filter.sortOrder, filter.status)}>
-                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sort by Date</span>
+                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sắp xếp theo Ngày</span>
                   </MenuItem>
                   <MenuItem className="w-full" onClick={() => handleSortAndFilter("status", filter.sortOrder, filter.status)}>
-                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sort by Status</span>
+                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sắp xếp theo Trạng thái</span>
                   </MenuItem>
                   <MenuItem className="w-full" onClick={() => setFilter({ ...filter, status: "PROCESSING" })}>
-                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Filter by Processing</span>
+                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tình trạng đang xử lý</span>
                   </MenuItem>
                   <MenuItem className="w-full" onClick={() => setFilter({ ...filter, status: "COMPLETED" })}>
-                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Filter by Completed</span>
+                    <span className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tình trạng đã hoàn thành</span>
                   </MenuItem>
                   {/* Các trạng thái khác */}
                 </MenuItems>
@@ -131,7 +131,7 @@ const CustomerOrderManagement = () => {
 
             <Link className="bg-black rounded-[20px] h-10 w-[160px] flex justify-center" to="/admin/orders/create">
               <button className="flex items-center">
-                <span className="text-white font-bold">Create order</span>
+                <span className="text-white font-bold">Tạo đơn hàng</span>
                 <IoAdd className="w-6 h-6 ml-2 text-white" />
               </button>
             </Link>
@@ -189,35 +189,35 @@ const CustomerOrderManagement = () => {
                       </Typography>
                     </td>
                     <td className={`${classes} p-4 border-b`}>
-  <div className="flex items-center justify-center space-x-2">
-    <span
-      className={`px-3 py-1 text-sm rounded-full font-medium ${getStatusColor(row.status)}`}
-    >
-      {row.status}
-    </span>
-    <Menu as="div" className="relative">
-      <MenuButton>
-        <ChevronDownIcon className="h-5 w-5 text-gray-400 hover:text-blue-500 transition-all" />
-      </MenuButton>
-      <MenuItems className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg">
-        {["PROCESSING", "SHIPPING", "COMPLETED", "CANCELED"].map((status) => (
-          <MenuItem key={status} as="button" onClick={() => handleStatusChange(row.id, status)}>
-            <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              {status}
-            </span>
-          </MenuItem>
-        ))}
-      </MenuItems>
-    </Menu>
-  </div>
-</td>
+                      <div className="flex items-center justify-center space-x-2">
+                        <span
+                          className={`px-3 py-1 text-sm rounded-full font-medium ${getStatusColor(row.status)}`}
+                        >
+                          {row.status}
+                        </span>
+                        <Menu as="div" className="relative">
+                          <MenuButton>
+                            <ChevronDownIcon className="h-5 w-5 text-gray-400 hover:text-blue-500 transition-all" />
+                          </MenuButton>
+                          <MenuItems className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg">
+                            {["PROCESSING", "SHIPPING", "COMPLETED", "CANCELED"].map((status) => (
+                              <MenuItem key={status} as="button" onClick={() => handleStatusChange(row.id, status)}>
+                                <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                  {status}
+                                </span>
+                              </MenuItem>
+                            ))}
+                          </MenuItems>
+                        </Menu>
+                      </div>
+                    </td>
 
                     <td className={`${classes} p-4 border-b`}>
                       <button
                         onClick={() => handleDetailClick(row)} // Mở modal khi click vào Detail
                         className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg shadow-sm"
                       >
-                        Detail
+                        Chi tiết
                       </button>
                     </td>
                   </tr>
@@ -232,20 +232,20 @@ const CustomerOrderManagement = () => {
       {isModalOpen && selectedRow && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-1/3 shadow-lg">
-            <div className="text-lg font-bold mb-4">Order Details</div>
+            <div className="text-lg font-bold mb-4">Chi tiết đơn hàng</div>
             <div className="space-y-2">
-              <p><strong>Invoice Date:</strong> {formatDate(selectedRow.invoiceDate)}</p>
-              <p><strong>Address:</strong> {selectedRow.address}</p>
-              <p><strong>Total Price:</strong> ${selectedRow.totalPrice.toFixed(2)}</p>
-              <p><strong>Customer:</strong> {selectedRow.customer.fullName}</p>
-              <p><strong>Status:</strong> {selectedRow.status}</p>
+              <p><strong>Ngày lập hóa đơn:</strong> {formatDate(selectedRow.invoiceDate)}</p>
+              <p><strong>Địa chỉ:</strong> {selectedRow.address}</p>
+              <p><strong>Tổng tiền:</strong> ${selectedRow.totalPrice.toFixed(2)}</p>
+              <p><strong>Tên khách hàng:</strong> {selectedRow.customer.fullName}</p>
+              <p><strong>Trạng thái đơn hàng:</strong> {selectedRow.status}</p>
             </div>
             <div className="mt-4 flex justify-end">
               <button
                 onClick={closeModal}  // Đóng modal
                 className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
               >
-                Close
+                Đóng
               </button>
             </div>
           </div>

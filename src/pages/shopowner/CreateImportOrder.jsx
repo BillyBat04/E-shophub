@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import axiosInstance from "../../config/api";
 import { RxCross2 } from "react-icons/rx";
+
 const CreateImportOrder = () => {
   const { productId } = useParams();
   const navigate = useNavigate()
@@ -24,7 +25,6 @@ const CreateImportOrder = () => {
   const [totalQuantity, setTotalQuantity] = useState(0)
   const [totalPrice, setTotalPrice] = useState(0)
 
-
   const addproductOption = () => {
     setproductOptions((prevOptions) => [
       ...prevOptions,
@@ -40,7 +40,6 @@ const CreateImportOrder = () => {
     const response = await axiosInstance.get('/supplier')
     setSuppliers(response.data)
   }, [])
-
 
   useEffect(() => {
     getSuppliers()
@@ -60,7 +59,7 @@ const CreateImportOrder = () => {
     console.log(optionId)
     setQuantities(prevState => ({
       ...prevState,
-      [optionId]: value, // Cập nhật quantity của option tương ứng
+      [optionId]: value,
     }));
   };
 
@@ -111,30 +110,28 @@ const CreateImportOrder = () => {
     } catch (error) {
       console.log(error)
     }
-
-
   }
 
   return (
     <div className="text-sm bg-customGray3">
       <div className="text-base grid lg:grid-cols-[repeat(3,_1fr)] items-center p-6 bg-white shadow-md rounded-[20px]">
         <Link className='flex items-center' to="..">
-          <button className="w-[200px] mr-auto text-gray-600 text-lg">&#8592; Product {productId}</button>
+          <button className="w-[200px] mr-auto text-gray-600 text-lg">&#8592; Sản phẩm {productId}</button>
         </Link>
         <p className="text-base font-semibold justify-self-center">
-          ADD PRODUCT
+          THÊM SẢN PHẨM
         </p>
       </div>
       <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-[1fr_1fr] gap-4">
         <div className="flex flex-col gap-4">
           <fieldset className="px-8 py-6 bg-white shadow-md rounded-xl">
-            <h3 className="text-base mb-3 font-semibold">Supplier</h3>
+            <h3 className="text-base mb-3 font-semibold">Nhà cung cấp</h3>
             <div className="flex-grow space-y-2">
               <select
                 onChange={e => handleSupplierChanged(e)}
                 className="w-full bg-slate-200 p-2 border border-black rounded-lg"
                 id="product-category">
-                <option>Select supplier</option>
+                <option>Chọn nhà cung cấp</option>
                 {suppliers.map((supplier, index) => {
                   return (
                     <option key={index} value={supplier.id} >{supplier.supplierName}</option>
@@ -144,33 +141,33 @@ const CreateImportOrder = () => {
             </div>
           </fieldset>
           <fieldset className="px-8 py-6 bg-white shadow-md rounded-xl">
-            <h3 className="text-base font-semibold mb-3">General Information</h3>
+            <h3 className="text-base font-semibold mb-3">Thông tin chung</h3>
             <div className=''>
               <div className=' w-full h-[90%] bg-white'>
-                <h5 className='font-normal text-slate-400 mb-2'>Shipping Address</h5>
+                <h5 className='font-normal text-slate-400 mb-2'>Địa chỉ giao hàng</h5>
                 <input
                   value={address}
                   onChange={e => setAddress(e.target.value)}
                   className="w-full bg-slate-200 p-2 mb-2 border border-black rounded-lg"
                 />
-                <h5 className='font-normal text-slate-400 mb-2'>Products</h5>
+                <h5 className='font-normal text-slate-400 mb-2'>Sản phẩm</h5>
                 <button
                   className="border border-blue-700 px-3 py-1 rounded-md text-blue-700"
                   type="button"
                   onClick={addproductOption}>
-                  Add Product
+                  Thêm sản phẩm
                 </button>
                 <div className=''>
                   {productOptions.map((option, index) => {
                     return (
                       <div key={option.id} className="flex gap-4 mt-3">
                         <div className="flex-grow w-1/2">
-                          <h5 className='font-normal text-slate-400 mb-2' htmlFor={`sku-${option.id}`}>Product</h5>
+                          <h5 className='font-normal text-slate-400 mb-2'>Sản phẩm</h5>
                           <select
                             onChange={(e) => handleProductChanged(e.target.value)}
                             className="w-full bg-slate-200 p-2 border border-black rounded-lg"
                             id="product-category">
-                            <option>Select product</option>
+                            <option>Chọn sản phẩm</option>
                             {products.map((product, index) => {
                               return (
                                 <option key={index} value={product.SKU} >{product.productName}</option>
@@ -179,7 +176,7 @@ const CreateImportOrder = () => {
                           </select>
                         </div>
                         <div className="flex-grow w-1/2">
-                          <h5 className='font-normal text-slate-400 mb-2' htmlFor={`quantity-${option.id}`}>Quantity</h5>
+                          <h5 className='font-normal text-slate-400 mb-2'>Số lượng</h5>
                           <input
                             className="w-full bg-slate-200 p-2 border border-black rounded-lg"
                             value={quantities[index] || ''}
@@ -201,7 +198,7 @@ const CreateImportOrder = () => {
                     onClick={e => handleConfirm(e)}
                     className="opacity-50 hover:opacity-100 duration-150 mt-4 ml-[auto] self-end bg-black text-white text-base px-8 py-3 rounded-lg shadow-md"
                     type="button">
-                    <span>Confirm</span>
+                    <span>Xác nhận</span>
                   </button>
                 </div>
               </div>
@@ -210,7 +207,7 @@ const CreateImportOrder = () => {
         </div>
         <div className="flex flex-col gap-4">
           <div className="px-8 py-6 bg-white shadow-md rounded-xl">
-            <h3 className="text-base font-semibold mb-3">Products</h3>
+            <h3 className="text-base font-semibold mb-3">Sản phẩm</h3>
             {productList?.map((product, index) => {
               return (
                 <div key={index} className="flex items-center p-2 rounded-md border border-black mt-4">
@@ -218,21 +215,21 @@ const CreateImportOrder = () => {
                     <img src={product.image} className="w-full h-full" />
                   </div>
                   <div className="ml-6 w-2/3">
-                    <p className="">Product Name: <span className=" font-bold">{product.productName}</span></p>
-                    <p>Quantity: {quantities[index]}</p>
+                    <p>Tên sản phẩm: <span className=" font-bold">{product.productName}</span></p>
+                    <p>Số lượng: {quantities[index]}</p>
                   </div>
                 </div>
               )
             })}
-            <h3 className="text-base font-semibold mt-3">Address: {address}</h3>
-            <h3 className="text-base font-semibold mt-3">Total Quantity: {totalQuantity}</h3>
-            <h3 className="text-base font-semibold mt-3">Total Price: {totalPrice}</h3>
+            <h3 className="text-base font-semibold mt-3">Địa chỉ: {address}</h3>
+            <h3 className="text-base font-semibold mt-3">Tổng số lượng: {totalQuantity}</h3>
+            <h3 className="text-base font-semibold mt-3">Tổng giá: {totalPrice}</h3>
           </div>
           <button
             onClick={e => handleSubmit(e)}
             className="w-max self-end bg-black text-white text-base px-8 py-3 rounded-lg shadow-md"
             type="button">
-            <span>Submit</span>
+            <span>Gửi đơn hàng</span>
           </button>
         </div>
       </form>

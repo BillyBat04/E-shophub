@@ -24,38 +24,38 @@ const CustomerDetail = () => {
             gender,
             nation
         });
-        alert('Customer information saved!');
+        alert('Thông tin khách hàng đã được lưu!');
     };
 
     return (
         <div className='w-full h-full'>
             <div className="text-base grid mb-3 lg:grid-cols-[repeat(3,_1fr)] items-center h-16 bg-white shadow-md rounded-[20px]">
                 <Link className='flex items-center' to="..">
-                    <button className="w-[100px] mr-auto text-gray-600 text-lg">&#8592; List</button>
+                    <button className="w-[100px] mr-auto text-gray-600 text-lg">&#8592; Danh sách khách hàng</button>
                 </Link>
                 <p className="text-base font-semibold justify-self-center">
-                    CUSTOMER INFORMATION
+                    THÔNG TIN KHÁCH HÀNG
                 </p>
             </div>
             <div className='h-full gap-3 grid grid-cols-7 w-full'>
                 <div className='col-span-3 h-[87%] p-5 bg-white rounded-lg'>
-                    <h3 className="text-base mb-3 font-semibold">Avatar</h3>
+                    <h3 className="text-base mb-3 font-semibold">Ảnh đại diện</h3>
                     <div className="flex flex-col items-center">
                         <div className="h-32 w-32 mb-4 rounded-full overflow-hidden border-2 border-gray-300">
                             {selectedAvatar ? (
                                 <img
                                     src={selectedAvatar}
-                                    alt="Selected Avatar"
+                                    alt="Ảnh đại diện"
                                     className="h-full w-full object-cover"
                                 />
                             ) : (
                                 <div className="h-full w-full flex items-center justify-center">
-                                    No Avatar
+                                    Chưa có ảnh
                                 </div>
                             )}
                         </div>
                         <label className="text-xs cursor-pointer bg-blue-500 text-white px-3 py-2 rounded-lg">
-                            Select Avatar
+                            Chọn ảnh
                             <input
                                 type="file"
                                 accept="image/*"
@@ -67,73 +67,73 @@ const CustomerDetail = () => {
                 </div>
                 <div className='col-span-3'>
                     <div className='h-[87%] w-[100%] bg-white rounded-lg p-5'>
-                        <h3 className="text-base mb-3 font-semibold">Information</h3>
+                        <h3 className="text-base mb-3 font-semibold">Thông tin</h3>
                         <div className='pt-1'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Name</h5>
+                            <h5 className='font-normal text-slate-400 mb-2'>Họ và tên</h5>
                             <input className='pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>
                         <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Username</h5>
+                            <h5 className='font-normal text-slate-400 mb-2'>Tên người dùng</h5>
                             <input className='pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>
                         <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Birthday</h5>
+                            <h5 className='font-normal text-slate-400 mb-2'>Ngày sinh</h5>
                             <DatePicker
                                 selected={birthday}
                                 onChange={(date) => setBirthday(date)}
                                 className="pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black"
-                                placeholderText="Select date"
+                                placeholderText="Chọn ngày"
                                 dateFormat="yyyy/MM/dd"
                             />
                         </div>
                         <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Gender</h5>
+                            <h5 className='font-normal text-slate-400 mb-2'>Giới tính</h5>
                             <div className="flex items-center gap-4">
                                 <label className="flex items-center gap-2">
                                     <input
                                         type="radio"
                                         name="gender"
-                                        value="Male"
-                                        checked={gender === 'Male'}
+                                        value="Nam"
+                                        checked={gender === 'Nam'}
                                         onChange={(e) => setGender(e.target.value)}
                                     />
-                                    Male
+                                    Nam
                                 </label>
                                 <label className="flex items-center gap-2">
                                     <input
                                         type="radio"
                                         name="gender"
-                                        value="Female"
-                                        checked={gender === 'Female'}
+                                        value="Nữ"
+                                        checked={gender === 'Nữ'}
                                         onChange={(e) => setGender(e.target.value)}
                                     />
-                                    Female
+                                    Nữ
                                 </label>
                                 <label className="flex items-center gap-2">
                                     <input
                                         type="radio"
                                         name="gender"
-                                        value="Other"
-                                        checked={gender === 'Other'}
+                                        value="Khác"
+                                        checked={gender === 'Khác'}
                                         onChange={(e) => setGender(e.target.value)}
                                     />
-                                    Other
+                                    Khác
                                 </label>
                             </div>
                         </div>
                         <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Nation</h5>
+                            <h5 className='font-normal text-slate-400 mb-2'>Quốc tịch</h5>
                             <select
                                 value={nation}
                                 onChange={(e) => setNation(e.target.value)}
                                 className='pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black'
                             >
-                                <option value="" disabled>Select Nation</option>
-                                <option value="USA">USA</option>
+                                <option value="" disabled>Chọn quốc tịch</option>
+                                <option value="Mỹ">Mỹ</option>
                                 <option value="Canada">Canada</option>
-                                <option value="Vietnam">Vietnam</option>
-                                <option value="Japan">Japan</option>
-                                <option value="Other">Other</option>
+                                <option value="Việt Nam">Việt Nam</option>
+                                <option value="Nhật Bản">Nhật Bản</option>
+                                <option value="Khác">Khác</option>
                             </select>
                         </div>
                     </div>
@@ -144,7 +144,7 @@ const CustomerDetail = () => {
                         onClick={handleSave}
                         className='w-36 h-12 rounded-xl bg-customBlack text-white'
                     >
-                        Save
+                        Lưu
                     </button>
                 </div>
             </div>
