@@ -155,7 +155,7 @@ const CreateDisplayedProduct = () => {
                 onClick={(e) => handleSubmit(e)}
                 className="mt-4 w-max self-end bg-black text-white text-base px-8 py-3 rounded-lg shadow-md"
                 type="submit">
-                <span>Submit</span>
+                <span>Hoàn tất</span>
             </button>
             </div>
             </div>}

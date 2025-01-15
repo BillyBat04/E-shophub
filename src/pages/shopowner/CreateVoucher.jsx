@@ -42,7 +42,7 @@ const AddVoucher = () => {
             &#8592; Voucher {supplierId}
           </button>
         </Link>
-        <p className="text-base font-semibold justify-self-center">VOUCHER INFORMATION</p>
+        <p className="text-base font-semibold justify-self-center">Thông tin mã giảm giá</p>
       </div>
       <div className="w-2/3 mx-auto mt-4 h-full">
         <div className="grid grid-rows-6 gap-4">
@@ -50,18 +50,18 @@ const AddVoucher = () => {
             onSubmit={(e) => handleSubmit(e)}
             className="p-5 row-span-4 w-full h-full bg-white rounded-lg customShadow"
           >
-            <h3 className="text-base mb-3 font-semibold">General Information</h3>
+            <h3 className="text-base mb-3 font-semibold">Thông tin chung</h3>
             <div className="pb-3">
-              <h5 className="font-normal text-slate-400 mb-2">Voucher Name</h5>
+              <h5 className="font-normal text-slate-400 mb-2">Mã giảm giá:</h5>
               <input
                 value={voucher}
                 onChange={(e) => setVoucher(e.target.value)}
                 className="pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black"
               />
-              <button onClick={() => generateCode()} className='p-2 bg-black text-white font-bold rounded-md mt-4'>Generate code</button>
+              <button onClick={() => generateCode()} className='p-2 bg-black text-white font-bold rounded-md mt-4'>Tạo mã giảm giá</button>
             </div>
             <div className="pb-3">
-              <h5 className="font-normal text-slate-400 mb-2">Start Date</h5>
+              <h5 className="font-normal text-slate-400 mb-2">Ngày bắt đầu:</h5>
               <DatePicker
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
@@ -70,7 +70,7 @@ const AddVoucher = () => {
               />
             </div>
             <div className="pb-3">
-              <h5 className="font-normal text-slate-400 mb-2">End Date</h5>
+              <h5 className="font-normal text-slate-400 mb-2">Ngày hết hạn:</h5>
               <DatePicker
                 selected={endDate}
                 onChange={(date) => setEndDate(date)}
@@ -79,7 +79,7 @@ const AddVoucher = () => {
               />
             </div>
             <div className="pb-3">
-              <h5 className="font-normal text-slate-400 mb-2">Discount</h5>
+              <h5 className="font-normal text-slate-400 mb-2">Mức giảm:</h5>
               <input
                 value={discount}
                 onChange={(e) => setDiscount(e.target.value)}
@@ -90,7 +90,7 @@ const AddVoucher = () => {
               className="bg-black p-2 w-full rounded-md text-white opacity-50 hover:opacity-100 duration-150"
               type="submit"
             >
-              SUBMIT
+              Hoàn tất
             </button>
           </form>
         </div>

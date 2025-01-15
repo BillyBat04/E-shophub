@@ -58,7 +58,7 @@ const EmployeeList = () => {
         </form>
         <Link to="addemployee">
           <button className="flex items-center gap-2 bg-black rounded-[20px] px-4 py-2">
-            <span className="text-white font-bold">Add new employee</span>
+            <span className="text-white font-bold">Thêm nhân viên mới</span>
             <IoAdd className="w-6 h-6 text-white"></IoAdd>
           </button>
         </Link>
@@ -157,7 +157,7 @@ const EmployeeList = () => {
                       >
                         <Link to={row.id}>
                           <button className='bg-black w-20 h-6 rounded-xl'>
-                            Detail
+                            Chi tiết
                           </button>
                         </Link>
                       </Typography>

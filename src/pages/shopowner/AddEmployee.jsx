@@ -80,7 +80,7 @@ const AddEmployee = () => {
                                 )}
                             </div>
                             <label className="text-xs cursor-pointer bg-blue-500 text-white px-3 py-2 rounded-lg">
-                                Select Avatar
+                                Chọn ảnh đại diện
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -93,9 +93,9 @@ const AddEmployee = () => {
                 </div>
                 <div>
                     <div className=' h-fit bg-white rounded-lg p-5'>
-                        <h3 className="text-base mb-3 font-semibold">Information</h3>
+                        <h3 className="text-base mb-3 font-semibold">Thông tin nhân viên</h3>
                         <div className='pt-1'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Full Name</h5>
+                            <h5 className='font-normal text-slate-400 mb-2'>Họ và tên</h5>
                             <input value={fullName} onChange={e => setFullName(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>
                         <div className='pt-1'>
@@ -111,8 +111,8 @@ const AddEmployee = () => {
                             <h5 className='font-normal text-slate-400 mb-2'>Role</h5>
                             <select onChange={e => setRole(e.target.value)} className="pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black">
                                 <option value="">Select role</option>
-                                <option value="WHEMPLOYEE">Warehouse Employee</option>
-                                <option value="DEEMPLOYEE">Delivery Employee</option>
+                                <option value="WHEMPLOYEE">Nhân viên kho</option>
+                                <option value="DEEMPLOYEE">Nhân viên vận chuyển</option>
                             </select>
                         </div>
                         <div className='pt-3'>
@@ -120,7 +120,7 @@ const AddEmployee = () => {
                             <input value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} className=' pl-2 font-normal rounded-md bg-slate-50 border border-slate-500 w-full h-10 text-black' />
                         </div>
                         <div className='pt-3'>
-                            <h5 className='font-normal text-slate-400 mb-2'>Start working Day</h5>
+                            <h5 className='font-normal text-slate-400 mb-2'>Ngày bắt đầu công việc</h5>
                             <input
                                 type="date"
                                 value={startDate}
@@ -131,7 +131,7 @@ const AddEmployee = () => {
                         </div>
                     </div >
                     <div className='pt-5 row-span-1 flex justify-end items-center'>
-                        <button onClick={e => handleSubmit(e)} type='button' className='w-36 h-12 rounded-xl bg-customBlack text-white'>Submit</button>
+                        <button onClick={e => handleSubmit(e)} type='button' className='w-36 h-12 rounded-xl bg-customBlack text-white'>Hoàn tất</button>
                     </div>
                 </div>
             </div >
