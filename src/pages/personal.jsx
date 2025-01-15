@@ -6,37 +6,38 @@ import { Avatar } from '@mui/material';
 
 const Personal = () => {
     const location = useLocation();
-    const [customer, setCustomer] = useState()
-    const {user} = useUser()
+    const [customer, setCustomer] = useState();
+    const { user } = useUser();
     const item = [
         {
-            name: "History",
+            name: "Lịch sử",
             link: "history"
         },
         {
-            name: "Information",
+            name: "Thông tin cá nhân",
             link: "information"
         },
-    ]
-    
+    ];
+
     useEffect(() => {
         const getUser = async () => {
-            const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`)
-            setCustomer(response.data)
-        }
-        getUser()
-    }, [user])
+            const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`);
+            setCustomer(response.data);
+        };
+        getUser();
+    }, [user]);
 
     return (
         <div className='flex flex-col w-screen h-full'>
             <div className="flex p-8 bg-gray-100 min-h-screen">
+                {/* Sidebar */}
                 <div className="w-1/4 h-[81%] p-6 flex flex-col items-center justify-center bg-white shadow-lg rounded-2xl">
-                    <Avatar alt='avatar' src={user?.image} sx={{height: '100px', width: '100px'}}/>
+                    <Avatar alt='avatar' src={user?.image} sx={{ height: '100px', width: '100px' }} />
                     <h2 className="text-2xl font-bold my-10">{customer?.fullName}</h2>
                     {item.map((tab) => (
                         <Link
                             to={tab.link}
-                            key={tab.link} 
+                            key={tab.link}
                             className={`w-full text-center py-4 mb-4 rounded-full ${location.pathname.includes(tab.link)
                                 ? 'bg-black text-white' : 'text-black border border-black'
                                 }`}
@@ -44,8 +45,9 @@ const Personal = () => {
                             {tab.name}
                         </Link>
                     ))}
-                    <button className="w-full py-2 text-black font-semibold">Log out</button>
+                    <button className="w-full py-2 text-black font-semibold">Đăng xuất</button>
                 </div>
+                {/* Content */}
                 <div className="flex items-center flex-col w-full">
                     <Outlet />
                 </div>

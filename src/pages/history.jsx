@@ -47,7 +47,7 @@ const History = () => {
         }
     };
 
-    const TABLE_HEAD = ['No', 'Invoice Date', 'Total Price', 'Address', 'Status'];
+    const TABLE_HEAD = ['STT', 'Ngày tạo đơn', 'Tổng tiền', 'Địa chỉ', 'Trạng thái'];
 
     return (
         <div className="flex items-center flex-col w-full ml-6">
@@ -63,7 +63,7 @@ const History = () => {
                 ))}
             </div>
 
-            {/* Orders table */}
+            {/* Bảng lịch sử đơn hàng */}
             <div className="w-full min-w-max table-auto text-center bg-white p-4 rounded-md">
                 <table className="w-full min-w-max table-auto text-center">
                     <thead>
@@ -123,7 +123,7 @@ const History = () => {
                                                 }}
                                                 className="bg-black w-20 h-6 rounded-xl"
                                             >
-                                                Detail
+                                                Chi tiết
                                             </button>
                                         </Typography>
                                     </td>

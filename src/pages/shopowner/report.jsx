@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import CustomBarChart from '../../custom/customBarchart';
 import { Card, Typography } from "@material-tailwind/react";
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 
 const Reports = () => {
-  const TABLE_HEAD = ["No", "SKU", "Image", "Name", "Price", "Sold", "Inventory", "Rating"];
+  const TABLE_HEAD = ["STT", "SKU", "Hình ảnh", "Tên sản phẩm", "Giá", "Đã bán", "Tồn kho", "Đánh giá"];
 
   const tableRows = [
     {
@@ -17,49 +17,9 @@ const Reports = () => {
       inventory: "1000",
       rating: "5",
     },
-    {
-      no: "1",
-      sku: "0312873",
-      img: "src/assets/16pr.svg",
-      name: "iPhone 16 Pro",
-      price: "20.000.000 VND",
-      sold: "1000",
-      inventory: "1000",
-      rating: "5",
-    },
-    {
-      no: "1",
-      sku: "0312873",
-      img: "src/assets/16pr.svg",
-      name: "iPhone 16 Pro",
-      price: "20.000.000 VND",
-      sold: "1000",
-      inventory: "1000",
-      rating: "5",
-    },
-    {
-      no: "1",
-      sku: "0312873",
-      img: "src/assets/16pr.svg",
-      name: "iPhone 16 Pro",
-      price: "20.000.000 VND",
-      sold: "1000",
-      inventory: "1000",
-      rating: "5",
-    },
-    {
-      no: "1",
-      sku: "0312873",
-      img: "src/assets/16pr.svg",
-      name: "iPhone 16 Pro",
-      price: "20.000.000 VND",
-      sold: "1000",
-      inventory: "1000",
-      rating: "5",
-    },
-
-
+    // Thêm các dòng khác nếu cần
   ];
+
   const data = [
     { name: "11/11", value: 17 },
     { name: "12/11", value: 45 },
@@ -68,6 +28,7 @@ const Reports = () => {
     { name: "15/11", value: 105 },
     { name: "16/11", value: 10 },
   ];
+
   return (
     <div className='h-full w-full flex flex-col'>
       <div className='pb-1 h-[50%] flex w-full '>
@@ -78,7 +39,7 @@ const Reports = () => {
                 <img src='src/assets/revenue.png' />
               </div>
               <div className='flex h-full flex-col justify-between'>
-                <span className='text-lg'>Revenue</span>
+                <span className='text-lg'>Doanh thu</span>
                 <span className='text-4xl'>1000$</span>
               </div>
             </div>
@@ -89,7 +50,7 @@ const Reports = () => {
                 <img src='src/assets/order.png' />
               </div>
               <div className='mr-[20px] flex h-full flex-col justify-between'>
-                <span className='text-lg'>Order</span>
+                <span className='text-lg'>Đơn hàng</span>
                 <span className='text-4xl'>1000</span>
               </div>
             </div>
@@ -100,14 +61,14 @@ const Reports = () => {
                 <img src='src/assets/profit.png' />
               </div>
               <div className='flex h-full flex-col justify-between'>
-                <span className='text-lg'>Profit</span>
+                <span className='text-lg'>Lợi nhuận</span>
                 <span className='text-4xl'>1000$</span>
               </div>
             </div>
           </div>
         </div>
         <div className='p-5  w-3/5 h-[96%] flex flex-col justify-center items-center rounded-lg mb-3 bg-white customShadow'>
-          <span className=' font-semibold text-2xl'>Revenue Chart</span>
+          <span className=' font-semibold text-2xl'>Biểu đồ doanh thu</span>
           <CustomBarChart data={data} />
         </div>
       </div>
@@ -117,9 +78,12 @@ const Reports = () => {
             <thead>
               <tr >
                 {TABLE_HEAD.map((head, index) => (
-                  <th key={head} className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
+                  <th
+                    key={head}
+                    className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
                     ${index === 0 ? 'rounded-l-2xl' : ''} 
-                    ${index === TABLE_HEAD.length - 1 ? 'rounded-r-2xl' : ''}`}>
+                    ${index === TABLE_HEAD.length - 1 ? 'rounded-r-2xl' : ''}`}
+                  >
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -202,7 +166,6 @@ const Reports = () => {
                       >
                         {row.rating}
                         <img className='flex ml-1 h-4 w-4' src="src/assets/stars.png" />
-
                       </Typography>
                     </td>
                   </tr>
@@ -213,7 +176,7 @@ const Reports = () => {
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Reports;

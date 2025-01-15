@@ -9,24 +9,26 @@ import formatDate from "../../helpers/formatDate";
 
 const Voucher = () => {
     const isDetailPage = location.pathname !== "/admin/voucher";
-    const TABLE_HEAD = ["ID", "Name", "Start Date", "End date", "Discount"];
- 
-    const [voucherList, setVoucherList] = useState([])
+    const TABLE_HEAD = ["ID", "Tên mã giảm giá", "Ngày bắt đầu", "Ngày kết thúc", "Mức giảm giá"];
+
+    const [voucherList, setVoucherList] = useState([]);
+
     const getList = useCallback(async () => {
-        const response = await axiosInstance.get('/voucher')
-        setVoucherList(response.data)
-    } , [])
+        const response = await axiosInstance.get('/voucher');
+        setVoucherList(response.data);
+    }, []);
 
-    const handleDelete = async () => {
-
-    }
+    const handleDelete = async (id) => {
+        await axiosInstance.delete(`/voucher/${id}`);
+        setVoucherList(voucherList.filter(voucher => voucher.id !== id));
+    };
 
     useEffect(() => {
-        getList()
-    }, [getList])
+        getList();
+    }, [getList]);
 
     if (isDetailPage) {
-        return <Outlet></Outlet>
+        return <Outlet></Outlet>;
     }
 
     return (
@@ -36,7 +38,7 @@ const Voucher = () => {
                     <div className="grid grid-cols-[1fr_auto] px-4 py-2 border border-black rounded-[20px]">
                         <input
                             className="focus:outline-none"
-                            placeholder="Find ID or name"></input>
+                            placeholder="Tìm ID hoặc tên mã giảm giá"></input>
                         <button type="submit">
                             <IoIosSearch className="w-6 h-6"></IoIosSearch>
                         </button>
@@ -47,7 +49,7 @@ const Voucher = () => {
                 </form>
                 <Link to="create">
                     <button className="flex items-center gap-2 bg-black rounded-[20px] px-4 py-2">
-                        <span className="text-white font-bold">Add Voucher</span>
+                        <span className="text-white font-bold">Thêm mã giảm giá</span>
                         <IoAdd className="w-6 h-6 text-white"></IoAdd>
                     </button>
                 </Link>
@@ -57,7 +59,7 @@ const Voucher = () => {
                 <Card className="p-5 w-full flex h-full overflow-scroll px-6">
                     <table className="w-full min-w-max table-auto text-center">
                         <thead>
-                            <tr >
+                            <tr>
                                 {TABLE_HEAD.map((head, index) => (
                                     <th key={head} className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
                     ${index === 0 ? 'rounded-l-2xl' : ''} 
@@ -86,7 +88,7 @@ const Voucher = () => {
                                                 color="blue-gray"
                                                 className="font-bold"
                                             >
-                                                {voucher.id.slice(0,3)}
+                                                {voucher.id.slice(0, 3)}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -126,11 +128,13 @@ const Voucher = () => {
                                                 variant="small"
                                                 className="font-normal text-white"
                                             >
-                        <button onClick={() => handleDelete(voucher.id)} className='ml-4 bg-black w-20 h-6 rounded-xl'>
-                            Delete
-                        </button>
+                                                <button
+                                                    onClick={() => handleDelete(voucher.id)}
+                                                    className="ml-4 bg-black w-20 h-6 rounded-xl"
+                                                >
+                                                    Xóa
+                                                </button>
                                             </Typography>
-                                          
                                         </td>
                                     </tr>
                                 );
@@ -142,6 +146,5 @@ const Voucher = () => {
         </div>
     );
 };
-
 
 export default Voucher;

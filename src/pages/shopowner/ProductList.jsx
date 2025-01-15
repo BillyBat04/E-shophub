@@ -9,27 +9,28 @@ import axiosInstance from "../../config/api";
 import formatNumber from "../../helpers/formatNumber";
 
 const ProductList = () => {
-  const [list, setList] = useState([])
+  const [list, setList] = useState([]);
 
   const getList = useCallback(async () => {
-    const response = await axiosInstance.get('/product')
-    setList(response.data)
-    console.log(response.data)
-  }, [])
+    const response = await axiosInstance.get('/product');
+    setList(response.data);
+    console.log(response.data);
+  }, []);
 
   useEffect(() => {
-    getList()
-  }, [getList])
+    getList();
+  }, [getList]);
 
   const handleDelete = async (SKU) => {
-    await axiosInstance.delete(`/product/${SKU}`)
-    window.location.reload()
-  }
+    await axiosInstance.delete(`/product/${SKU}`);
+    window.location.reload();
+  };
 
   const isDetailPage = location.pathname !== "/admin/products";
-  const TABLE_HEAD = ["SKU", "Product Name", "Image","Purchase Price", "Selling Price", "Supplier"];
+  const TABLE_HEAD = ["SKU", "Tên sản phẩm", "Hình ảnh", "Giá nhập", "Giá bán", "Nhà cung cấp"];
+
   if (isDetailPage) {
-    return <Outlet></Outlet>
+    return <Outlet></Outlet>;
   }
 
   return (
@@ -39,7 +40,8 @@ const ProductList = () => {
           <div className="grid grid-cols-[1fr_auto] px-4 py-2 border border-black rounded-[20px]">
             <input
               className="focus:outline-none"
-              placeholder="Find ID or name"></input>
+              placeholder="Tìm ID hoặc tên sản phẩm"
+            ></input>
             <button type="submit">
               <IoIosSearch className="w-6 h-6"></IoIosSearch>
             </button>
@@ -48,9 +50,9 @@ const ProductList = () => {
             <FaFilter className="w-6 h-6"></FaFilter>
           </button>
         </form>
-        <Link className=" bg-black rounded-[20px] px-6 py-2" to="/admin/products/create"> 
+        <Link className=" bg-black rounded-[20px] px-6 py-2" to="/admin/products/create">
           <button className="flex items-center">
-            <span className="text-white font-bold">Add Product</span>
+            <span className="text-white font-bold">Thêm sản phẩm</span>
             <IoAdd className="w-6 h-6 text-white"></IoAdd>
           </button>
         </Link>
@@ -60,11 +62,14 @@ const ProductList = () => {
         <Card className="p-5 w-full flex h-full overflow-scroll px-6">
           <table className="w-full min-w-max table-auto text-center">
             <thead>
-              <tr >
+              <tr>
                 {TABLE_HEAD.map((head, index) => (
-                  <th key={head} className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
+                  <th
+                    key={head}
+                    className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
                     ${index === 0 ? 'rounded-l-2xl' : ''} 
-                    ${index === TABLE_HEAD.length - 1 ? 'rounded-r-2xl' : ''}`}>
+                    ${index === TABLE_HEAD.length - 1 ? 'rounded-r-2xl' : ''}`}
+                  >
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -116,14 +121,6 @@ const ProductList = () => {
                         {formatNumber(row.purchasePrice)}đ
                       </Typography>
                     </td>
-                    {/* <td className={classes}>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                      >
-                        <Switcher status= {row.sellingPrice}/>
-                      </Typography>
-                    </td> */}
                     <td className={classes}>
                       <Typography
                         variant="small"
@@ -137,10 +134,9 @@ const ProductList = () => {
                         variant="small"
                         className="font-normal text-gray-600"
                       >
-                        {row.supplierId.substring(0,3)}
+                        {row.supplierId.substring(0, 3)}
                       </Typography>
                     </td>
-                    
                     <td className={classes}>
                       <Typography
                         variant="small"
@@ -148,11 +144,14 @@ const ProductList = () => {
                       >
                         <Link to={row.SKU}>
                           <button className='bg-black w-20 h-6 rounded-xl'>
-                            Detail
+                            Chi tiết
                           </button>
                         </Link>
-                        <button onClick={() => handleDelete(row.SKU)} className='ml-4 bg-black w-20 h-6 rounded-xl'>
-                            Delete
+                        <button
+                          onClick={() => handleDelete(row.SKU)}
+                          className='ml-4 bg-black w-20 h-6 rounded-xl'
+                        >
+                          Xóa
                         </button>
                       </Typography>
                     </td>

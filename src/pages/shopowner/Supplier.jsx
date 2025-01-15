@@ -8,22 +8,24 @@ import axiosInstance from "../../config/api";
 
 const Supplier = () => {
     const isDetailPage = location.pathname !== "/admin/supplier";
-    const TABLE_HEAD = ["ID", "Name", "Email", "Address", "Phone Number", "Contact Person" , "Total Product"];
+    const TABLE_HEAD = ["ID", "Tên nhà cung cấp", "Email", "Địa chỉ", "Số điện thoại", "Người liên hệ", "Tổng sản phẩm"];
 
-    const [supplierList, setSupplierList] = useState([])
+    const [supplierList, setSupplierList] = useState([]);
+
     const getList = useCallback(async () => {
-        const response = await axiosInstance.get('/supplier')
-        console.log(response.data)
-        setSupplierList(response.data)
-    } , [])
+        const response = await axiosInstance.get('/supplier');
+        console.log(response.data);
+        setSupplierList(response.data);
+    }, []);
 
     useEffect(() => {
-        getList()
-    }, [getList])
+        getList();
+    }, [getList]);
 
     if (isDetailPage) {
-        return <Outlet></Outlet>
+        return <Outlet></Outlet>;
     }
+
     return (
         <div className="h-full p-6 bg-white shadow-md rounded-[20px] text-sm">
             <div className="flex justify-between">
@@ -31,7 +33,7 @@ const Supplier = () => {
                     <div className="grid grid-cols-[1fr_auto] px-4 py-2 border border-black rounded-[20px]">
                         <input
                             className="focus:outline-none"
-                            placeholder="Find ID or name"></input>
+                            placeholder="Tìm kiếm ID hoặc tên"></input>
                         <button type="submit">
                             <IoIosSearch className="w-6 h-6"></IoIosSearch>
                         </button>
@@ -42,7 +44,7 @@ const Supplier = () => {
                 </form>
                 <Link to="addsupplier">
                     <button className="flex items-center gap-2 bg-black rounded-[20px] px-4 py-2">
-                        <span className="text-white font-bold">Add Supplier</span>
+                        <span className="text-white font-bold">Thêm nhà cung cấp</span>
                         <IoAdd className="w-6 h-6 text-white"></IoAdd>
                     </button>
                 </Link>
@@ -52,7 +54,7 @@ const Supplier = () => {
                 <Card className="p-5 w-full flex h-full overflow-scroll px-6">
                     <table className="w-full min-w-max table-auto text-center">
                         <thead>
-                            <tr >
+                            <tr>
                                 {TABLE_HEAD.map((head, index) => (
                                     <th key={head} className={`border-r-[4px] border-white bg-customGray3 pb-4 pt-4 
                     ${index === 0 ? 'rounded-l-2xl' : ''} 
@@ -81,7 +83,7 @@ const Supplier = () => {
                                                 color="blue-gray"
                                                 className="font-bold"
                                             >
-                                                {supplier.id.slice(0,3)}
+                                                {supplier.id.slice(0, 3)}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -139,7 +141,7 @@ const Supplier = () => {
                                             >
                                                 <Link to={supplier.id}>
                                                     <button className='bg-black w-20 h-6 rounded-xl'>
-                                                        Detail
+                                                        Chi tiết
                                                     </button>
                                                 </Link>
                                             </Typography>

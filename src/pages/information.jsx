@@ -5,36 +5,37 @@ import formatDate from "../helpers/formatDate";
 import axios from "axios";
 
 export default function Information() {
-    const {user} = useUser()
-    const [customer, setCustomer] = useState()
+    const { user } = useUser();
+    const [customer, setCustomer] = useState();
     const [userInfo, setUserInfo] = useState({
         fullName: "John Doe",
         email: "johndoe@example.com",
         birthday: "01/01/2001",
-        gender: "Male",
+        gender: "Nam",
         phoneNumber: "123-456-7890",
         address: "123 Main St, Springfield",
-        dateCreated: '00/00/0000'
+        dateCreated: "00/00/0000"
     });
     const [selectedAvatar, setSelectedAvatar] = useState(null);
-    const [, setFile] = useState()
+    const [, setFile] = useState();
+
     const handleAvatarChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const imageURL = URL.createObjectURL(file);
             setSelectedAvatar(imageURL);
-            setFile(file)
+            setFile(file);
         }
-        const data = new FormData()
-        if (file) data.append('image', file)
+        const data = new FormData();
+        if (file) data.append('image', file);
         const response = await axios({
             method: 'PATCH',
             url: `http://localhost:3000/api/user/${user.id}`,
             data,
-            headers: {'Content-Type': 'multipart/form-data'}
-        })
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
         if (response.status === 200) {
-            localStorage.setItem('user', JSON.stringify(response.data))
+            localStorage.setItem('user', JSON.stringify(response.data));
             window.location.reload();
         }
     };
@@ -43,7 +44,7 @@ export default function Information() {
 
     const handleChange = (e) => {
         let { name, value } = e.target;
-        if (name === "birthday") value = formatDate(value)
+        if (name === "birthday") value = formatDate(value);
         setUserInfo({
             ...userInfo,
             [name]: value,
@@ -51,58 +52,57 @@ export default function Information() {
     };
 
     const handleSave = async (e) => {
-        e.preventDefault()
-        // eslint-disable-next-line no-unused-vars
+        e.preventDefault();
         const { email, dateCreated, ...updatedUserInfo } = userInfo;
-        await axiosInstance.patch(`/customer/${customer.id}`, updatedUserInfo)
+        await axiosInstance.patch(`/customer/${customer.id}`, updatedUserInfo);
         setIsEditing(false);
-        window.location.reload()
+        window.location.reload();
     };
 
     useEffect(() => {
         const getUser = async () => {
-            const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`)
-            setCustomer(response.data)
-            const existCustomer = response.data
-            if (existCustomer){
+            const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`);
+            setCustomer(response.data);
+            const existCustomer = response.data;
+            if (existCustomer) {
                 setUserInfo(() => ({
-                fullName: existCustomer.fullName,
-                email: user.email,
-                birthday: existCustomer.birthday,
-                gender: existCustomer.gender,
-                phoneNumber: existCustomer.phoneNumber,
-                address: existCustomer.address,
-                dateCreated: formatDate(user.createdAt)
-            }))
+                    fullName: existCustomer.fullName,
+                    email: user.email,
+                    birthday: existCustomer.birthday,
+                    gender: existCustomer.gender === "Male" ? "Nam" : existCustomer.gender === "Female" ? "Nữ" : "Khác",
+                    phoneNumber: existCustomer.phoneNumber,
+                    address: existCustomer.address,
+                    dateCreated: formatDate(user.createdAt)
+                }));
             }
-        }
-        getUser()
-    }, [user])
+        };
+        getUser();
+    }, [user]);
 
     return (
         <div className="w-full ml-6 gap-3 flex">
-            <div className='w-1/3 h-full p-5 bg-white rounded-lg'>
-                <h3 className="text-base mb-3 font-semibold">Avatar</h3>
+            <div className="w-1/3 h-full p-5 bg-white rounded-lg">
+                <h3 className="text-base mb-3 font-semibold">Ảnh đại diện</h3>
                 <div className="flex flex-col items-center">
                     <div className="h-32 w-32 mb-4 rounded-full overflow-hidden border-2 border-gray-300">
                         {selectedAvatar ? (
                             <img
                                 src={selectedAvatar}
-                                alt="Selected Avatar"
+                                alt="Ảnh đại diện"
                                 className="h-full w-full object-cover"
                             />
                         ) : (
                             <div className="h-full w-full flex items-center justify-center">
                                 <img
                                     src={user?.image}
-                                    alt="Selected Avatar"
+                                    alt="Ảnh đại diện"
                                     className="h-full w-full object-cover"
                                 />
                             </div>
                         )}
                     </div>
                     <label className="text-xs cursor-pointer bg-blue-500 text-white px-3 py-2 rounded-lg">
-                        Select Avatar
+                        Chọn ảnh
                         <input
                             type="file"
                             accept="image/*"
@@ -114,11 +114,11 @@ export default function Information() {
             </div>
 
             <div className="w-2/3 mx-auto p-6 bg-white rounded-lg shadow-md">
-                <h3 className="text-base mb-3 font-semibold">Personal Information</h3>
+                <h3 className="text-base mb-3 font-semibold">Thông tin cá nhân</h3>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    {/* Full Name */}
+                    {/* Họ và tên */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                        <label className="block text-sm font-medium text-gray-700">Họ và tên</label>
                         {isEditing ? (
                             <input
                                 type="text"
@@ -135,29 +135,18 @@ export default function Information() {
                     {/* Email */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Email</label>
-                        {isEditing ? (
-                            <input
-                                type="email"
-                                name="email"
-                                value={userInfo.email}
-                                onChange={handleChange}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            />
-                        ) : (
-                            <p className="mt-1 text-gray-600">{userInfo.email}</p>
-                        )}
+                        <p className="mt-1 text-gray-600">{userInfo.email}</p>
                     </div>
 
-                    {/* Birthday */}
+                    {/* Ngày sinh */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Birthday</label>
+                        <label className="block text-sm font-medium text-gray-700">Ngày sinh</label>
                         {isEditing ? (
                             <input
                                 type="date"
                                 name="birthday"
                                 value={userInfo.birthday}
                                 onChange={handleChange}
-                                placeholder={userInfo.birthday}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             />
                         ) : (
@@ -165,43 +154,43 @@ export default function Information() {
                         )}
                     </div>
 
-                    {/* Sex */}
+                    {/* Giới tính */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Sex</label>
+                        <label className="block text-sm font-medium text-gray-700">Giới tính</label>
                         {isEditing ? (
                             <div className="flex items-center space-x-4">
                                 <label>
                                     <input
                                         type="radio"
                                         name="gender"
-                                        value="Male"
-                                        checked={userInfo.gender === "Male"}
+                                        value="Nam"
+                                        checked={userInfo.gender === "Nam"}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
-                                    Male
+                                    Nam
                                 </label>
                                 <label>
                                     <input
                                         type="radio"
-                                        name="sex"
-                                        value="Female"
-                                        checked={userInfo.gender === "Female"}
+                                        name="gender"
+                                        value="Nữ"
+                                        checked={userInfo.gender === "Nữ"}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
-                                    Female
+                                    Nữ
                                 </label>
                                 <label>
                                     <input
                                         type="radio"
-                                        name="sex"
-                                        value="Other"
-                                        checked={userInfo.gender === "Other"}
+                                        name="gender"
+                                        value="Khác"
+                                        checked={userInfo.gender === "Khác"}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
-                                    Other
+                                    Khác
                                 </label>
                             </div>
                         ) : (
@@ -209,8 +198,9 @@ export default function Information() {
                         )}
                     </div>
 
+                    {/* Số điện thoại */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Phone</label>
+                        <label className="block text-sm font-medium text-gray-700">Số điện thoại</label>
                         {isEditing ? (
                             <input
                                 type="text"
@@ -224,8 +214,9 @@ export default function Information() {
                         )}
                     </div>
 
+                    {/* Địa chỉ */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Address</label>
+                        <label className="block text-sm font-medium text-gray-700">Địa chỉ</label>
                         {isEditing ? (
                             <input
                                 type="text"
@@ -238,19 +229,11 @@ export default function Information() {
                             <p className="mt-1 text-gray-600">{userInfo.address}</p>
                         )}
                     </div>
+
+                    {/* Ngày tạo tài khoản */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Date created</label>
-                        {isEditing ? (
-                            <input
-                                type="text"
-                                name="dateCreated"
-                                value={userInfo.dateCreated}
-                                onChange={handleChange}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            />
-                        ) : (
-                            <p className="mt-1 text-gray-600">{userInfo.dateCreated}</p>
-                        )}
+                        <label className="block text-sm font-medium text-gray-700">Ngày tạo tài khoản</label>
+                        <p className="mt-1 text-gray-600">{userInfo.dateCreated}</p>
                     </div>
                 </div>
 
@@ -261,13 +244,13 @@ export default function Information() {
                                 onClick={() => setIsEditing(false)}
                                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
                             >
-                                Cancel
+                                Hủy
                             </button>
                             <button
                                 onClick={e => handleSave(e)}
                                 className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
                             >
-                                Save
+                                Lưu
                             </button>
                         </>
                     ) : (
@@ -275,7 +258,7 @@ export default function Information() {
                             onClick={() => setIsEditing(true)}
                             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
                         >
-                            Edit
+                            Chỉnh sửa
                         </button>
                     )}
                 </div>

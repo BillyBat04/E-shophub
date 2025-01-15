@@ -12,8 +12,8 @@ const PaymentPage = () => {
     const [address, setAddress] = useState({});
     const [productList, setProductList] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [file, setFile] = useState(null)
-    const [customer, setCustomer] = useState(null)
+    const [file, setFile] = useState(null);
+    const [customer, setCustomer] = useState(null);
 
     const [quantity, setQuantity] = useState(
         productList.reduce((acc, item) => {
@@ -26,35 +26,36 @@ const PaymentPage = () => {
     const { user } = useUser();
 
     const [voucher, setVoucher] = useState("");
-    const [validVoucher, setValidVoucher] = useState({})
+    const [validVoucher, setValidVoucher] = useState({});
+
     const handleApply = async () => {
         if (voucher.trim() === "") {
-            alert("Vui lòng nhập mã voucher!");
+            alert("Vui lòng nhập mã giảm giá!");
         } else {
             try {
                 const response = await axiosInstance.post('/voucher/check', {
                     name: voucher,
                     currentDate: new Date()
-                })
+                });
                 if (response.data !== null) {
-                    setValidVoucher(response.data)
-                    setTotalPrice(prevState => prevState * (1 - response.data.discount / 100))
+                    setValidVoucher(response.data);
+                    setTotalPrice(prevState => prevState * (1 - response.data.discount / 100));
                 } else {
-                    alert(`Voucher: ${voucher} đã bị quá hạn`)
+                    alert(`Mã giảm giá ${voucher} đã hết hạn.`);
                 }
             } catch (error) {
-                alert(`Voucher: ${voucher} đã bị quá hạn`)
+                alert(`Mã giảm giá ${voucher} không hợp lệ hoặc đã hết hạn.`);
             }
         }
     };
 
     useEffect(() => {
         const getUser = async () => {
-            const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`)
-            setCustomer(response.data)
-        }
-        getUser()
-    }, [user])
+            const response = await axiosInstance.get(`/customer/get-by-user/${user?.id}`);
+            setCustomer(response.data);
+        };
+        getUser();
+    }, [user]);
 
     const handlePaymentSelection = (method) => {
         setSelectedPayment(method);
@@ -86,20 +87,20 @@ const PaymentPage = () => {
         const response = await axiosInstance.get(`/customer/get-by-user/${user.id}`);
         const customer = response.data;
 
-        const data = new FormData()
-        data.append('image', file)
-        data.append('totalPrice', parseInt(totalPrice))
-        data.append('address', fullAddress)
-        data.append('customerId', customer.id)
-        data.append('invoiceDate', new Date().toISOString())
-        data.append('status', 'PROCESSING')
+        const data = new FormData();
+        data.append('image', file);
+        data.append('totalPrice', parseInt(totalPrice));
+        data.append('address', fullAddress);
+        data.append('customerId', customer.id);
+        data.append('invoiceDate', new Date().toISOString());
+        data.append('status', 'PROCESSING');
+
         const newInvoice = await axios({
             method: 'POST',
             url: 'http://localhost:3000/api/invoice',
             data,
             headers: { 'Content-Type': 'multipart/form-data' }
-        })
-
+        });
 
         const invoiceId = newInvoice.data.id;
         for (let product of productList) {
@@ -112,14 +113,15 @@ const PaymentPage = () => {
                     displayedProductId: displayedProduct.data[0].id
                 });
             } catch (err) {
-                console.log(err)
-                alert('Số lượng tồn kho hiện tại ít hơn số lượng bạn đặt')
+                console.log(err);
+                alert('Số lượng tồn kho hiện tại không đủ.');
             }
         }
+
         await axiosInstance.post('/invoice/send-email', {
             email: user.email,
             invoiceId: newInvoice.data.id
-        })
+        });
         navigate('/personal/history');
         window.location.reload();
     };
@@ -129,11 +131,11 @@ const PaymentPage = () => {
     }, [getProductList]);
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8 flex ">
+        <div className="min-h-screen bg-gray-50 p-8 flex">
             <section className=" mx-auto mb-6 w-[70%]">
                 <h1 className="text-3xl font-bold text-center mb-8">Thanh toán đơn hàng</h1>
                 <div className='flex flex-row justify-between'>
-                    <h2 className="text-xl font-semibold mb-4">Your shopping</h2>
+                    <h2 className="text-xl font-semibold mb-4">Giỏ hàng của bạn</h2>
                 </div>
                 {productList?.map((item, index) => (
                     <div key={index} className="flex mb-4">
@@ -188,7 +190,7 @@ const PaymentPage = () => {
                     <div className="flex justify-center">
                         <div className="mt-6 flex flex-col items-center">
                             <div onClick={() => handlePaymentSelection('COD')}>
-                                <img className=' w-20 h-20 rounded-lg ' src={`${selectedPayment === 'COD' ? 'src/assets/CODg.svg' : 'src/assets/CODb.svg'}`} />
+                                <img className='w-20 h-20 rounded-lg' src={`${selectedPayment === 'COD' ? 'src/assets/CODg.svg' : 'src/assets/CODb.svg'}`} />
                             </div>
                             <input
                                 type="checkbox"
@@ -200,7 +202,7 @@ const PaymentPage = () => {
 
                         <div className="flex flex-col items-center">
                             <div onClick={() => handlePaymentSelection('momo')}>
-                                <img className=' w-32 h-32 rounded-lg ' src={`${selectedPayment === 'momo' ? 'src/assets/momop.png' : 'src/assets/momob.png'}`} />
+                                <img className='w-32 h-32 rounded-lg' src={`${selectedPayment === 'momo' ? 'src/assets/momop.png' : 'src/assets/momob.png'}`} />
                             </div>
                             <input
                                 type="checkbox"
@@ -211,7 +213,7 @@ const PaymentPage = () => {
                     </div>
                 </section>
 
-                {/* Order Button */}
+                {/* Đặt hàng */}
                 <section className='ml-2 mt-4'>
                     <p className='text-xl'>Đơn hàng</p>
                     <div className='flex justify-between mt-2'>
@@ -239,7 +241,7 @@ const PaymentPage = () => {
                         <input
                             type="text"
                             className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Nhập mã voucher"
+                            placeholder="Nhập mã giảm giá"
                             value={voucher}
                             onChange={(e) => setVoucher(e.target.value)}
                         />
